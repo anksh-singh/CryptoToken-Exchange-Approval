@@ -1,0 +1,298 @@
+syntax = "proto3";
+package proto;
+
+option go_package = "./pb";
+
+import "contract.proto";
+
+message ExchangeTokenRequest {
+  string chain = 1;
+  string exchange_type = 2;
+}
+
+message ExchangeTokenResponse {repeated ExchangeTokenInfo exchangeTokens = 1;}
+
+message ExchangeTokenInfo {
+  string token_address = 1;
+  string token_decimals = 2;
+  string token_symbol = 3;
+  string token_name = 4;
+  string token_logo_url = 5;
+  string logo_url = 6;
+}
+
+
+message ExchangeMultiQuoteRequest {
+  string chain = 1;
+  repeated MultiChainRequests multi_chain_requests = 2;
+  string taker_address = 3;
+  string exchange_type = 4;
+}
+message MultiChainRequests {
+  string sell_amount = 1;
+  string sell_token = 2;
+  string buy_token = 3;
+  string slippage = 4;
+}
+
+message ExchangeMultiQuoteResponse {
+  string chain = 1;
+  repeated MultiChainResponse multi_chain_response = 2;
+}
+
+message MultiChainResponse {
+  string res_amount = 1;
+  string price_impact = 2;
+  string res_price_per_from_token = 3;
+  string res_price_per_to_token = 4;
+  string from_token_price = 5;
+  string to_token_price = 6;
+  string minimum_received = 7;
+  string approve_address = 8;
+  string sell_token = 9;
+  string buy_token = 10;
+}
+
+message ExchangeMultiSwapRequest {
+  string chain = 1;
+  repeated MultiChainRequests multi_chain_requests = 2;
+  string taker_address = 3;
+  string exchange_type = 4;
+}
+message ExchangeMultiSwapResponse {
+  string to = 1;
+  string data = 2;
+  string value = 3;
+  string gas_limit = 4;
+  string gas = 5;
+  string tx_link = 6;
+  MultiSwapTxs multi_route_data = 7;
+}
+
+message ExchangeMultipleSwapResponse {
+  double quote_value = 1;
+  double op_l1_fee = 2;
+  GasPriceInfo gas_price = 3;
+  repeated ApprovalResponse approval = 4;
+  ExchangeSwapResponse transaction = 5;
+}
+
+message ExchangeQuoteRequest {
+  string chain = 1;
+  string taker_address = 2;
+  string sell_token = 3;
+  string buy_token = 4;
+  string sell_amount = 5;
+  string slippage = 6;
+  string exchange_type = 7;
+}
+
+message ExchangeQuoteResponse {
+  string res_amount = 1;
+  string price_impact = 2;
+  string res_price_per_from_token = 3;
+  string res_price_per_to_token = 4;
+  string from_token_price = 5;
+  string to_token_price = 6;
+  string minimum_received = 7;
+  string approve_address = 8;
+  string sell_token = 9;
+  string buy_token = 10;
+}
+
+message ExchangeSwapRequest {
+  string chain = 1;
+  string taker_address = 2;
+  string sell_token = 3;
+  string buy_token = 4;
+  string sell_amount = 5;
+  string slippage = 6;
+  string exchange_type = 7;
+}
+
+message MultiSwapTxs {repeated string data = 1;}
+
+message ExchangeSwapResponse {
+  string to = 1;
+  string data = 2;
+  string value = 3;
+  string gas_limit = 4;
+  string gas = 5;
+  string tx_link = 6;
+  MultiSwapTxs multi_route_data = 7;
+}
+
+message ExchangeSwapExecuteRequest {
+  string chain = 1;
+  string exchange_type = 2;
+  ZeroSwapExecuteRequest zero_swap_payload = 3;
+  CowSwapExecuteRequest cow_swap_payload = 4;
+}
+message ZeroSwapExecuteRequest {
+  string taker_address = 1;
+  string sell_token = 2;
+  string buy_token = 3;
+  string sell_amount = 4;
+  string signature = 5;
+  string transactional_deadline = 6;
+  string slippage = 7;
+}
+
+message CowSwapExecuteRequest {
+  string sellToken = 1;
+  string buyToken = 2;
+  string receiver = 3;
+  string sellAmount = 4;
+  string buyAmount = 5;
+  int32 validTo = 6;
+  string appData = 7;
+  string feeAmount = 8;
+  string kind = 9;
+  bool partiallyFillable = 10;
+  string sellTokenBalance = 11;
+  string buyTokenBalance = 12;
+  string signingScheme = 13;
+  string signature = 14;
+  string from = 15;
+  int32 quoteId = 16;
+  string slippage = 17;
+}
+message ExchangeSwapExecuteResponse {
+  ExecuteResponse execute_response = 1;
+  ExchangeSwapResponse exchange_swap_response = 2;
+}
+
+message ExecuteResponse {
+  string tx_hash = 1;
+}
+message ExchangeSwapTransactionResponse {
+  string transactionHash = 1;
+  ExchangeSwapExecuteQuote quote = 2;
+}
+
+message ExchangeSwapExecuteQuote {
+  string to = 1;
+  string data = 2;
+  string value = 3;
+  string price = 4;
+  string gas = 5;
+  string estimatedGas = 6;
+  string gasPrice = 7;
+}
+
+message FreeTradeCountRequest {
+  string account = 1;
+  string chain = 2;
+  string exchange_type = 3;
+}
+
+message FreeTradeCountResponse {
+  string chain_id = 1;
+  string chain_name = 2;
+  string account = 3;
+  string free_trade_count = 4;
+}
+
+message ExchangeSignatureRequest {
+  string chain = 1;
+  string taker_address = 2;
+  string sell_token = 3;
+  string buy_token = 4;
+  string sell_amount = 5;
+  string slippage = 6;
+  string signature = 7;
+  string exchange_type = 8;
+}
+
+message ExchangeSignatureResponse {
+  ZeroswapSignatureResponse zeroswap_data = 1;
+  CowSwapSignatureResponse cowswap_data = 2;
+}
+
+message ZeroswapSignatureResponse {
+  ExchangeSignatureTypes types = 1;
+  ExchangeDomain domain = 2;
+  string primaryType = 3;
+  ExchangeMessage message = 4;
+}
+
+message CowSwapSignatureResponse {
+  string sellToken = 1;
+  string buyToken = 2;
+  string receiver = 3;
+  string sellAmount = 4;
+  string buyAmount = 5;
+  int32 validTo = 6;
+  string appData = 7;
+  string feeAmount = 8;
+  string kind = 9;
+  bool partiallyFillable = 10;
+  string sellTokenBalance = 11;
+  string buyTokenBalance = 12;
+  string from = 15;
+  int32 quoteID = 16;
+}
+
+message ExchangeSignatureTypes {
+  repeated ExchangeType EIP712Domain = 1;
+  repeated ExchangeType Swap = 2;
+}
+
+message ExchangeDomain {
+  string name = 1;
+  string version = 2;
+  int32 chainId = 3;
+  string verifyingContract = 4;
+  string salt = 5;
+}
+
+message ExchangeMessage {
+  string buyToken = 1;
+  string sellToken = 2;
+  string buyTokenAddress = 3;
+  string sellTokenAddress = 4;
+  string sellAmount = 5;
+  string recipient = 6;
+  int32 slippageTolerance = 7;
+  int32 transactionDeadline = 8;
+  string executorContract = 9;
+}
+
+message ExchangeType {
+  string name = 1;
+  string type = 2;
+}
+
+message TokenApprovalRequest {
+  string chain = 1;
+  string token = 2;
+  string gasless = 3;
+  string exchange_type = 4;
+}
+
+message TokenInfo {
+  string symbol = 1;
+  string decimals = 2;
+  string tokenAddress = 3;
+}
+
+message TokenApprovalResponse {
+  int32 chainId = 1;
+  string chainName = 2;
+  TokenInfo tokenInfo = 3;
+  string to = 4;
+  string data = 5;
+  int32 estimatedGas = 6;
+  string gasPrice = 7;
+}
+
+message PositionRequest {
+  string address = 1;
+  PositionPayload position_payload = 2;
+}
+
+message PositionPayload {
+  repeated string chain_ids = 1;
+  repeated string protocol_ids = 2;
+  string currency = 3;
+}

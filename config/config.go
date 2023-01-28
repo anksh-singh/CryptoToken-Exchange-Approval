@@ -1,12 +1,12 @@
 package config
 
 import (
-	"encoding/json"
+	// "encoding/json"
 	"github.com/spf13/viper"
-	"io"
-	"io/ioutil"
+	// "io"
+	// "io/ioutil"
 	"log"
-	"net/http"
+	// "net/http"
 )
 
 type Config struct {
@@ -436,40 +436,8 @@ type CosmosDirectory struct {
 	} `json:"rest"`
 }
 
-func LoadCosmosBackUpEndPoints(config *Config) *Config {
-	var mapUrls = make(map[string]string, 0)
-	for _, chain := range config.Cosmos.Cfg.Wallets {
-		var cosmosDirectory CosmosDirectory
-		resp, err := http.Get("https://status.cosmos.directory/" + chain.ChainName)
-		if err != nil {
-			log.Fatalf(" Error in GET Request  : %v", err.Error())
-		}
-		if resp.StatusCode == 200 {
-			defer func(Body io.ReadCloser) {
-				err = Body.Close()
-				if err != nil {
-					log.Fatalf(" Error in GET Request  : %v", err.Error())
-				}
-			}(resp.Body)
-			body, ipUtilErr := ioutil.ReadAll(resp.Body)
-			if ipUtilErr != nil {
-				log.Fatalf(" Error in GET Request  : %v", err.Error())
-			}
-			err = json.Unmarshal(body, &cosmosDirectory)
-			if err != nil {
-				log.Fatalf(" Error in GET Request  : %v", err.Error())
-			}
-			if len(cosmosDirectory.Rest.Best) != 0 {
-				mapUrls[chain.ChainName] = cosmosDirectory.Rest.Best[0].Address
-			}
-		}
-	}
-	config.Cosmos.Cfg.BackUpUrls = mapUrls
-	return config
-}
-
 func LoadConfig(filename, path string) *Config {
-	var configuration *Config
+	var configuration Config
 	var configName string
 	configName = "default_config" // single config file
 	viper.SetConfigName(configName)
@@ -488,6 +456,6 @@ func LoadConfig(filename, path string) *Config {
 	if err != nil {
 		log.Fatalf("Unable to decode into struct, %v", err)
 	}
-	configuration = LoadCosmosBackUpEndPoints(configuration)
-	return configuration
+	// configuration = LoadCosmosBackUpEndPoints(configuration)
+	return &configuration
 }

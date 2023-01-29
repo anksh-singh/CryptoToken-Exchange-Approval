@@ -7,7 +7,7 @@ import (
 	"bridge-allowance/pkg/grpc/proto/pb"
 	"bridge-allowance/pkg/jsonrpc"
 	"bridge-allowance/utils"
-	"bridge-allowance/utils/models"
+	// "bridge-allowance/utils/models"
 	"encoding/json"
 	"fmt"
 	"github.com/umbracle/ethgo/builtin/erc20"
@@ -17,7 +17,7 @@ import (
 	"strings"
 	"sync"
 
-	"bridge-allowance/pkg/unmarshal"
+	// "bridge-allowance/pkg/unmarshal"
 	"github.com/onrik/ethrpc"
 	"github.com/umbracle/ethgo"
 	_ "github.com/umbracle/ethgo"
@@ -34,20 +34,8 @@ import (
 type EvmCore interface {
 	GetTokenPrice(request *pb.TokenPriceRequest) (*pb.TokenPriceResponse, error)
 	GetTokenPriceV2(request *pb.TokenPriceRequest) (*pb.TokenPriceResponseV2, error)
-	GetAssets(request *pb.BalanceRequest) (*pb.BalanceResponse, error)
-	GetNonce(request *pb.NonceRequest) (*pb.NonceResponse, error)
-	GasLimit(request *pb.GasLimitRequest) (*pb.GasLimitResponse, error)
-	SendTransaction(request *pb.SendTransactionRequest) (*pb.SendTransactionResponse, error)
-	ListTransaction(request *pb.ListTransactionRequest) (*pb.ListTransactionResponse, error)
-	GetUserData(request *pb.UserDataRequest) (*pb.UserDataResponse, error)
-	GetProcessingFee(request *pb.ProcessingFeeRequest) (*pb.ProcessingFeeResponse, error)
-	GetTxStatus(request *pb.TxStatusRequest) (*pb.TxStatusResponse, error)
 	GetTokenAllowance(request *pb.AllowanceRequest) (*pb.AllowanceResponse, error)
-	TokenApprove(request *pb.ApprovalRequest) (*pb.ApprovalResponse, error)
-	GetNftCollections(request *pb.NftCollectionRequest) (*pb.ListNftCollectionResponse, error)
-	BulkApproval(request *pb.ApprovalRequest) (*pb.BulkApprovalResponse, error)
-	BulkAllowance(request *pb.AllowanceRequest) (*pb.BulkAllowanceResponse, error)
-	GetOpportunites(request *pb.GetOpportunitiesRequest) (*pb.GetOpportunitesResponse, error)
+	
 }
 
 var TxStatus = func() map[string]string {
@@ -105,15 +93,15 @@ func NewEVMCore(config *config.Config, logger *zap.SugaredLogger, services commo
 func (evm *evmCore) GetTokenPrice(request *pb.TokenPriceRequest) (*pb.TokenPriceResponse, error) {
 	source := evm.util.GetWalletSource(request.Chain)
 	switch source.TokenPriceSource {
-	case "coingecko":
-		return evm.services.CoinGecko.GetTokenExchange(request.Currency, request.Chain)
-	case "custom":
-		if request.Chain == "zksync" {
-			return evm.services.Zksync.GetTokenPrice(request.Currency, "")
-		} else {
-			return nil, status.Error(codes.Unimplemented,
-				fmt.Sprintf("Unsupported operation: Source %v is unsupported", source.TokenPriceSource))
-		}
+	// case "coingecko":
+	// 	return evm.services.CoinGecko.GetTokenExchange(request.Currency, request.Chain)
+	// case "custom":
+	// 	if request.Chain == "zksync" {
+	// 		return evm.services.Zksync.GetTokenPrice(request.Currency, "")
+	// 	} else {
+	// 		return nil, status.Error(codes.Unimplemented,
+	// 			fmt.Sprintf("Unsupported operation: Source %v is unsupported", source.TokenPriceSource))
+	// 	}
 	default:
 		return nil, status.Errorf(codes.Unavailable,
 			fmt.Sprintf("Unsupported operation: Source %v is unsupported", source.TokenPriceSource), "Unsupported source")
@@ -124,8 +112,8 @@ func (evm *evmCore) GetTokenPrice(request *pb.TokenPriceRequest) (*pb.TokenPrice
 func (evm *evmCore) GetTokenPriceV2(request *pb.TokenPriceRequest) (*pb.TokenPriceResponseV2, error) {
 	source := evm.util.GetWalletSource(request.Chain)
 	switch source.TokenPriceSource {
-	case "coingecko":
-		return evm.services.CoinGecko.GetTokenExchangeV2(request.Currency, request.Chain)
+	// case "coingecko":
+	// 	return evm.services.CoinGecko.GetTokenExchangeV2(request.Currency, request.Chain)
 	default:
 		return nil, status.Errorf(codes.Unavailable,
 			fmt.Sprintf("Unsupported operation: Source %v is unsupported", source.TokenPriceSource), "Unsupported source")
@@ -137,8 +125,8 @@ func (evm *evmCore) GetAssets(request *pb.BalanceRequest) (*pb.BalanceResponse, 
 	source := evm.util.GetWalletSource(request.Chain)
 	evm.logger.Debugf("Sources := %s", source)
 	switch source.HistorySource {
-	case "unmarshal":
-		return transformUnmarshalBalances(evm, request)
+	// case "unmarshal":
+	// 	return transformUnmarshalBalances(evm, request)
 	case "custom":
 		return getCustomBalances(evm, request)
 	default:
@@ -152,134 +140,134 @@ func getCustomBalances(evm *evmCore, request *pb.BalanceRequest) (*pb.BalanceRes
 	var assetResponse pb.BalanceResponse
 	assetResponse.Token = make([]*pb.TokenBalance, 0)
 	switch request.Chain {
-	case "tomochain":
-		return getTomoAssets(evm, request)
-	case "zksync":
-		return evm.services.Zksync.GetAssets(request)
+	// case "tomochain":
+	// 	return getTomoAssets(evm, request)
+	// case "zksync":
+	// 	return evm.services.Zksync.GetAssets(request)
 	default:
 		return nil, status.Errorf(codes.Unavailable, "Unsupported balances source", "Unsupported source")
 	}
 }
 
-// transformUnmarshalBalances transform unmarshal balances response
-func transformUnmarshalBalances(evm *evmCore, request *pb.BalanceRequest) (*pb.BalanceResponse, error) {
-	var assetResponse pb.BalanceResponse
-	assetResponse.Token = make([]*pb.TokenBalance, 0)
-	// Format response data according to *pb.AssetResponse contract
-	balances, err := evm.services.Unmarshall.GetAssets(request.GetAddress(), request.Chain)
-	if err != nil {
-		evm.logger.Error("Error fetching balances. Err: ", err)
-		return nil, status.Errorf(codes.Internal, err.Error(), "Internal Error")
-	}
-	for _, item := range balances {
-		if strings.ToLower(request.Chain) == "xinfin" && item.ContractAddress == "xdceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" {
-			item.ContractAddress = "xdceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
-		} else if strings.ToLower(request.Chain) == "optimism" && strings.ToLower(item.ContractAddress) == "0xdeaddeaddeaddeaddeaddeaddeaddeaddead0000" {
-			item.ContractAddress = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
-		}
-		asset := pb.TokenBalance{
-			ContractName:         Clean(item.ContractName).(string),
-			ContractTickerSymbol: Clean(item.ContractTickerSymbol).(string),
-			ContractDecimals:     item.ContractDecimals,
-			ContractAddress:      Clean(item.ContractAddress).(string),
-			Coin:                 item.Coin,
-			Balance:              Clean(item.Balance).(string),
-			Quote:                Clean(item.Quote).(float64),
-			QuotePrice:           strconv.FormatFloat(Clean(item.Quote).(float64), 'f', -1, 64),
-			QuoteRate:            Clean(item.QuoteRate).(float64),
-			LogoUrl:              Clean(item.LogoURL).(string),
-			QuoteRate_24H:        Clean(fmt.Sprintf("%v", item.QuoteRate24H)).(string),
-			QuotePctChange_24H:   item.QuotePctChange24H,
-		}
-		assetResponse.Token = append(assetResponse.Token, &asset)
-	}
-	evm.logger.Debug("Unmarshall balances response: ", &balances)
-	return &assetResponse, nil
-}
+// // transformUnmarshalBalances transform unmarshal balances response
+// func transformUnmarshalBalances(evm *evmCore, request *pb.BalanceRequest) (*pb.BalanceResponse, error) {
+// 	var assetResponse pb.BalanceResponse
+// 	assetResponse.Token = make([]*pb.TokenBalance, 0)
+// 	// Format response data according to *pb.AssetResponse contract
+// 	balances, err := evm.services.Unmarshall.GetAssets(request.GetAddress(), request.Chain)
+// 	if err != nil {
+// 		evm.logger.Error("Error fetching balances. Err: ", err)
+// 		return nil, status.Errorf(codes.Internal, err.Error(), "Internal Error")
+// 	}
+// 	for _, item := range balances {
+// 		if strings.ToLower(request.Chain) == "xinfin" && item.ContractAddress == "xdceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" {
+// 			item.ContractAddress = "xdceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+// 		} else if strings.ToLower(request.Chain) == "optimism" && strings.ToLower(item.ContractAddress) == "0xdeaddeaddeaddeaddeaddeaddeaddeaddead0000" {
+// 			item.ContractAddress = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+// 		}
+// 		asset := pb.TokenBalance{
+// 			ContractName:         Clean(item.ContractName).(string),
+// 			ContractTickerSymbol: Clean(item.ContractTickerSymbol).(string),
+// 			ContractDecimals:     item.ContractDecimals,
+// 			ContractAddress:      Clean(item.ContractAddress).(string),
+// 			Coin:                 item.Coin,
+// 			Balance:              Clean(item.Balance).(string),
+// 			Quote:                Clean(item.Quote).(float64),
+// 			QuotePrice:           strconv.FormatFloat(Clean(item.Quote).(float64), 'f', -1, 64),
+// 			QuoteRate:            Clean(item.QuoteRate).(float64),
+// 			LogoUrl:              Clean(item.LogoURL).(string),
+// 			QuoteRate_24H:        Clean(fmt.Sprintf("%v", item.QuoteRate24H)).(string),
+// 			QuotePctChange_24H:   item.QuotePctChange24H,
+// 		}
+// 		assetResponse.Token = append(assetResponse.Token, &asset)
+// 	}
+// 	evm.logger.Debug("Unmarshall balances response: ", &balances)
+// 	return &assetResponse, nil
+// }
 
 // getTomoAssets retrieve tokens list from tomo wallet API
-func getTomoAssets(evm *evmCore, request *pb.BalanceRequest) (*pb.BalanceResponse, error) {
-	var assetResponse pb.BalanceResponse
-	assetResponse.Token = make([]*pb.TokenBalance, 0)
-	//Fetch native token balance
-	info := evm.util.GetWalletInfo(request.Chain)
-	rpc := info.RPC
-	client, err := ethgoJsonRPC.NewClient(rpc)
-	if err != nil {
-		panic(err)
-	}
-	balance, err := client.Eth().GetBalance(ethgo.HexToAddress(request.Address), ethgo.Latest)
-	nativeTokenBalance := fmt.Sprintf("%v", balance)
-	newNativeTokenBalance, err := strconv.ParseFloat(nativeTokenBalance, 64)
-	tokenInfoRequest := &pb.TokenInfoRequest{
-		Token: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-		Range: "",
-		Chain: "tomochain",
-	}
-	//Default values
-	var quotePrice = 0.0
-	var quotePriceChange24H = ""
-	var quotePricePercentageChange24H = 0.0
-	var quoteRate = 0.0
-	tokenInfo, err := evm.services.CoinGecko.GetTokenInfo(tokenInfoRequest)
-	if err == nil {
-		quotePrice = newNativeTokenBalance / math.Pow(10, float64(18)) * tokenInfo.Token.MarketData.CurrentPrice.Usd
-		quoteRate = tokenInfo.Token.MarketData.CurrentPrice.Usd
-		quotePriceChange24H = strconv.FormatFloat(tokenInfo.Token.MarketData.PriceChange24H, 'f', 2, 64)
-		quotePricePercentageChange24H = tokenInfo.Token.MarketData.PriceChangePercentage24HInCurrency.Usd
-	}
-	//Set native token balances
-	asset := pb.TokenBalance{
-		ContractName:         "tomochain",
-		ContractTickerSymbol: "TOMO",
-		ContractDecimals:     18,
-		ContractAddress:      "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-		Coin:                 88,
-		Balance:              nativeTokenBalance,
-		Quote:                quotePrice,
-		QuotePrice:           strconv.FormatFloat(quotePrice, 'f', -1, 64),
-		QuoteRate:            quoteRate,
-		LogoUrl:              "https://raw.githubusercontent.com/tomochain/tokens/master/tokens/0x0000000000000000000000000000000000000001.png",
-		QuoteRate_24H:        quotePriceChange24H,
-		QuotePctChange_24H:   quotePricePercentageChange24H,
-	}
-	assetResponse.Token = append(assetResponse.Token, &asset)
+// func getTomoAssets(evm *evmCore, request *pb.BalanceRequest) (*pb.BalanceResponse, error) {
+// 	var assetResponse pb.BalanceResponse
+// 	assetResponse.Token = make([]*pb.TokenBalance, 0)
+// 	//Fetch native token balance
+// 	info := evm.util.GetWalletInfo(request.Chain)
+// 	rpc := info.RPC
+// 	client, err := ethgoJsonRPC.NewClient(rpc)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	balance, err := client.Eth().GetBalance(ethgo.HexToAddress(request.Address), ethgo.Latest)
+// 	nativeTokenBalance := fmt.Sprintf("%v", balance)
+// 	newNativeTokenBalance, err := strconv.ParseFloat(nativeTokenBalance, 64)
+// 	tokenInfoRequest := &pb.TokenInfoRequest{
+// 		Token: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+// 		Range: "",
+// 		Chain: "tomochain",
+// 	}
+// 	//Default values
+// 	var quotePrice = 0.0
+// 	var quotePriceChange24H = ""
+// 	var quotePricePercentageChange24H = 0.0
+// 	var quoteRate = 0.0
+// 	tokenInfo, err := evm.services.CoinGecko.GetTokenInfo(tokenInfoRequest)
+// 	if err == nil {
+// 		quotePrice = newNativeTokenBalance / math.Pow(10, float64(18)) * tokenInfo.Token.MarketData.CurrentPrice.Usd
+// 		quoteRate = tokenInfo.Token.MarketData.CurrentPrice.Usd
+// 		quotePriceChange24H = strconv.FormatFloat(tokenInfo.Token.MarketData.PriceChange24H, 'f', 2, 64)
+// 		quotePricePercentageChange24H = tokenInfo.Token.MarketData.PriceChangePercentage24HInCurrency.Usd
+// 	}
+// 	//Set native token balances
+// 	asset := pb.TokenBalance{
+// 		ContractName:         "tomochain",
+// 		ContractTickerSymbol: "TOMO",
+// 		ContractDecimals:     18,
+// 		ContractAddress:      "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+// 		Coin:                 88,
+// 		Balance:              nativeTokenBalance,
+// 		Quote:                quotePrice,
+// 		QuotePrice:           strconv.FormatFloat(quotePrice, 'f', -1, 64),
+// 		QuoteRate:            quoteRate,
+// 		LogoUrl:              "https://raw.githubusercontent.com/tomochain/tokens/master/tokens/0x0000000000000000000000000000000000000001.png",
+// 		QuoteRate_24H:        quotePriceChange24H,
+// 		QuotePctChange_24H:   quotePricePercentageChange24H,
+// 	}
+// 	assetResponse.Token = append(assetResponse.Token, &asset)
 
-	//Fetch balances for non-native tokens
-	walletUrl := fmt.Sprintf("https://wallet.tomochain.com/api/tokens/?holder=%v", request.Address)
-	body, err := evm.httpRequest.GetRequest(walletUrl)
-	if err != nil {
-		return nil, err
-	}
-	tomoWalletBalances := make(TomoWalletBalances, 0)
-	err = json.Unmarshal(body, &tomoWalletBalances)
-	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error(), "json unmarshalling error")
-	}
-	for _, item := range tomoWalletBalances {
-		var quotePrice = 0.0
-		var quotePriceChange24H = ""
-		var quotePricePercentageChange24H = 0.0
-		var quoteRate = 0.0
-		asset := pb.TokenBalance{
-			//Balances currently defaults to price in USD
-			ContractName:         Clean(item.Name).(string),
-			ContractTickerSymbol: Clean(item.Symbol).(string),
-			ContractDecimals:     int32(item.Decimals),
-			ContractAddress:      Clean(item.TokenAddress).(string),
-			Coin:                 88,
-			Balance:              Clean(item.Balance).(string),
-			Quote:                quotePrice,
-			QuotePrice:           strconv.FormatFloat(quotePrice, 'f', -1, 64),
-			QuoteRate:            quoteRate,
-			LogoUrl:              Clean(item.Icon).(string),
-			QuoteRate_24H:        quotePriceChange24H,
-			QuotePctChange_24H:   quotePricePercentageChange24H,
-		}
-		assetResponse.Token = append(assetResponse.Token, &asset)
-	}
-	return &assetResponse, nil
-}
+// 	//Fetch balances for non-native tokens
+// 	walletUrl := fmt.Sprintf("https://wallet.tomochain.com/api/tokens/?holder=%v", request.Address)
+// 	body, err := evm.httpRequest.GetRequest(walletUrl)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	tomoWalletBalances := make(TomoWalletBalances, 0)
+// 	err = json.Unmarshal(body, &tomoWalletBalances)
+// 	if err != nil {
+// 		return nil, status.Errorf(codes.Internal, err.Error(), "json unmarshalling error")
+// 	}
+// 	for _, item := range tomoWalletBalances {
+// 		var quotePrice = 0.0
+// 		var quotePriceChange24H = ""
+// 		var quotePricePercentageChange24H = 0.0
+// 		var quoteRate = 0.0
+// 		asset := pb.TokenBalance{
+// 			//Balances currently defaults to price in USD
+// 			ContractName:         Clean(item.Name).(string),
+// 			ContractTickerSymbol: Clean(item.Symbol).(string),
+// 			ContractDecimals:     int32(item.Decimals),
+// 			ContractAddress:      Clean(item.TokenAddress).(string),
+// 			Coin:                 88,
+// 			Balance:              Clean(item.Balance).(string),
+// 			Quote:                quotePrice,
+// 			QuotePrice:           strconv.FormatFloat(quotePrice, 'f', -1, 64),
+// 			QuoteRate:            quoteRate,
+// 			LogoUrl:              Clean(item.Icon).(string),
+// 			QuoteRate_24H:        quotePriceChange24H,
+// 			QuotePctChange_24H:   quotePricePercentageChange24H,
+// 		}
+// 		assetResponse.Token = append(assetResponse.Token, &asset)
+// 	}
+// 	return &assetResponse, nil
+// }
 
 // Quotepctchange24h calculate 24hour quote percentage change
 func Quotepctchange24h(quoteRate, quoteRate24H float64) float64 {
@@ -299,19 +287,19 @@ func Clean(arg interface{}) interface{} {
 	}
 }
 
-// ListTransaction Lists the transactions activity for an address
-// TODO: Add support for 3P services
-func (evm *evmCore) ListTransaction(request *pb.ListTransactionRequest) (*pb.ListTransactionResponse, error) {
-	source := evm.util.GetWalletSource(request.Chain)
-	switch source.HistorySource {
-	case "unmarshal":
-		return transformUnmarshalTxHistory(evm, request)
-	case "custom":
-		return getCustomTxHistory(evm, request)
-	default:
-		return nil, status.Errorf(codes.Unavailable, "Unsupported Operation", "Unsupported Operation")
-	}
-}
+// // ListTransaction Lists the transactions activity for an address
+// // TODO: Add support for 3P services
+// func (evm *evmCore) ListTransaction(request *pb.ListTransactionRequest) (*pb.ListTransactionResponse, error) {
+// 	source := evm.util.GetWalletSource(request.Chain)
+// 	switch source.HistorySource {
+// 	case "unmarshal":
+// 		return transformUnmarshalTxHistory(evm, request)
+// 	case "custom":
+// 		return getCustomTxHistory(evm, request)
+// 	default:
+// 		return nil, status.Errorf(codes.Unavailable, "Unsupported Operation", "Unsupported Operation")
+// 	}
+// }
 
 // getCustomTxHistory construct transactions history using custom logic
 func getCustomTxHistory(evm *evmCore, request *pb.ListTransactionRequest) (*pb.ListTransactionResponse, error) {
@@ -320,8 +308,8 @@ func getCustomTxHistory(evm *evmCore, request *pb.ListTransactionRequest) (*pb.L
 	switch request.Chain {
 	case "tomochain":
 		return getTomoTxHistory(evm, request)
-	case "zksync":
-		return evm.services.Zksync.ListTransaction(request)
+	// case "zksync":
+	// 	return evm.services.Zksync.ListTransaction(request)
 	default:
 		return nil, status.Errorf(codes.Unavailable, "Unsupported balances source", "Unsupported balances source")
 	}
@@ -649,77 +637,77 @@ func parseTRCEvents(events []LogEvents, request *pb.ListTransactionRequest) ([]*
 }
 */
 
-func transformUnmarshalTxHistory(evm *evmCore, request *pb.ListTransactionRequest) (*pb.ListTransactionResponse, error) {
-	transactions, err := evm.services.Unmarshall.ListTransaction(request, request.Chain)
-	if err != nil {
-		evm.logger.Error("Error fetching history. Err: ", err)
-		return nil, status.Errorf(codes.Internal, err.Error(), "Internal Error")
-	}
-	var transactionResponse pb.ListTransactionResponse
-	transactionResponse.Transactions = make([]*pb.TransactionData, 0)
-	transactionResponse.Page = transactions.Page
-	transactionResponse.ItemsOnPage = transactions.ItemsOnPage
-	transactionResponse.TotalPages = transactions.TotalPages
-	transactionResponse.TotalTxs = transactions.TotalTxs
+// func transformUnmarshalTxHistory(evm *evmCore, request *pb.ListTransactionRequest) (*pb.ListTransactionResponse, error) {
+// 	transactions, err := evm.services.Unmarshall.ListTransaction(request, request.Chain)
+// 	if err != nil {
+// 		evm.logger.Error("Error fetching history. Err: ", err)
+// 		return nil, status.Errorf(codes.Internal, err.Error(), "Internal Error")
+// 	}
+// 	var transactionResponse pb.ListTransactionResponse
+// 	transactionResponse.Transactions = make([]*pb.TransactionData, 0)
+// 	transactionResponse.Page = transactions.Page
+// 	transactionResponse.ItemsOnPage = transactions.ItemsOnPage
+// 	transactionResponse.TotalPages = transactions.TotalPages
+// 	transactionResponse.TotalTxs = transactions.TotalTxs
 
-	// Format response data as per *pb.AssetResponse contract
-	for _, item := range transactions.Transactions {
-		var transactionData pb.TransactionData
-		transactionData.Id = item.ID
-		transactionData.Date = item.Date
-		transactionData.Type = item.Type
-		transactionData.To = item.To
-		transactionData.Value = item.Value
-		transactionData.Nonce = item.Nonce
-		transactionData.NativeTokenDecimals = item.NativeTokenDecimals
-		transactionData.From = item.From
-		transactionData.Status = item.Status
-		transactionData.Fee = item.Fee
-		transactionData.Block = item.Block
-		transactionData.Description = item.Description
-		for _, sent := range item.Sent {
-			var sentTx pb.TransactionInfo
-			sentTx.Name = sent.Name
-			sentTx.To = sent.To
-			sentTx.Value = sent.Value
-			sentTx.LogoUrl = sent.LogoURL
-			sentTx.QuoteRate = sent.QuoteRate
-			sentTx.Decimals = sent.Decimals
-			sentTx.Symbol = sent.Symbol
-			sentTx.TokenId = sent.TokenID
-			sentTx.From = sent.From
-			transactionData.Sent = append(transactionData.Sent, &sentTx)
-		}
-		for _, received := range item.Received {
-			var receivedTx pb.TransactionInfo
-			receivedTx.Name = received.Name
-			receivedTx.To = received.To
-			receivedTx.Value = received.Value
-			receivedTx.LogoUrl = received.LogoURL
-			receivedTx.QuoteRate = received.QuoteRate
-			receivedTx.Decimals = received.Decimals
-			receivedTx.Symbol = received.Symbol
-			receivedTx.TokenId = received.TokenID
-			receivedTx.From = received.From
-			transactionData.Received = append(transactionData.Received, &receivedTx)
-		}
-		for _, others := range item.Others {
-			var OtherTx pb.TransactionInfo
-			OtherTx.Name = others.Name
-			OtherTx.To = others.To
-			OtherTx.Value = others.Value
-			OtherTx.LogoUrl = others.LogoURL
-			OtherTx.QuoteRate = others.QuoteRate
-			OtherTx.Decimals = others.Decimals
-			OtherTx.Symbol = others.Symbol
-			OtherTx.TokenId = others.TokenID
-			OtherTx.From = others.From
-			transactionData.Others = append(transactionData.Others, &OtherTx)
-		}
-		transactionResponse.Transactions = append(transactionResponse.Transactions, &transactionData)
-	}
-	return &transactionResponse, nil
-}
+// 	// Format response data as per *pb.AssetResponse contract
+// 	for _, item := range transactions.Transactions {
+// 		var transactionData pb.TransactionData
+// 		transactionData.Id = item.ID
+// 		transactionData.Date = item.Date
+// 		transactionData.Type = item.Type
+// 		transactionData.To = item.To
+// 		transactionData.Value = item.Value
+// 		transactionData.Nonce = item.Nonce
+// 		transactionData.NativeTokenDecimals = item.NativeTokenDecimals
+// 		transactionData.From = item.From
+// 		transactionData.Status = item.Status
+// 		transactionData.Fee = item.Fee
+// 		transactionData.Block = item.Block
+// 		transactionData.Description = item.Description
+// 		for _, sent := range item.Sent {
+// 			var sentTx pb.TransactionInfo
+// 			sentTx.Name = sent.Name
+// 			sentTx.To = sent.To
+// 			sentTx.Value = sent.Value
+// 			sentTx.LogoUrl = sent.LogoURL
+// 			sentTx.QuoteRate = sent.QuoteRate
+// 			sentTx.Decimals = sent.Decimals
+// 			sentTx.Symbol = sent.Symbol
+// 			sentTx.TokenId = sent.TokenID
+// 			sentTx.From = sent.From
+// 			transactionData.Sent = append(transactionData.Sent, &sentTx)
+// 		}
+// 		for _, received := range item.Received {
+// 			var receivedTx pb.TransactionInfo
+// 			receivedTx.Name = received.Name
+// 			receivedTx.To = received.To
+// 			receivedTx.Value = received.Value
+// 			receivedTx.LogoUrl = received.LogoURL
+// 			receivedTx.QuoteRate = received.QuoteRate
+// 			receivedTx.Decimals = received.Decimals
+// 			receivedTx.Symbol = received.Symbol
+// 			receivedTx.TokenId = received.TokenID
+// 			receivedTx.From = received.From
+// 			transactionData.Received = append(transactionData.Received, &receivedTx)
+// 		}
+// 		for _, others := range item.Others {
+// 			var OtherTx pb.TransactionInfo
+// 			OtherTx.Name = others.Name
+// 			OtherTx.To = others.To
+// 			OtherTx.Value = others.Value
+// 			OtherTx.LogoUrl = others.LogoURL
+// 			OtherTx.QuoteRate = others.QuoteRate
+// 			OtherTx.Decimals = others.Decimals
+// 			OtherTx.Symbol = others.Symbol
+// 			OtherTx.TokenId = others.TokenID
+// 			OtherTx.From = others.From
+// 			transactionData.Others = append(transactionData.Others, &OtherTx)
+// 		}
+// 		transactionResponse.Transactions = append(transactionResponse.Transactions, &transactionData)
+// 	}
+// 	return &transactionResponse, nil
+// }
 
 var TransactionTypes = func() map[string]string {
 	return map[string]string{
@@ -734,17 +722,17 @@ var TransactionTypes = func() map[string]string {
 	}
 }
 
-func (evm *evmCore) GetNonce(request *pb.NonceRequest) (*pb.NonceResponse, error) {
-	source := evm.util.GetWalletSource(request.Chain)
-	switch source.NonceSource {
-	case "debank":
-		return getNonce(evm, request)
-	case "custom":
-		return getCustomNonce(evm, request)
-	default:
-		return nil, status.Errorf(codes.Unavailable, "Unsupported Operation", "Unsupported Operation")
-	}
-}
+// func (evm *evmCore) GetNonce(request *pb.NonceRequest) (*pb.NonceResponse, error) {
+// 	source := evm.util.GetWalletSource(request.Chain)
+// 	switch source.NonceSource {
+// 	case "debank":
+// 		return getNonce(evm, request)
+// 	case "custom":
+// 		return getCustomNonce(evm, request)
+// 	default:
+// 		return nil, status.Errorf(codes.Unavailable, "Unsupported Operation", "Unsupported Operation")
+// 	}
+// }
 
 // getEthTransactionCount returns the latest transactions count for the given address
 func getEthTransactionCount(evm *evmCore, chain string, address string) (int, error) {
@@ -767,112 +755,112 @@ func getEthGasPrice(evm *evmCore, chain string) (big.Int, error) {
 }
 
 // getCustomNonce fetch nonce for an address based on a custom logic
-func getCustomNonce(evm *evmCore, request *pb.NonceRequest) (*pb.NonceResponse, error) {
-	evm.logger.Info("Getting into custom nonce")
-	nonce, err := getEthTransactionCount(evm, request.Chain, request.Address)
-	if err != nil {
-		evm.logger.Error("Error fetching nonce. Err: ", err)
-		return nil, status.Errorf(codes.Internal, err.Error(), "Internal Error")
-	}
-	tokenPrice, err := evm.services.CoinGecko.GetTokenExchange("usd", request.Chain)
-	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error(), "Error fetching quote price")
-	}
-	gasPrice, err := getEthGasPrice(evm, request.Chain)
-	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error(), "Error fetching gas price")
-	}
-	evm.logger.Info("gasPrice: ", gasPrice)
-	gasPriceInfo := pb.GasPriceInfo{}
-	var fastestFee = 0.0
-	var slowAvgFee = 0.0
-	var fastFee = 0.0
-	acc := big.Exact
-	switch request.Chain {
-	case "tomochain", "xinfin":
-		//V1 compatible custom gas price calculation
-		//Convert gas price to Gwei gasprice / 10^9
-		gasPriceGwei := new(big.Float).Quo(new(big.Float).SetInt(&gasPrice), new(big.Float).SetInt64(utils.GWei))
-		//fastest fee = base gas price * 20
-		fastestFee, acc = new(big.Float).Mul(gasPriceGwei, new(big.Float).SetInt64(20)).Float64()
-		if acc != big.Exact {
-			//TODO:Handle loss of precision
-		}
-		//slow & average fee = base gas price * 4
-		slowAvgFee, acc = new(big.Float).Mul(gasPriceGwei, new(big.Float).SetInt64(4)).Float64()
-		if acc != big.Exact {
-			//TODO:Handle loss of precision
-		}
-		//fast fee = base gas price * 8
-		fastFee, acc = new(big.Float).Mul(gasPriceGwei, new(big.Float).SetInt64(8)).Float64()
-		if acc != big.Exact {
-			//TODO:Handle loos of precision
-		}
-	//Klaytn requires gas fee to be exactly 250 at the time of writing - https://docs.klaytn.foundation/klaytn/design/transaction-fees
-	case "klaytn":
-		fastFee = 250.0
-		slowAvgFee = 250.0
-		fastestFee = 250.0
-	case "zksync":
-		fastFee = 250.0
-		slowAvgFee = 250.0
-		fastestFee = 250.0
-		tokenPrice, err = evm.services.Zksync.GetTokenPrice("usd", "")
-	default:
-		return nil, status.Error(codes.Unavailable, "Unsupported nonce source")
-	}
-	gasPriceInfo = pb.GasPriceInfo{
-		Fast:        fastFee,
-		SafeLow:     slowAvgFee,
-		Fastest:     fastestFee,
-		Average:     slowAvgFee,
-		SafeLowWait: 5,
-		AvgWait:     2,
-		FastWait:    1,
-		FastestWait: 0.5,
-	}
+// func getCustomNonce(evm *evmCore, request *pb.NonceRequest) (*pb.NonceResponse, error) {
+// 	evm.logger.Info("Getting into custom nonce")
+// 	nonce, err := getEthTransactionCount(evm, request.Chain, request.Address)
+// 	if err != nil {
+// 		evm.logger.Error("Error fetching nonce. Err: ", err)
+// 		return nil, status.Errorf(codes.Internal, err.Error(), "Internal Error")
+// 	}
+// 	tokenPrice, err := evm.services.CoinGecko.GetTokenExchange("usd", request.Chain)
+// 	if err != nil {
+// 		return nil, status.Errorf(codes.Internal, err.Error(), "Error fetching quote price")
+// 	}
+// 	gasPrice, err := getEthGasPrice(evm, request.Chain)
+// 	if err != nil {
+// 		return nil, status.Errorf(codes.Internal, err.Error(), "Error fetching gas price")
+// 	}
+// 	evm.logger.Info("gasPrice: ", gasPrice)
+// 	gasPriceInfo := pb.GasPriceInfo{}
+// 	var fastestFee = 0.0
+// 	var slowAvgFee = 0.0
+// 	var fastFee = 0.0
+// 	acc := big.Exact
+// 	switch request.Chain {
+// 	case "tomochain", "xinfin":
+// 		//V1 compatible custom gas price calculation
+// 		//Convert gas price to Gwei gasprice / 10^9
+// 		gasPriceGwei := new(big.Float).Quo(new(big.Float).SetInt(&gasPrice), new(big.Float).SetInt64(utils.GWei))
+// 		//fastest fee = base gas price * 20
+// 		fastestFee, acc = new(big.Float).Mul(gasPriceGwei, new(big.Float).SetInt64(20)).Float64()
+// 		if acc != big.Exact {
+// 			//TODO:Handle loss of precision
+// 		}
+// 		//slow & average fee = base gas price * 4
+// 		slowAvgFee, acc = new(big.Float).Mul(gasPriceGwei, new(big.Float).SetInt64(4)).Float64()
+// 		if acc != big.Exact {
+// 			//TODO:Handle loss of precision
+// 		}
+// 		//fast fee = base gas price * 8
+// 		fastFee, acc = new(big.Float).Mul(gasPriceGwei, new(big.Float).SetInt64(8)).Float64()
+// 		if acc != big.Exact {
+// 			//TODO:Handle loos of precision
+// 		}
+// 	//Klaytn requires gas fee to be exactly 250 at the time of writing - https://docs.klaytn.foundation/klaytn/design/transaction-fees
+// 	case "klaytn":
+// 		fastFee = 250.0
+// 		slowAvgFee = 250.0
+// 		fastestFee = 250.0
+// 	case "zksync":
+// 		fastFee = 250.0
+// 		slowAvgFee = 250.0
+// 		fastestFee = 250.0
+// 		tokenPrice, err = evm.services.Zksync.GetTokenPrice("usd", "")
+// 	default:
+// 		return nil, status.Error(codes.Unavailable, "Unsupported nonce source")
+// 	}
+// 	gasPriceInfo = pb.GasPriceInfo{
+// 		Fast:        fastFee,
+// 		SafeLow:     slowAvgFee,
+// 		Fastest:     fastestFee,
+// 		Average:     slowAvgFee,
+// 		SafeLowWait: 5,
+// 		AvgWait:     2,
+// 		FastWait:    1,
+// 		FastestWait: 0.5,
+// 	}
 
-	return &pb.NonceResponse{
-		Nonce:      int64(nonce),
-		QuoteValue: tokenPrice.Price,
-		GasPrice:   &gasPriceInfo,
-		OpL1Fee:    0.0,
-	}, nil
-}
+// 	return &pb.NonceResponse{
+// 		Nonce:      int64(nonce),
+// 		QuoteValue: tokenPrice.Price,
+// 		GasPrice:   &gasPriceInfo,
+// 		OpL1Fee:    0.0,
+// 	}, nil
+// }
 
-func getNonce(evm *evmCore, request *pb.NonceRequest) (*pb.NonceResponse, error) {
-	nonce, err := getEthTransactionCount(evm, request.Chain, request.Address)
-	if err != nil {
-		evm.logger.Error("Error fetching nonce. Err: ", err)
-		return nil, status.Errorf(codes.Internal, err.Error(), "Internal Error")
-	}
-	tokenPrice, err := evm.services.CoinGecko.GetTokenExchange("usd", request.Chain)
-	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error(), "Error fetching quote price")
-	}
-	evm.logger.Info("quote price := ", tokenPrice.Price)
-	gasPrice, err := evm.services.Debank.GetGasPriceInfo(request.Chain)
-	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error(), "Internal Error")
-	}
-	optL1Fee := evm.optContractABI(request.Chain)
-	gasPriceInfo := pb.GasPriceInfo{
-		Fast:        float64(gasPrice.Fast),
-		SafeLow:     float64(gasPrice.Slow),
-		Fastest:     float64(gasPrice.Fast + (gasPrice.Fast * .2)),
-		Average:     float64(gasPrice.Normal),
-		SafeLowWait: 10,
-		AvgWait:     2,
-		FastWait:    1,
-		FastestWait: 0.5,
-	}
-	return &pb.NonceResponse{
-		Nonce:      int64(nonce),
-		QuoteValue: tokenPrice.Price,
-		GasPrice:   &gasPriceInfo,
-		OpL1Fee:    optL1Fee,
-	}, nil
-}
+// func getNonce(evm *evmCore, request *pb.NonceRequest) (*pb.NonceResponse, error) {
+// 	nonce, err := getEthTransactionCount(evm, request.Chain, request.Address)
+// 	if err != nil {
+// 		evm.logger.Error("Error fetching nonce. Err: ", err)
+// 		return nil, status.Errorf(codes.Internal, err.Error(), "Internal Error")
+// 	}
+// 	tokenPrice, err := evm.services.CoinGecko.GetTokenExchange("usd", request.Chain)
+// 	if err != nil {
+// 		return nil, status.Errorf(codes.Internal, err.Error(), "Error fetching quote price")
+// 	}
+// 	evm.logger.Info("quote price := ", tokenPrice.Price)
+// 	gasPrice, err := evm.services.Debank.GetGasPriceInfo(request.Chain)
+// 	if err != nil {
+// 		return nil, status.Errorf(codes.Internal, err.Error(), "Internal Error")
+// 	}
+// 	optL1Fee := evm.optContractABI(request.Chain)
+// 	gasPriceInfo := pb.GasPriceInfo{
+// 		Fast:        float64(gasPrice.Fast),
+// 		SafeLow:     float64(gasPrice.Slow),
+// 		Fastest:     float64(gasPrice.Fast + (gasPrice.Fast * .2)),
+// 		Average:     float64(gasPrice.Normal),
+// 		SafeLowWait: 10,
+// 		AvgWait:     2,
+// 		FastWait:    1,
+// 		FastestWait: 0.5,
+// 	}
+// 	return &pb.NonceResponse{
+// 		Nonce:      int64(nonce),
+// 		QuoteValue: tokenPrice.Price,
+// 		GasPrice:   &gasPriceInfo,
+// 		OpL1Fee:    optL1Fee,
+// 	}, nil
+// }
 
 func (evm *evmCore) SendTransaction(request *pb.SendTransactionRequest) (*pb.SendTransactionResponse, error) {
 	txId, err := evm.rpc[request.Chain].EthSendRawTransaction(request.Msg)
@@ -1067,72 +1055,72 @@ func (evm *evmCore) contractABI(request ContractABIRequest) (string, error) {
 	}
 }
 
-func (evm *evmCore) TokenApprove(request *pb.ApprovalRequest) (*pb.ApprovalResponse, error) {
-	var res pb.ApprovalResponse
-	var gasPrice string
-	var blockNativeResponse *BlockNativeGasPrice
-	if request.Chain == "xinfin" {
-		request.Token = evm.util.ResolveXDCAddress(request.Token)
-	}
-	data, err := evm.contractABI(ContractABIRequest{
-		Contract: request.Token,
-		To:       request.Target,
-		Data:     "79228162514264337593543950335", //Maximum Decimal Value
-		Method:   "approve",
-		Chain:    request.Chain,
-	})
-	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error(), "Internal Error")
-	}
-	gasData := data
-	transaction := ethrpc.T{
-		From: request.Token,
-		To:   request.Target,
-		Data: gasData,
-	}
-	gasLimit, err := evm.rpc[request.Chain].EthEstimateGas(transaction) //TODO: EthEstimateGas need to be generic
-	if err != nil {
-		evm.logger.Error("Error fetching gas estimate")
-		gasLimit = 60000 //Constant Gas Limit Value
-		evm.logger.Error(err)
-	}
-	evm.logger.Error("Gas limit before: ", gasLimit)
-	switch request.Chain {
-	case "boba":
-		gasLimit = int(math.Ceil(float64(gasLimit * 5)))
-	case "aurora":
-		gasLimit = int(math.Ceil(float64(gasLimit * 2)))
-	case "arbitrum":
-		gasLimit = int(math.Ceil(float64(gasLimit * 20)))
-	default:
-		gasLimit = int(math.Ceil(float64(gasLimit) * 1.2))
-	}
-	if request.Chain != "bsc" {
-		body, err := evm.httpRequest.GetRequestWithHeaders(evm.env.BlockNative.EndPoint+"/gasprices/blockprices",
-			"Authorization", evm.env.BlockNative.AuthHeader)
-		if err != nil {
-			return nil, err
-		}
-		if err := json.Unmarshal(body, &blockNativeResponse); err != nil {
-			evm.logger.Error(err)
-			return nil, status.Errorf(codes.Internal, err.Error(), "json unmarshalling error")
-		}
-		if len(blockNativeResponse.BlockPrices) != 0 {
-			gasPrice = fmt.Sprintf("%v", blockNativeResponse.BlockPrices[0].EstimatedPrices[0].Price)
-		}
-	}
-	if gasPrice != "" {
-		res.TxLink = fmt.Sprintf("https://txlink.io/tx?to=%s&value=%s&data=%s&gaslimit=%s&gasPrice=%v", request.Token, "0", gasData, strconv.Itoa(gasLimit), gasPrice)
-	} else {
-		res.TxLink = fmt.Sprintf("https://txlink.io/tx?to=%s&value=%s&data=%s&gaslimit=%s", request.Token, "0", gasData, strconv.Itoa(gasLimit))
-	}
-	res.To = request.Token
-	res.Value = "0"
-	res.Data = gasData
-	res.GasLimit = strconv.Itoa(gasLimit)
-	return &res, nil
+// func (evm *evmCore) TokenApprove(request *pb.ApprovalRequest) (*pb.ApprovalResponse, error) {
+// 	var res pb.ApprovalResponse
+// 	var gasPrice string
+// 	var blockNativeResponse *BlockNativeGasPrice
+// 	if request.Chain == "xinfin" {
+// 		request.Token = evm.util.ResolveXDCAddress(request.Token)
+// 	}
+// 	data, err := evm.contractABI(ContractABIRequest{
+// 		Contract: request.Token,
+// 		To:       request.Target,
+// 		Data:     "79228162514264337593543950335", //Maximum Decimal Value
+// 		Method:   "approve",
+// 		Chain:    request.Chain,
+// 	})
+// 	if err != nil {
+// 		return nil, status.Errorf(codes.Internal, err.Error(), "Internal Error")
+// 	}
+// 	gasData := data
+// 	transaction := ethrpc.T{
+// 		From: request.Token,
+// 		To:   request.Target,
+// 		Data: gasData,
+// 	}
+// 	gasLimit, err := evm.rpc[request.Chain].EthEstimateGas(transaction) //TODO: EthEstimateGas need to be generic
+// 	if err != nil {
+// 		evm.logger.Error("Error fetching gas estimate")
+// 		gasLimit = 60000 //Constant Gas Limit Value
+// 		evm.logger.Error(err)
+// 	}
+// 	evm.logger.Error("Gas limit before: ", gasLimit)
+// 	switch request.Chain {
+// 	case "boba":
+// 		gasLimit = int(math.Ceil(float64(gasLimit * 5)))
+// 	case "aurora":
+// 		gasLimit = int(math.Ceil(float64(gasLimit * 2)))
+// 	case "arbitrum":
+// 		gasLimit = int(math.Ceil(float64(gasLimit * 20)))
+// 	default:
+// 		gasLimit = int(math.Ceil(float64(gasLimit) * 1.2))
+// 	}
+// 	if request.Chain != "bsc" {
+// 		body, err := evm.httpRequest.GetRequestWithHeaders(evm.env.BlockNative.EndPoint+"/gasprices/blockprices",
+// 			"Authorization", evm.env.BlockNative.AuthHeader)
+// 		if err != nil {
+// 			return nil, err
+// 		}
+// 		if err := json.Unmarshal(body, &blockNativeResponse); err != nil {
+// 			evm.logger.Error(err)
+// 			return nil, status.Errorf(codes.Internal, err.Error(), "json unmarshalling error")
+// 		}
+// 		if len(blockNativeResponse.BlockPrices) != 0 {
+// 			gasPrice = fmt.Sprintf("%v", blockNativeResponse.BlockPrices[0].EstimatedPrices[0].Price)
+// 		}
+// 	}
+// 	if gasPrice != "" {
+// 		res.TxLink = fmt.Sprintf("https://txlink.io/tx?to=%s&value=%s&data=%s&gaslimit=%s&gasPrice=%v", request.Token, "0", gasData, strconv.Itoa(gasLimit), gasPrice)
+// 	} else {
+// 		res.TxLink = fmt.Sprintf("https://txlink.io/tx?to=%s&value=%s&data=%s&gaslimit=%s", request.Token, "0", gasData, strconv.Itoa(gasLimit))
+// 	}
+// 	res.To = request.Token
+// 	res.Value = "0"
+// 	res.Data = gasData
+// 	res.GasLimit = strconv.Itoa(gasLimit)
+// 	return &res, nil
 
-}
+// }
 func (evm *evmCore) isChainNativeToken(tokenAddress string, chain string) bool {
 	var isNativeChain bool
 	for _, c := range evm.env.EVM.Cfg.Wallets {
@@ -1237,185 +1225,185 @@ func (evm *evmCore) GetProcessingFee(request *pb.ProcessingFeeRequest) (*pb.Proc
 	return nil, nil
 }
 
-// GetUserData Retrieve user data from on the provided source
-func (evm *evmCore) GetUserData(request *pb.UserDataRequest) (*pb.UserDataResponse, error) {
-	source := evm.util.GetWalletSource(request.Chain)
-	switch source.UserDataSource {
-	case "unmarshal":
-		return transformUnmarshalUserData(evm, request)
-	//Hack considering unmarshal as the only data source.
-	//TODO: common utilities doesn't need adapter routing.
-	case "":
-		return transformUnmarshalUserData(evm, request)
-	default:
-		return nil, status.Error(codes.Unavailable, "Unsupported Operation")
-	}
-}
+// // GetUserData Retrieve user data from on the provided source
+// func (evm *evmCore) GetUserData(request *pb.UserDataRequest) (*pb.UserDataResponse, error) {
+// 	source := evm.util.GetWalletSource(request.Chain)
+// 	switch source.UserDataSource {
+// 	case "unmarshal":
+// 		return transformUnmarshalUserData(evm, request)
+// 	//Hack considering unmarshal as the only data source.
+// 	//TODO: common utilities doesn't need adapter routing.
+// 	case "":
+// 		return transformUnmarshalUserData(evm, request)
+// 	default:
+// 		return nil, status.Error(codes.Unavailable, "Unsupported Operation")
+// 	}
+// }
 
-// transformUnmarshalUserData Transforms unmarshal data model into user data response model
-func transformUnmarshalUserData(evm *evmCore, request *pb.UserDataRequest) (*pb.UserDataResponse, error) {
-	userData, err := evm.services.Unmarshall.GetUserData(request, request.Chain)
-	if err != nil {
-		evm.logger.Error("Error fetching user data. Err: ", err)
-		return nil, status.Errorf(codes.Internal, err.Error(), "Internal Error")
-	}
-	userDataResponse := pb.UserDataResponse{
-		QuoteRate:              userData.QuoteRate,
-		TotalFeesPaid:          userData.TotalFeesPaid,
-		TotalFeesPaidUsd:       userData.TotalFeesPaidUsd,
-		AverageTokenPrice:      userData.AverageTokenPrice,
-		OverallProfitLoss:      userData.OverallProfitLoss,
-		CurrentHoldingQuantity: userData.CurrentHoldingQuantity,
-		PercentageChange_24H:   userData.PercentageChange24H,
-		PriceChange_24H:        userData.PriceChange24H,
-	}
-	return &userDataResponse, nil
-}
+// // transformUnmarshalUserData Transforms unmarshal data model into user data response model
+// func transformUnmarshalUserData(evm *evmCore, request *pb.UserDataRequest) (*pb.UserDataResponse, error) {
+// 	userData, err := evm.services.Unmarshall.GetUserData(request, request.Chain)
+// 	if err != nil {
+// 		evm.logger.Error("Error fetching user data. Err: ", err)
+// 		return nil, status.Errorf(codes.Internal, err.Error(), "Internal Error")
+// 	}
+// 	userDataResponse := pb.UserDataResponse{
+// 		QuoteRate:              userData.QuoteRate,
+// 		TotalFeesPaid:          userData.TotalFeesPaid,
+// 		TotalFeesPaidUsd:       userData.TotalFeesPaidUsd,
+// 		AverageTokenPrice:      userData.AverageTokenPrice,
+// 		OverallProfitLoss:      userData.OverallProfitLoss,
+// 		CurrentHoldingQuantity: userData.CurrentHoldingQuantity,
+// 		PercentageChange_24H:   userData.PercentageChange24H,
+// 		PriceChange_24H:        userData.PriceChange24H,
+// 	}
+// 	return &userDataResponse, nil
+// }
 
-func (evm *evmCore) GetNftCollections(request *pb.NftCollectionRequest) (*pb.ListNftCollectionResponse, error) {
-	var endpoint = "https://api.opensea.io"
-	url := fmt.Sprintf("%s%s%s%s%s%s%s", endpoint, "/api/v1/assets?owner=", request.Address, "&offset=", request.Page, "&limit=", request.PageSize)
-	body, err := evm.httpRequest.GetRequestWithHeaders(url, "X-API-KEY", "8bb16c6088134b3fb77903d39aad0cce")
-	if err != nil {
-		evm.logger.Error("NftCollectionsHandler info Logging Error  is : %v", err.Error())
-	}
-	var jsonResponseStruct *unmarshal.NFTCollectionDataModel
-	err = json.Unmarshal(body, &jsonResponseStruct)
-	if err != nil {
-		evm.logger.Error(" NftCollectionsHandler Logging Error  is : %v", err.Error())
-		return nil, status.Errorf(codes.Internal, err.Error(), "json unmarshalling error")
-	}
+// func (evm *evmCore) GetNftCollections(request *pb.NftCollectionRequest) (*pb.ListNftCollectionResponse, error) {
+// 	var endpoint = "https://api.opensea.io"
+// 	url := fmt.Sprintf("%s%s%s%s%s%s%s", endpoint, "/api/v1/assets?owner=", request.Address, "&offset=", request.Page, "&limit=", request.PageSize)
+// 	body, err := evm.httpRequest.GetRequestWithHeaders(url, "X-API-KEY", "8bb16c6088134b3fb77903d39aad0cce")
+// 	if err != nil {
+// 		evm.logger.Error("NftCollectionsHandler info Logging Error  is : %v", err.Error())
+// 	}
+// 	var jsonResponseStruct *unmarshal.NFTCollectionDataModel
+// 	err = json.Unmarshal(body, &jsonResponseStruct)
+// 	if err != nil {
+// 		evm.logger.Error(" NftCollectionsHandler Logging Error  is : %v", err.Error())
+// 		return nil, status.Errorf(codes.Internal, err.Error(), "json unmarshalling error")
+// 	}
 
-	var nftCollections []*pb.NftCollectionResponse
-	for _, asset := range jsonResponseStruct.Assets {
-		collection := asset.Collection
-		collection_item := pb.NftCollectionResponse{
-			BannerImageUrl:          collection.BannerImageUrl,
-			ChatUrl:                 collection.ChatUrl,
-			CreatedDate:             collection.CreatedDate,
-			DefaultToFiat:           collection.DefaultToFiat,
-			Description:             collection.Description,
-			DevBuyerFeeBasisPoints:  collection.DevBuyerFeeBasisPoints,
-			DevSellerFeeBasisPoints: collection.DevSellerFeeBasisPoints,
-			DiscordUrl:              collection.DiscordUrl,
-			DisplayData: &pb.NFTDisplayData{
-				CardDisplayStyle: collection.DisplayData.CardDisplayStyle,
-			},
-			ExternalUrl:                 collection.ExternalUrl,
-			Featured:                    collection.Featured,
-			FeaturedImageUrl:            collection.FeaturedImageUrl,
-			Hidden:                      collection.Hidden,
-			SafelistRequestStatus:       collection.SafelistRequestStatus,
-			ImageUrl:                    collection.ImageUrl,
-			IsSubjectToWhitelist:        collection.IsSubjectToWhitelist,
-			LargeImageUrl:               collection.LargeImageUrl,
-			MediumUsername:              collection.MediumUsername,
-			Name:                        collection.Name,
-			OnlyProxiedTransfers:        collection.OnlyProxiedTransfers,
-			OpenseaBuyerFeeBasisPoints:  collection.OpenseaBuyerFeeBasisPoints,
-			OpenseaSellerFeeBasisPoints: collection.OpenseaSellerFeeBasisPoints,
-			PayoutAddress:               collection.PayoutAddress,
-			RequireEmail:                collection.RequireEmail,
-			ShortDescription:            collection.ShortDescription,
-			Slug:                        collection.Slug,
-			TelegramUrl:                 collection.TelegramUrl,
-			TwitterUsername:             collection.TwitterUsername,
-			InstagramUsername:           collection.InstagramUsername,
-			WikiUrl:                     collection.WikiUrl,
-			IsNsfw:                      collection.IsNsfw,
-			NftData: []*pb.NftData{
-				&pb.NftData{
-					Id:                   asset.Id,
-					NumSales:             asset.NumSales,
-					BackgroundColor:      asset.BackgroundColor,
-					ImageUrl:             asset.ImageUrl,
-					ImagePreviewUrl:      asset.ImagePreviewUrl,
-					ImageThumbnailUrl:    asset.ImageThumbnailUrl,
-					ImageOriginalUrl:     asset.ImageOriginalUrl,
-					AnimationUrl:         asset.AnimationUrl,
-					AnimationOriginalUrl: asset.AnimationOriginalUrl,
-					Name:                 asset.Name,
-					Description:          asset.Description,
-					ExternalLink:         asset.ExternalLink,
-					AssetContract:        &pb.NftDataAssetContract{},
-					Permalink:            asset.Permalink,
-					Decimals:             asset.Decimals,
-					TokenMetadata:        asset.TokenMetadata,
-					IsNsfw:               asset.IsNsfw,
-					Owner:                &pb.NftDataOwner{},
-					SellOrders: []*pb.NftDataSellOrders{
-						&pb.NftDataSellOrders{},
-					},
-					SeaportSellOrders: asset.SeaportSellOrders,
-					Creator: &pb.NftDataCreator{
-						User: &pb.NftDataUser{
-							Username: asset.Creator.User.Username,
-						},
-						ProfileImgUrl: asset.Creator.ProfileImgUrl,
-						Address:       asset.Creator.Address,
-						Config:        asset.Creator.Config,
-					},
-					Traits:                  GetTraits(asset.Traits),
-					LastSale:                nil,
-					TopBid:                  asset.TopBid,
-					ListingDate:             asset.ListingDate,
-					IsPresale:               asset.IsPresale,
-					TransferFeePaymentToken: asset.TransferFeePaymentToken,
-					TransferFee:             asset.TransferFee,
-					TokenId:                 asset.TokenId,
-					CollectionName:          collection.Name,
-					ContractAddress:         asset.AssetContract.Address,
-				},
-			},
-		}
-		nftCollections = append(nftCollections, &collection_item)
-	}
+// 	var nftCollections []*pb.NftCollectionResponse
+// 	for _, asset := range jsonResponseStruct.Assets {
+// 		collection := asset.Collection
+// 		collection_item := pb.NftCollectionResponse{
+// 			BannerImageUrl:          collection.BannerImageUrl,
+// 			ChatUrl:                 collection.ChatUrl,
+// 			CreatedDate:             collection.CreatedDate,
+// 			DefaultToFiat:           collection.DefaultToFiat,
+// 			Description:             collection.Description,
+// 			DevBuyerFeeBasisPoints:  collection.DevBuyerFeeBasisPoints,
+// 			DevSellerFeeBasisPoints: collection.DevSellerFeeBasisPoints,
+// 			DiscordUrl:              collection.DiscordUrl,
+// 			DisplayData: &pb.NFTDisplayData{
+// 				CardDisplayStyle: collection.DisplayData.CardDisplayStyle,
+// 			},
+// 			ExternalUrl:                 collection.ExternalUrl,
+// 			Featured:                    collection.Featured,
+// 			FeaturedImageUrl:            collection.FeaturedImageUrl,
+// 			Hidden:                      collection.Hidden,
+// 			SafelistRequestStatus:       collection.SafelistRequestStatus,
+// 			ImageUrl:                    collection.ImageUrl,
+// 			IsSubjectToWhitelist:        collection.IsSubjectToWhitelist,
+// 			LargeImageUrl:               collection.LargeImageUrl,
+// 			MediumUsername:              collection.MediumUsername,
+// 			Name:                        collection.Name,
+// 			OnlyProxiedTransfers:        collection.OnlyProxiedTransfers,
+// 			OpenseaBuyerFeeBasisPoints:  collection.OpenseaBuyerFeeBasisPoints,
+// 			OpenseaSellerFeeBasisPoints: collection.OpenseaSellerFeeBasisPoints,
+// 			PayoutAddress:               collection.PayoutAddress,
+// 			RequireEmail:                collection.RequireEmail,
+// 			ShortDescription:            collection.ShortDescription,
+// 			Slug:                        collection.Slug,
+// 			TelegramUrl:                 collection.TelegramUrl,
+// 			TwitterUsername:             collection.TwitterUsername,
+// 			InstagramUsername:           collection.InstagramUsername,
+// 			WikiUrl:                     collection.WikiUrl,
+// 			IsNsfw:                      collection.IsNsfw,
+// 			NftData: []*pb.NftData{
+// 				&pb.NftData{
+// 					Id:                   asset.Id,
+// 					NumSales:             asset.NumSales,
+// 					BackgroundColor:      asset.BackgroundColor,
+// 					ImageUrl:             asset.ImageUrl,
+// 					ImagePreviewUrl:      asset.ImagePreviewUrl,
+// 					ImageThumbnailUrl:    asset.ImageThumbnailUrl,
+// 					ImageOriginalUrl:     asset.ImageOriginalUrl,
+// 					AnimationUrl:         asset.AnimationUrl,
+// 					AnimationOriginalUrl: asset.AnimationOriginalUrl,
+// 					Name:                 asset.Name,
+// 					Description:          asset.Description,
+// 					ExternalLink:         asset.ExternalLink,
+// 					AssetContract:        &pb.NftDataAssetContract{},
+// 					Permalink:            asset.Permalink,
+// 					Decimals:             asset.Decimals,
+// 					TokenMetadata:        asset.TokenMetadata,
+// 					IsNsfw:               asset.IsNsfw,
+// 					Owner:                &pb.NftDataOwner{},
+// 					SellOrders: []*pb.NftDataSellOrders{
+// 						&pb.NftDataSellOrders{},
+// 					},
+// 					SeaportSellOrders: asset.SeaportSellOrders,
+// 					Creator: &pb.NftDataCreator{
+// 						User: &pb.NftDataUser{
+// 							Username: asset.Creator.User.Username,
+// 						},
+// 						ProfileImgUrl: asset.Creator.ProfileImgUrl,
+// 						Address:       asset.Creator.Address,
+// 						Config:        asset.Creator.Config,
+// 					},
+// 					Traits:                  GetTraits(asset.Traits),
+// 					LastSale:                nil,
+// 					TopBid:                  asset.TopBid,
+// 					ListingDate:             asset.ListingDate,
+// 					IsPresale:               asset.IsPresale,
+// 					TransferFeePaymentToken: asset.TransferFeePaymentToken,
+// 					TransferFee:             asset.TransferFee,
+// 					TokenId:                 asset.TokenId,
+// 					CollectionName:          collection.Name,
+// 					ContractAddress:         asset.AssetContract.Address,
+// 				},
+// 			},
+// 		}
+// 		nftCollections = append(nftCollections, &collection_item)
+// 	}
 
-	return &pb.ListNftCollectionResponse{
-		Nft: nftCollections,
-	}, nil
-}
+// 	return &pb.ListNftCollectionResponse{
+// 		Nft: nftCollections,
+// 	}, nil
+// }
 
-func (evm *evmCore) BulkApproval(request *pb.ApprovalRequest) (*pb.BulkApprovalResponse, error) {
-	var bulkApprovalResponse pb.BulkApprovalResponse
-	var tokens = strings.Split(request.Token, ",")
-	chanResponse := make(chan *pb.ApprovalResponse)
-	var listApprovalResponse []*pb.ApprovalResponse
-	wg := new(sync.WaitGroup)
-	for _, value := range tokens {
-		wg.Add(1)
-		req := &pb.ApprovalRequest{
-			Target: request.Target,
-			Chain:  request.Chain,
-			Token:  strings.Trim(value, " "),
-		}
-		go evm.GetTokenApproval(req, wg, chanResponse)
-		listApprovalResponse = append(listApprovalResponse, <-chanResponse)
-	}
-	bulkApprovalResponse.Response = listApprovalResponse
-	return &bulkApprovalResponse, nil
-}
+// func (evm *evmCore) BulkApproval(request *pb.ApprovalRequest) (*pb.BulkApprovalResponse, error) {
+// 	var bulkApprovalResponse pb.BulkApprovalResponse
+// 	var tokens = strings.Split(request.Token, ",")
+// 	chanResponse := make(chan *pb.ApprovalResponse)
+// 	var listApprovalResponse []*pb.ApprovalResponse
+// 	wg := new(sync.WaitGroup)
+// 	for _, value := range tokens {
+// 		wg.Add(1)
+// 		req := &pb.ApprovalRequest{
+// 			Target: request.Target,
+// 			Chain:  request.Chain,
+// 			Token:  strings.Trim(value, " "),
+// 		}
+// 		go evm.GetTokenApproval(req, wg, chanResponse)
+// 		listApprovalResponse = append(listApprovalResponse, <-chanResponse)
+// 	}
+// 	bulkApprovalResponse.Response = listApprovalResponse
+// 	return &bulkApprovalResponse, nil
+// }
 
-func (evm *evmCore) BulkAllowance(request *pb.AllowanceRequest) (*pb.BulkAllowanceResponse, error) {
-	var bulkAllowanceResponse pb.BulkAllowanceResponse
-	var tokens = strings.Split(request.Contract, ",")
-	chanResponse := make(chan *pb.AllowanceResponse)
-	var listAllowanceResponse []*pb.AllowanceResponse
-	wg := new(sync.WaitGroup)
-	for _, value := range tokens {
-		wg.Add(1)
-		req := &pb.AllowanceRequest{
-			Chain:    request.Chain,
-			Contract: strings.Trim(value, " "),
-			Owner:    request.Owner,
-			Spender:  request.Spender,
-		}
-		go evm.GetBulkTokenAllowance(req, wg, chanResponse)
-		listAllowanceResponse = append(listAllowanceResponse, <-chanResponse)
-	}
-	bulkAllowanceResponse.Response = listAllowanceResponse
-	return &bulkAllowanceResponse, nil
-}
+// func (evm *evmCore) BulkAllowance(request *pb.AllowanceRequest) (*pb.BulkAllowanceResponse, error) {
+// 	var bulkAllowanceResponse pb.BulkAllowanceResponse
+// 	var tokens = strings.Split(request.Contract, ",")
+// 	chanResponse := make(chan *pb.AllowanceResponse)
+// 	var listAllowanceResponse []*pb.AllowanceResponse
+// 	wg := new(sync.WaitGroup)
+// 	for _, value := range tokens {
+// 		wg.Add(1)
+// 		req := &pb.AllowanceRequest{
+// 			Chain:    request.Chain,
+// 			Contract: strings.Trim(value, " "),
+// 			Owner:    request.Owner,
+// 			Spender:  request.Spender,
+// 		}
+// 		go evm.GetBulkTokenAllowance(req, wg, chanResponse)
+// 		listAllowanceResponse = append(listAllowanceResponse, <-chanResponse)
+// 	}
+// 	bulkAllowanceResponse.Response = listAllowanceResponse
+// 	return &bulkAllowanceResponse, nil
+// }
 
 type Traits []struct {
 	TraitType   string `json:"trait_type"`
@@ -1441,12 +1429,12 @@ func GetTraits(t Traits) []*pb.NftDataTraits {
 	return trait
 }
 
-func (evm *evmCore) GetTokenApproval(req *pb.ApprovalRequest, wg *sync.WaitGroup, chanResponse chan *pb.ApprovalResponse) {
-	defer wg.Done()
-	tokenApprovalResponse, _ := evm.TokenApprove(req)
-	chanResponse <- tokenApprovalResponse
-	return
-}
+// func (evm *evmCore) GetTokenApproval(req *pb.ApprovalRequest, wg *sync.WaitGroup, chanResponse chan *pb.ApprovalResponse) {
+// 	defer wg.Done()
+// 	tokenApprovalResponse, _ := evm.TokenApprove(req)
+// 	chanResponse <- tokenApprovalResponse
+// 	return
+// }
 
 func (evm *evmCore) GetBulkTokenAllowance(req *pb.AllowanceRequest, wg *sync.WaitGroup, chanResponse chan *pb.AllowanceResponse) {
 	defer wg.Done()
@@ -1454,135 +1442,135 @@ func (evm *evmCore) GetBulkTokenAllowance(req *pb.AllowanceRequest, wg *sync.Wai
 	chanResponse <- tokenAllowanceResponse
 	return
 }
-func (evm *evmCore) GetOpportunites(request *pb.GetOpportunitiesRequest) (*pb.GetOpportunitesResponse, error) {
-	var opportunityResForEVM Opportunities
-	var opportunities models.Opportunities
-	reqUrl := fmt.Sprintf(evm.env.PROXIES_ENDPOINT+"/v1/stake/opportunity-new?current=%s", request.Chain)
-	res, err := evm.httpRequest.GetRequest(reqUrl)
-	if err != nil {
-		evm.logger.Error(err)
-		return nil, status.Errorf(codes.Internal, err.Error(), "error at fetching response from v1")
-	}
-	err = json.Unmarshal(res, &opportunityResForEVM)
-	if err != nil {
-		return nil, err
-	}
-	for _, current := range opportunityResForEVM.Current {
-		switch current.Apr.(type) {
-		case float64:
-			current.Apr = strconv.FormatFloat(current.Apr.(float64), 'f', -1, 64)
-			opportunityData := models.OpportunityData{
-				Apr:                         current.Apr.(string),
-				Chain:                       current.Chain,
-				Logo:                        current.Logo,
-				StakeTokenName:              current.StakeTokenName,
-				ReceiptTokenName:            current.ReceiptTokenName,
-				ContractDecimals:            current.ContractDecimals,
-				StakeTokenLogoUrl:           current.StakeTokenLogoUrl,
-				StakeTokenContractAddress:   current.StakeTokenContractAddress,
-				ReceiptTokenLogoUrl:         current.ReceiptTokenLogoUrl,
-				ReceiptTokenContractAddres:  current.ReceiptTokenContractAddres,
-				ReceiptTokenContractAddress: current.ReceiptTokenContractAddress,
-				StakeToReceiptExchangeRate:  current.StakeToReceiptExchangeRate,
-				ReceiptToStakeExchangeRate:  current.ReceiptToStakeExchangeRate,
-				QuoteRate:                   current.QuoteRate,
-				ReceiptQuoteRate:            current.ReceiptQuoteRate,
-				StakingType:                 current.StakingType,
-				ProtocolName:                current.ProtocolName,
-				CoolDownPeriod:              current.CoolDownPeriod,
-				MinLockup:                   current.MinLockup,
-				RewardSchedule:              current.RewardSchedule,
-				TokenName:                   current.TokenName,
-			}
-			opportunities.Current = append(opportunities.Current, opportunityData)
-		default:
-			opportunityData := models.OpportunityData{
-				Apr:                         current.Apr.(string),
-				Chain:                       current.Chain,
-				Logo:                        current.Logo,
-				StakeTokenName:              current.StakeTokenName,
-				ReceiptTokenName:            current.ReceiptTokenName,
-				ContractDecimals:            current.ContractDecimals,
-				StakeTokenLogoUrl:           current.StakeTokenLogoUrl,
-				StakeTokenContractAddress:   current.StakeTokenContractAddress,
-				ReceiptTokenLogoUrl:         current.ReceiptTokenLogoUrl,
-				ReceiptTokenContractAddres:  current.ReceiptTokenContractAddres,
-				ReceiptTokenContractAddress: current.ReceiptTokenContractAddress,
-				StakeToReceiptExchangeRate:  current.StakeToReceiptExchangeRate,
-				ReceiptToStakeExchangeRate:  current.ReceiptToStakeExchangeRate,
-				QuoteRate:                   current.QuoteRate,
-				ReceiptQuoteRate:            current.ReceiptQuoteRate,
-				StakingType:                 current.StakingType,
-				ProtocolName:                current.ProtocolName,
-				CoolDownPeriod:              current.CoolDownPeriod,
-				MinLockup:                   current.MinLockup,
-				RewardSchedule:              current.RewardSchedule,
-				TokenName:                   current.TokenName,
-			}
-			opportunities.Current = append(opportunities.Current, opportunityData)
-		}
-	}
-	for _, others := range opportunityResForEVM.Others {
-		switch others.Apr.(type) {
-		case float64:
-			others.Apr = strconv.FormatFloat(others.Apr.(float64), 'f', -1, 64)
-			opportunityData := models.OpportunityData{
-				Apr:                         others.Apr.(string),
-				Chain:                       others.Chain,
-				Logo:                        others.Logo,
-				StakeTokenName:              others.StakeTokenName,
-				ReceiptTokenName:            others.ReceiptTokenName,
-				ContractDecimals:            others.ContractDecimals,
-				StakeTokenLogoUrl:           others.StakeTokenLogoUrl,
-				StakeTokenContractAddress:   others.StakeTokenContractAddress,
-				ReceiptTokenLogoUrl:         others.ReceiptTokenLogoUrl,
-				ReceiptTokenContractAddres:  others.ReceiptTokenContractAddres,
-				ReceiptTokenContractAddress: others.ReceiptTokenContractAddress,
-				StakeToReceiptExchangeRate:  others.StakeToReceiptExchangeRate,
-				ReceiptToStakeExchangeRate:  others.ReceiptToStakeExchangeRate,
-				QuoteRate:                   others.QuoteRate,
-				ReceiptQuoteRate:            others.ReceiptQuoteRate,
-				StakingType:                 others.StakingType,
-				ProtocolName:                others.ProtocolName,
-				CoolDownPeriod:              others.CoolDownPeriod,
-				MinLockup:                   others.MinLockup,
-				RewardSchedule:              others.RewardSchedule,
-				TokenName:                   others.TokenName,
-			}
-			opportunities.Others = append(opportunities.Others, opportunityData)
-		default:
-			opportunityData := models.OpportunityData{
-				Apr:                         others.Apr.(string),
-				Chain:                       others.Chain,
-				Logo:                        others.Logo,
-				StakeTokenName:              others.StakeTokenName,
-				ReceiptTokenName:            others.ReceiptTokenName,
-				ContractDecimals:            others.ContractDecimals,
-				StakeTokenLogoUrl:           others.StakeTokenLogoUrl,
-				StakeTokenContractAddress:   others.StakeTokenContractAddress,
-				ReceiptTokenLogoUrl:         others.ReceiptTokenLogoUrl,
-				ReceiptTokenContractAddres:  others.ReceiptTokenContractAddres,
-				ReceiptTokenContractAddress: others.ReceiptTokenContractAddress,
-				StakeToReceiptExchangeRate:  others.StakeToReceiptExchangeRate,
-				ReceiptToStakeExchangeRate:  others.ReceiptToStakeExchangeRate,
-				QuoteRate:                   others.QuoteRate,
-				ReceiptQuoteRate:            others.ReceiptQuoteRate,
-				StakingType:                 others.StakingType,
-				ProtocolName:                others.ProtocolName,
-				CoolDownPeriod:              others.CoolDownPeriod,
-				MinLockup:                   others.MinLockup,
-				RewardSchedule:              others.RewardSchedule,
-				TokenName:                   others.TokenName,
-			}
-			opportunities.Others = append(opportunities.Others, opportunityData)
-		}
-	}
+// func (evm *evmCore) GetOpportunites(request *pb.GetOpportunitiesRequest) (*pb.GetOpportunitesResponse, error) {
+// 	var opportunityResForEVM Opportunities
+// 	var opportunities models.Opportunities
+// 	reqUrl := fmt.Sprintf(evm.env.PROXIES_ENDPOINT+"/v1/stake/opportunity-new?current=%s", request.Chain)
+// 	res, err := evm.httpRequest.GetRequest(reqUrl)
+// 	if err != nil {
+// 		evm.logger.Error(err)
+// 		return nil, status.Errorf(codes.Internal, err.Error(), "error at fetching response from v1")
+// 	}
+// 	err = json.Unmarshal(res, &opportunityResForEVM)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	for _, current := range opportunityResForEVM.Current {
+// 		switch current.Apr.(type) {
+// 		case float64:
+// 			current.Apr = strconv.FormatFloat(current.Apr.(float64), 'f', -1, 64)
+// 			opportunityData := models.OpportunityData{
+// 				Apr:                         current.Apr.(string),
+// 				Chain:                       current.Chain,
+// 				Logo:                        current.Logo,
+// 				StakeTokenName:              current.StakeTokenName,
+// 				ReceiptTokenName:            current.ReceiptTokenName,
+// 				ContractDecimals:            current.ContractDecimals,
+// 				StakeTokenLogoUrl:           current.StakeTokenLogoUrl,
+// 				StakeTokenContractAddress:   current.StakeTokenContractAddress,
+// 				ReceiptTokenLogoUrl:         current.ReceiptTokenLogoUrl,
+// 				ReceiptTokenContractAddres:  current.ReceiptTokenContractAddres,
+// 				ReceiptTokenContractAddress: current.ReceiptTokenContractAddress,
+// 				StakeToReceiptExchangeRate:  current.StakeToReceiptExchangeRate,
+// 				ReceiptToStakeExchangeRate:  current.ReceiptToStakeExchangeRate,
+// 				QuoteRate:                   current.QuoteRate,
+// 				ReceiptQuoteRate:            current.ReceiptQuoteRate,
+// 				StakingType:                 current.StakingType,
+// 				ProtocolName:                current.ProtocolName,
+// 				CoolDownPeriod:              current.CoolDownPeriod,
+// 				MinLockup:                   current.MinLockup,
+// 				RewardSchedule:              current.RewardSchedule,
+// 				TokenName:                   current.TokenName,
+// 			}
+// 			opportunities.Current = append(opportunities.Current, opportunityData)
+// 		default:
+// 			opportunityData := models.OpportunityData{
+// 				Apr:                         current.Apr.(string),
+// 				Chain:                       current.Chain,
+// 				Logo:                        current.Logo,
+// 				StakeTokenName:              current.StakeTokenName,
+// 				ReceiptTokenName:            current.ReceiptTokenName,
+// 				ContractDecimals:            current.ContractDecimals,
+// 				StakeTokenLogoUrl:           current.StakeTokenLogoUrl,
+// 				StakeTokenContractAddress:   current.StakeTokenContractAddress,
+// 				ReceiptTokenLogoUrl:         current.ReceiptTokenLogoUrl,
+// 				ReceiptTokenContractAddres:  current.ReceiptTokenContractAddres,
+// 				ReceiptTokenContractAddress: current.ReceiptTokenContractAddress,
+// 				StakeToReceiptExchangeRate:  current.StakeToReceiptExchangeRate,
+// 				ReceiptToStakeExchangeRate:  current.ReceiptToStakeExchangeRate,
+// 				QuoteRate:                   current.QuoteRate,
+// 				ReceiptQuoteRate:            current.ReceiptQuoteRate,
+// 				StakingType:                 current.StakingType,
+// 				ProtocolName:                current.ProtocolName,
+// 				CoolDownPeriod:              current.CoolDownPeriod,
+// 				MinLockup:                   current.MinLockup,
+// 				RewardSchedule:              current.RewardSchedule,
+// 				TokenName:                   current.TokenName,
+// 			}
+// 			opportunities.Current = append(opportunities.Current, opportunityData)
+// 		}
+// 	}
+// 	for _, others := range opportunityResForEVM.Others {
+// 		switch others.Apr.(type) {
+// 		case float64:
+// 			others.Apr = strconv.FormatFloat(others.Apr.(float64), 'f', -1, 64)
+// 			opportunityData := models.OpportunityData{
+// 				Apr:                         others.Apr.(string),
+// 				Chain:                       others.Chain,
+// 				Logo:                        others.Logo,
+// 				StakeTokenName:              others.StakeTokenName,
+// 				ReceiptTokenName:            others.ReceiptTokenName,
+// 				ContractDecimals:            others.ContractDecimals,
+// 				StakeTokenLogoUrl:           others.StakeTokenLogoUrl,
+// 				StakeTokenContractAddress:   others.StakeTokenContractAddress,
+// 				ReceiptTokenLogoUrl:         others.ReceiptTokenLogoUrl,
+// 				ReceiptTokenContractAddres:  others.ReceiptTokenContractAddres,
+// 				ReceiptTokenContractAddress: others.ReceiptTokenContractAddress,
+// 				StakeToReceiptExchangeRate:  others.StakeToReceiptExchangeRate,
+// 				ReceiptToStakeExchangeRate:  others.ReceiptToStakeExchangeRate,
+// 				QuoteRate:                   others.QuoteRate,
+// 				ReceiptQuoteRate:            others.ReceiptQuoteRate,
+// 				StakingType:                 others.StakingType,
+// 				ProtocolName:                others.ProtocolName,
+// 				CoolDownPeriod:              others.CoolDownPeriod,
+// 				MinLockup:                   others.MinLockup,
+// 				RewardSchedule:              others.RewardSchedule,
+// 				TokenName:                   others.TokenName,
+// 			}
+// 			opportunities.Others = append(opportunities.Others, opportunityData)
+// 		default:
+// 			opportunityData := models.OpportunityData{
+// 				Apr:                         others.Apr.(string),
+// 				Chain:                       others.Chain,
+// 				Logo:                        others.Logo,
+// 				StakeTokenName:              others.StakeTokenName,
+// 				ReceiptTokenName:            others.ReceiptTokenName,
+// 				ContractDecimals:            others.ContractDecimals,
+// 				StakeTokenLogoUrl:           others.StakeTokenLogoUrl,
+// 				StakeTokenContractAddress:   others.StakeTokenContractAddress,
+// 				ReceiptTokenLogoUrl:         others.ReceiptTokenLogoUrl,
+// 				ReceiptTokenContractAddres:  others.ReceiptTokenContractAddres,
+// 				ReceiptTokenContractAddress: others.ReceiptTokenContractAddress,
+// 				StakeToReceiptExchangeRate:  others.StakeToReceiptExchangeRate,
+// 				ReceiptToStakeExchangeRate:  others.ReceiptToStakeExchangeRate,
+// 				QuoteRate:                   others.QuoteRate,
+// 				ReceiptQuoteRate:            others.ReceiptQuoteRate,
+// 				StakingType:                 others.StakingType,
+// 				ProtocolName:                others.ProtocolName,
+// 				CoolDownPeriod:              others.CoolDownPeriod,
+// 				MinLockup:                   others.MinLockup,
+// 				RewardSchedule:              others.RewardSchedule,
+// 				TokenName:                   others.TokenName,
+// 			}
+// 			opportunities.Others = append(opportunities.Others, opportunityData)
+// 		}
+// 	}
 
-	marshalRes, err := json.Marshal(opportunities)
-	if err != nil {
-		return nil, err
-	}
-	return &pb.GetOpportunitesResponse{
-		Opportunities: marshalRes,
-	}, nil
-}
+// 	marshalRes, err := json.Marshal(opportunities)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return &pb.GetOpportunitesResponse{
+// 		Opportunities: marshalRes,
+// 	}, nil
+// }

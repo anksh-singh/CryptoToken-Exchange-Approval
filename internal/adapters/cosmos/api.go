@@ -3,7 +3,7 @@ package cosmos
 import (
 	"bridge-allowance/config"
 	"bridge-allowance/internal/adapters/cosmos/application"
-	"bridge-allowance/pkg/coingecko"
+	// "bridge-allowance/pkg/coingecko"
 	"bridge-allowance/pkg/grpc/proto/pb"
 	"bridge-allowance/utils"
 	"github.com/spf13/cobra"
@@ -16,12 +16,12 @@ import (
 type cosmos struct {
 	config              *config.Config
 	logger              *zap.SugaredLogger
-	coingecko           *coingecko.CoinGecko
+	// coingecko           *coingecko.CoinGecko
 	cosmosServerHandler *application.CosmosServerHandler
 }
 
-func NewServer(config *config.Config, log *zap.SugaredLogger, coingecko *coingecko.CoinGecko) (*cosmos, error) {
-	newCosServerHander, err := application.NewCosmosServerHandler(config, log, coingecko)
+func NewServer(config *config.Config, log *zap.SugaredLogger) (*cosmos, error) {
+	newCosServerHander, err := application.NewCosmosServerHandler(config, log)
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +29,7 @@ func NewServer(config *config.Config, log *zap.SugaredLogger, coingecko *coingec
 		config:              config,
 		logger:              log,
 		cosmosServerHandler: newCosServerHander,
-		coingecko:           coingecko,
+		// coingecko:           coingecko,
 	}, nil
 }
 
@@ -58,9 +58,9 @@ var CosmosCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		conf := config.LoadConfig("", "")
 		logger := utils.SetupLogger(conf.Logger.LogLevel, conf.Logger.LogPath+conf.Cosmos.Cfg.LogFile, conf.LOG_ENCODING_FORMAT)
-		httpRequest := utils.NewHttpRequest(logger)
-		coinGecko := coingecko.NewCoinGecko(conf, logger, httpRequest)
-		cosmosServer, err := NewServer(conf, logger, coinGecko)
+		// httpRequest := utils.NewHttpRequest(logger)
+		// coinGecko := coingecko.NewCoinGecko(conf, logger, httpRequest)
+		cosmosServer, err := NewServer(conf, logger)
 		if err != nil {
 			logger.Error("Error in Starting Cosmos Server")
 			return

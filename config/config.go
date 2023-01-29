@@ -1,12 +1,9 @@
 package config
 
 import (
-	// "encoding/json"
 	"github.com/spf13/viper"
-	// "io"
-	// "io/ioutil"
 	"log"
-	// "net/http"
+	
 )
 
 type Config struct {

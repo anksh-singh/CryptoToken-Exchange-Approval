@@ -110,26 +110,4 @@ func (u *UtilConf) ValidateListTransactionRequest(in *pb.ListTransactionRequest)
 	return nil
 }
 
-func (u *UtilConf) ValidateNftCollectionRequest(in *pb.NftCollectionRequest) error {
-	const MinPage = 1
-	const MinPageSize = 1
-	const MaxPageSize = 25
-	u.log.Infof("starting validation tests")
-	pageInt, err := strconv.Atoi(in.Page)
-	if err != nil {
-		return status.Errorf(codes.InvalidArgument, "page should be an integer", "wrong data type")
-	} else {
-		if pageInt < MinPage {
-			return status.Errorf(codes.InvalidArgument, "Page should be between 1 - 25", "Invalid Data")
-		}
-	}
-	pageSizeInt, err := strconv.Atoi(in.PageSize)
-	if err != nil {
-		return status.Errorf(codes.InvalidArgument, "Page size should be between 1 - 25", "Invalid Data")
-	} else {
-		if pageSizeInt < MinPageSize || pageSizeInt > MaxPageSize {
-			return status.Errorf(codes.InvalidArgument, "Page size should be between 1 - 25", "Invalid Data")
-		}
-	}
-	return nil
-}
+

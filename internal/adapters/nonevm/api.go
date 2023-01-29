@@ -3,9 +3,9 @@ package nonevm
 import (
 	"bridge-allowance/config"
 	"bridge-allowance/internal/adapters/nonevm/application"
-	"bridge-allowance/pkg/coingecko"
-	aptos2 "bridge-allowance/pkg/customchain/aptos"
-	near2 "bridge-allowance/pkg/customchain/near"
+	// "bridge-allowance/pkg/coingecko"
+	// aptos2 "bridge-allowance/pkg/customchain/aptos"
+	// near2 "bridge-allowance/pkg/customchain/near"
 	"bridge-allowance/pkg/grpc/proto/pb"
 	"bridge-allowance/utils"
 	"github.com/spf13/cobra"
@@ -19,18 +19,18 @@ type NonEVMServer struct {
 	config        *config.Config
 	logger        *zap.SugaredLogger
 	ServerHandler *application.NonEVMServerHandler
-	coingecko     *coingecko.CoinGecko
+	// coingecko     *coingecko.CoinGecko
 }
 
-func NewNonEVMServer(config *config.Config, log *zap.SugaredLogger, coinGecko *coingecko.CoinGecko) *NonEVMServer {
-	near := near2.NewServiceNear(config, log, coinGecko)
-	aptos := aptos2.NewServiceAptos(config, log, coinGecko)
-	newServerHander := application.NewEVMServerServerHandler(config, log, coinGecko, near, aptos)
+func NewNonEVMServer(config *config.Config, log *zap.SugaredLogger) *NonEVMServer {
+	// near := near2.NewServiceNear(config, log, coinGecko)
+	// aptos := aptos2.NewServiceAptos(config, log, coinGecko)
+	newServerHander := application.NewEVMServerServerHandler(config, log)
 	return &NonEVMServer{
 		config:        config,
 		logger:        log,
 		ServerHandler: newServerHander,
-		coingecko:     coinGecko,
+		// coingecko:     coinGecko,
 	}
 }
 
@@ -60,9 +60,9 @@ var SolanaCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		conf := config.LoadConfig("", "")
 		logger := utils.SetupLogger(conf.Logger.LogLevel, conf.Logger.LogPath+conf.NonEVMConfig.LogFile, conf.LOG_ENCODING_FORMAT)
-		httpRequest := utils.NewHttpRequest(logger)
-		coinGecko := coingecko.NewCoinGecko(conf, logger, httpRequest)
-		solanaServer := NewNonEVMServer(conf, logger, coinGecko)
+		// httpRequest := utils.NewHttpRequest(logger)
+		// coinGecko := coingecko.NewCoinGecko(conf, logger, httpRequest)
+		solanaServer := NewNonEVMServer(conf, logger)
 		solanaServer.Start()
 	},
 }

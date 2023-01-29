@@ -66,18 +66,18 @@ func (b *Bridge) GetChains(request *pb.BridgeChainRequest) (*pb.BridgeChainRespo
 	}
 
 	switch b.config.Bridge.BridgeCfg.BridgeExchangeChains {
-	case "liFiBridge":
-		return b.services.LiFi.GetChains()
+	// case "liFiBridge":
+	// 	return b.services.LiFi.GetChains()
 	case "XYBridge":
 		return b.IV1Proxy.GetChains(request, b.config.PROXIES_ENDPOINT)
 	case "RouterBridge":
 		return b.IV1Proxy.GetChains(request, b.config.PROXIES_ENDPOINT)
 	case "RangoBridge":
 		return b.IV1Proxy.GetChains(request, b.config.PROXIES_ENDPOINT)
-	case "SocketBridge":
-		return b.services.Socket.GetChains()
-	case "DeBridge":
-		return b.services.DeBridge.GetChains()
+	// case "SocketBridge":
+	// 	return b.services.Socket.GetChains()
+	// case "DeBridge":
+	// 	return b.services.DeBridge.GetChains()
 	default:
 		return nil, status.Errorf(codes.Unimplemented,
 			fmt.Sprintf("Unsupported operation: Source %v is unsupported", b.config.Bridge.BridgeCfg.BridgeExchangeChains), "Unsupported operation")
@@ -102,18 +102,18 @@ func (b *Bridge) GetChainTokens(request *pb.BridgeChainTokensRequest) (*pb.Bridg
 			fmt.Sprintf("Unsupported '%s' Bridge", request.BridgeProvider), "Unsupported")
 	}
 	switch b.config.Bridge.BridgeCfg.BridgeExchangeChainTokens {
-	case "liFiBridge":
-		return b.services.LiFi.GetChainTokens(request)
-	case "SocketBridge":
-		return b.services.Socket.GetChainTokens(request)
+	// case "liFiBridge":
+	// 	return b.services.LiFi.GetChainTokens(request)
+	// case "SocketBridge":
+	// 	return b.services.Socket.GetChainTokens(request)
 	case "XYBridge":
 		return b.IV1Proxy.GetChainTokens(request, b.config.PROXIES_ENDPOINT)
 	case "RouterBridge":
 		return b.IV1Proxy.GetChainTokens(request, b.config.PROXIES_ENDPOINT)
 	case "RangoBridge":
 		return b.IV1Proxy.GetChainTokens(request, b.config.PROXIES_ENDPOINT)
-	case "DeBridge":
-		return b.services.DeBridge.GetChainTokens(request)
+	// case "DeBridge":
+	// 	return b.services.DeBridge.GetChainTokens(request)
 	default:
 		return nil, status.Errorf(codes.Unimplemented,
 			fmt.Sprintf("Unsupported operation: Source %v is unsupported", b.config.Bridge.BridgeCfg.BridgeExchangeChainTokens), "Unsupported operation")
@@ -138,18 +138,18 @@ func (b *Bridge) GetQuote(request *pb.BridgeQuoteRequest) (*pb.BridgeQuoteRespon
 			fmt.Sprintf("Unsupported '%s' Bridge", request.BridgeProvider), "Unsupported")
 	}
 	switch b.config.Bridge.BridgeCfg.BridgeExchangeQuote {
-	case "liFiBridge":
-		return b.services.LiFi.GetQuote(request)
-	case "SocketBridge":
-		return b.services.Socket.GetQuote(request)
+	// case "liFiBridge":
+	// 	return b.services.LiFi.GetQuote(request)
+	// case "SocketBridge":
+	// 	return b.services.Socket.GetQuote(request)
 	case "XYBridge":
 		return b.IV1Proxy.GetQuote(request, b.config.PROXIES_ENDPOINT)
 	case "RangoBridge":
 		return b.IV1Proxy.GetQuote(request, b.config.PROXIES_ENDPOINT)
 	case "RouterBridge":
 		return b.IV1Proxy.GetQuote(request, b.config.PROXIES_ENDPOINT)
-	case "DeBridge":
-		return b.services.DeBridge.GetQuote(request)
+	// case "DeBridge":
+	// 	return b.services.DeBridge.GetQuote(request)
 	default:
 		return nil, status.Errorf(codes.Unimplemented,
 			fmt.Sprintf("Unsupported operation: Source %v is unsupported", b.config.Bridge.BridgeCfg.BridgeExchangeQuote), "Unsupported operation")
@@ -174,18 +174,18 @@ func (b *Bridge) GetTransaction(request *pb.BridgeTransactionRequest) (*pb.Bridg
 			fmt.Sprintf("Unsupported '%s' Bridge", request.BridgeProvider), "Unsupported")
 	}
 	switch b.config.Bridge.BridgeCfg.BridgeExchangeTransaction {
-	case "liFiBridge":
-		return b.services.LiFi.GetTransaction(request)
+	// case "liFiBridge":
+	// 	return b.services.LiFi.GetTransaction(request)
 	case "XYBridge":
 		return b.IV1Proxy.GetTransaction(request, b.config.PROXIES_ENDPOINT)
-	case "SocketBridge":
-		return b.services.Socket.GetTransaction(request)
+	// case "SocketBridge":
+	// 	return b.services.Socket.GetTransaction(request)
 	case "RangoBridge":
 		return b.IV1Proxy.GetTransaction(request, b.config.PROXIES_ENDPOINT)
 	case "RouterBridge":
 		return b.IV1Proxy.GetTransaction(request, b.config.PROXIES_ENDPOINT)
-	case "DeBridge":
-		return b.services.DeBridge.GetTransaction(request)
+	// case "DeBridge":
+	// 	return b.services.DeBridge.GetTransaction(request)
 	default:
 		return nil, status.Errorf(codes.Unimplemented,
 			fmt.Sprintf("Unsupported operation: Source %v is unsupported", b.config.Bridge.BridgeCfg.BridgeExchangeTransaction), "Unsupported operation")
@@ -212,8 +212,8 @@ func (b *Bridge) GetTransactionStatus(request *pb.BridgeTransactionStatusRequest
 		return b.IV1Proxy.GetTransactionStatus(request, b.config.PROXIES_ENDPOINT)
 	case "RouterBridge":
 		return b.IV1Proxy.GetTransactionStatus(request, b.config.PROXIES_ENDPOINT)
-	case "SocketBridge":
-		return b.services.Socket.GetTransactionStatus(request)
+	// case "SocketBridge":
+	// 	return b.services.Socket.GetTransactionStatus(request)
 	case "RangoBridge":
 		return b.IV1Proxy.GetTransactionStatus(request, b.config.PROXIES_ENDPOINT)
 	default:

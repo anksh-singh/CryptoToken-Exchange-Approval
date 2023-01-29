@@ -11,16 +11,6 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// AllowanceHandler  godoc
-// @Summary      get token allowance
-// @Tags         Utils
-// @Accept       json
-// @Produce      json
-// @Param        chain   query      string  true  "chain"  Enums(solana,,arbitrum,fantom,ethereum,harmony,polygon,celo,optimism,xinfin,metis,avalanche,aurora,bsc,boba,moonriver,evmos,fuse,cronos,astar,tomochain,zksync,,kava,osmosis,terra,band)
-// @Param        contract   query      string  true  "contract"
-// @Param        owner   query      string  true  "owner"
-// @Param        spender   query      string  true  "spender"
-// @Router       /utils/getAllowance [get]
 func (h *handler) AllowanceHandler(ctx *gin.Context) {
 	context2, cancel := context.WithTimeout(context.Background(), defaultTimeOutMills)
 
@@ -60,38 +50,4 @@ func (h *handler) AllowanceHandler(ctx *gin.Context) {
 		utils.APIResponse(ctx, "Chain is not supported", codes.Unavailable, http.MethodGet, nil)
 		return
 	}
-}
-
-// EnsHandler  godoc
-// @Summary      ENS domain resolution
-// @Tags         Utils
-// @Accept       json
-// @Produce      json
-// @Param        domain   query      string  true  "domain"
-// @Router       /utils/ens [get]
-func (h *handler) EnsHandler(ctx *gin.Context) {
-	ensRequest := &pb.ENSRequest{
-		Domain: ctx.Query("domain"),
-	}
-	// Domain resolver
-	address := ""
-	var err error
-	//domain := strings.Split(ensRequest.Domain, ".")[1]
-
-	address, err = h.util.ResolveENSAddress(ensRequest.Domain)
-	if err != nil {
-		err = nil
-		address, err = h.util.ResolveZNSAddress(ensRequest.Domain)
-		if err != nil || address == "" {
-			address, err = h.util.ResolveUNSAddress(ensRequest.Domain)
-		}
-	}
-	response := pb.ENSResponse{Address: address}
-	if err != nil || address == "" {
-		//statusCode, _ := status.FromError(err)
-		utils.APIResponse(ctx, "cannot resolve domain", codes.Internal, http.MethodGet, nil)
-		return
-	}
-	utils.APIResponse(ctx, "Domain resolution is successful", codes.OK, http.MethodGet, response)
-	return
 }

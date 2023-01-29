@@ -75,14 +75,14 @@ func (bridge *BridgeServerHandler) BridgeTransaction(ctx context.Context, reques
 	return res, err
 }
 
-func (bridge *BridgeServerHandler) BridgeTransactionStatus(ctx context.Context, request *pb.BridgeTransactionStatusRequest) (*pb.BridgeTransactionStatusResponse, error) {
-	defer bridge.utils.CleanUp(bridge.logger)
-	bridge.logger.Info("initiating request to get bridge transaction status")
-	res, err := bridge.bridge.GetTransactionStatus(request)
-	if err != nil {
-		bridge.logger.Errorf("Get bridge transaction status resulted in error: %v", err.Error())
-		return nil, err
-	}
-	bridge.logger.Info("Return bridge transaction status")
-	return res, err
-}
+// func (bridge *BridgeServerHandler) BridgeTransactionStatus(ctx context.Context, request *pb.BridgeTransactionStatusRequest) (*pb.BridgeTransactionStatusResponse, error) {
+// 	defer bridge.utils.CleanUp(bridge.logger)
+// 	bridge.logger.Info("initiating request to get bridge transaction status")
+// 	res, err := bridge.bridge.GetTransactionStatus(request)
+// 	if err != nil {
+// 		bridge.logger.Errorf("Get bridge transaction status resulted in error: %v", err.Error())
+// 		return nil, err
+// 	}
+// 	bridge.logger.Info("Return bridge transaction status")
+// 	return res, err
+// }

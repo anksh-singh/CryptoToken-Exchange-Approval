@@ -4,25 +4,25 @@ import (
 	"bridge-allowance/config"
 	app "bridge-allowance/internal/adapters/evm/application"
 	"bridge-allowance/internal/adapters/evm/application/core/rpc"
-	"bridge-allowance/internal/adapters/evm/application/core/rpc/swap"
+	// "bridge-allowance/internal/adapters/evm/application/core/rpc/swap"
 	"bridge-allowance/internal/common"
-	_x "bridge-allowance/pkg/0x"
-	"bridge-allowance/pkg/coingecko"
-	"bridge-allowance/pkg/covalent"
-	"bridge-allowance/pkg/cowswap"
-	"bridge-allowance/pkg/customchain/zksync"
-	"bridge-allowance/pkg/dodo"
-	dzap2 "bridge-allowance/pkg/dzap"
+	// _x "bridge-allowance/pkg/0x"
+	// "bridge-allowance/pkg/coingecko"
+	// "bridge-allowance/pkg/covalent"
+	// "bridge-allowance/pkg/cowswap"
+	// "bridge-allowance/pkg/customchain/zksync"
+	// "bridge-allowance/pkg/dodo"
+	// dzap2 "bridge-allowance/pkg/dzap"
 	"bridge-allowance/pkg/grpc/proto/pb"
-	lifi2 "bridge-allowance/pkg/lifi"
-	"bridge-allowance/pkg/oneinch"
-	"bridge-allowance/pkg/openApi"
-	"bridge-allowance/pkg/tokenExchange/cocoswap"
-	"bridge-allowance/pkg/tokenExchange/dodoEth"
-	uniswap2 "bridge-allowance/pkg/tokenExchange/ubeswap"
-	"bridge-allowance/pkg/trustwallet"
-	"bridge-allowance/pkg/unmarshal"
-	"bridge-allowance/pkg/zeroswap"
+	// lifi2 "bridge-allowance/pkg/lifi"
+	// "bridge-allowance/pkg/oneinch"
+	// "bridge-allowance/pkg/openApi"
+	// "bridge-allowance/pkg/tokenExchange/cocoswap"
+	// "bridge-allowance/pkg/tokenExchange/dodoEth"
+	// uniswap2 "bridge-allowance/pkg/tokenExchange/ubeswap"
+	// "bridge-allowance/pkg/trustwallet"
+	// "bridge-allowance/pkg/unmarshal"
+	// "bridge-allowance/pkg/zeroswap"
 	"bridge-allowance/utils"
 	"net"
 
@@ -41,8 +41,8 @@ type evmServer struct {
 
 func NewServer(config *config.Config, logger *zap.SugaredLogger, services common.Services) *evmServer {
 	core := rpc.NewEVMCore(config, logger, services)
-	newSwap := swap.NewSwap(config, logger, services)
-	serverHandler := app.NewEVMServerHandler(*config, logger, core, newSwap)
+	// newSwap := swap.NewSwap(config, logger, services)
+	serverHandler := app.NewEVMServerHandler(*config, logger, core)
 	return &evmServer{
 		config:        *config,
 		logger:        logger,
@@ -81,47 +81,47 @@ var EvmCmd = &cobra.Command{
 		logger.Info(conf)
 		logger.Info(":::::::::::::::::::::::::::::::: Configuration ::::::::::::::::::::::::::::::::")
 		httRequest := utils.NewHttpRequest(logger)
-		coinGecko := coingecko.NewCoinGecko(conf, logger, httRequest)
-		covalentService := covalent.NewCovalentService(conf, logger, httRequest)
-		unmarshall := unmarshal.NewUnMarshalService(conf, logger, httRequest)
-		debank := openApi.NewOpenAPI(conf, logger, httRequest)
+		// coinGecko := coingecko.NewCoinGecko(conf, logger, httRequest)
+		// covalentService := covalent.NewCovalentService(conf, logger, httRequest)
+		// unmarshall := unmarshal.NewUnMarshalService(conf, logger, httRequest)
+		// debank := openApi.NewOpenAPI(conf, logger, httRequest)
 		helper := utils.Helpers{}
-		cocoSwap := cocoswap.NewTokenExchangeService(conf, logger, httRequest)
-		uniswap := uniswap2.NewTokenExchangeService(conf, logger, httRequest)
-		dodoex := dodoEth.NewTokenExchangeService(conf, logger, httRequest)
-		dodoExCache := dodoEth.NewTokenExchangeServiceCache(conf, logger, httRequest)
-		zeroX := _x.NewOXService(conf, logger, httRequest, &helper, coinGecko)
-		dodoExsWap := dodo.NewServiceDodo(conf, logger, httRequest, &helper, coinGecko)
-		trustWallet := trustwallet.NewTrustWallet(conf, logger, httRequest)
-		utils := utils.NewUtils(logger, conf)
-		lifi := lifi2.NewLiFiService(conf, logger, httRequest, &helper, utils.GetEVMBridgeData("lifi"), utils)
-		oneInch := oneinch.NewOneInchService(conf, logger, httRequest, &helper, coinGecko)
-		zeroSwap := zeroswap.NewZeroSwapService(conf, logger, httRequest, &helper, coinGecko)
-		cowSwap := cowswap.NewCowSwapService(conf, logger, httRequest, &helper, coinGecko, lifi)
-		zsynk := zksync.NewServiceZksync(conf, logger, coinGecko)
-		dzap := dzap2.NewServiceDZap(conf, logger, httRequest, &helper, coinGecko)
+		// cocoSwap := cocoswap.NewTokenExchangeService(conf, logger, httRequest)
+		// uniswap := uniswap2.NewTokenExchangeService(conf, logger, httRequest)
+		// dodoex := dodoEth.NewTokenExchangeService(conf, logger, httRequest)
+		// dodoExCache := dodoEth.NewTokenExchangeServiceCache(conf, logger, httRequest)
+		// zeroX := _x.NewOXService(conf, logger, httRequest, &helper, coinGecko)
+		// dodoExsWap := dodo.NewServiceDodo(conf, logger, httRequest, &helper, coinGecko)
+		// trustWallet := trustwallet.NewTrustWallet(conf, logger, httRequest)
+		// utils := utils.NewUtils(logger, conf)
+		// lifi := lifi2.NewLiFiService(conf, logger, httRequest, &helper, utils.GetEVMBridgeData("lifi"), utils)
+		// oneInch := oneinch.NewOneInchService(conf, logger, httRequest, &helper, coinGecko)
+		// zeroSwap := zeroswap.NewZeroSwapService(conf, logger, httRequest, &helper, coinGecko)
+		// cowSwap := cowswap.NewCowSwapService(conf, logger, httRequest, &helper, coinGecko, lifi)
+		// zsynk := zksync.NewServiceZksync(conf, logger, coinGecko)
+		// dzap := dzap2.NewServiceDZap(conf, logger, httRequest, &helper, coinGecko)
 		services := common.Services{
 			Http:       httRequest,
-			CoinGecko:  coinGecko,
-			Covalent:   covalentService,
+			// CoinGecko:  coinGecko,
+			// Covalent:   covalentService,
 			Helper:     &helper,
-			Unmarshall: unmarshall,
+			// Unmarshall: unmarshall,
 			//TODO: zerox swap swap
 			//zeroX:      _x.OXService{},
-			CocoSwapTokenExchange:    cocoSwap,
-			UniSwapTokenExchange:     uniswap,
-			ZeroX:                    zeroX,
-			Debank:                   debank,
-			DoDoExTokenExchange:      dodoex,
-			DoDoExTokenExchangeCache: dodoExCache,
-			DodoSwap:                 dodoExsWap,
-			TrustWallet:              trustWallet,
-			LiFi:                     lifi,
-			OneInch:                  oneInch,
-			ZeroSwap:                 zeroSwap,
-			CowSwap:                  cowSwap,
-			DZap:                     dzap,
-			Zksync:                   zsynk,
+			// CocoSwapTokenExchange:    cocoSwap,
+			// UniSwapTokenExchange:     uniswap,
+			// ZeroX:                    zeroX,
+			// Debank:                   debank,
+			// DoDoExTokenExchange:      dodoex,
+			// DoDoExTokenExchangeCache: dodoExCache,
+			// DodoSwap:                 dodoExsWap,
+			// TrustWallet:              trustWallet,
+			// LiFi:                     lifi,
+			// OneInch:                  oneInch,
+			// ZeroSwap:                 zeroSwap,
+			// CowSwap:                  cowSwap,
+			// DZap:                     dzap,
+			// Zksync:                   zsynk,
 		}
 		evmServer := NewServer(conf, logger, services)
 		evmServer.Start()

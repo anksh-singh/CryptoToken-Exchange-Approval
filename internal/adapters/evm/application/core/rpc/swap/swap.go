@@ -119,66 +119,66 @@ func (s *Swap) GetExchangeTokens(request *pb.ExchangeTokenRequest) (*pb.Exchange
 		} else {
 			return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
 		}
-	case "lifi":
-		if source.ChainName == request.Chain && source.LiFiSwapConfig.IsSupported == true {
-			exchangeLogoUrl = s.config.Swap.LIFILogoUrl
-			res, err := s.services.LiFi.GetExchangeTokens(&pb.BridgeChainTokensRequest{
-				Chain:     request.Chain,
-				FromChain: "",
-				ToChain:   "",
-			})
-			if err != nil {
-				return nil, err
-			}
-			responseStruct := pb.ExchangeTokenResponse{}
-			for _, item := range res.Tokens {
-				exchangeTokenInfo := pb.ExchangeTokenInfo{
-					TokenAddress:  item.TokenAddress,
-					TokenDecimals: fmt.Sprint(item.TokenDecimals),
-					TokenLogoUrl:  item.TokenLogoUrl,
-					TokenSymbol:   item.TokenSymbol,
-					TokenName:     item.TokenName,
-					LogoUrl:       exchangeLogoUrl,
-				}
-				responseStruct.ExchangeTokens = append(responseStruct.ExchangeTokens, &exchangeTokenInfo)
-			}
-			if nativeTokenInfo.TokenAddress != "" {
-				addressExists, _ := s.helper.CheckTokenListData(nativeTokenInfo.TokenAddress, "TokenAddress", reflect.ValueOf(&responseStruct.ExchangeTokens), reflect.TypeOf(responseStruct.ExchangeTokens), "TokenAddress")
-				if !addressExists {
-					responseStruct.ExchangeTokens = append(responseStruct.ExchangeTokens, nativeTokenInfo)
-				}
-			}
-			return &responseStruct, nil
-		} else {
-			return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
-		}
-	case "1inch":
-		if source.ChainName == request.Chain && source.OneInchSwapConfig.IsSupported == true {
-			exchangeLogoUrl = s.config.Swap.OneInchLogoUrl
-			return s.services.OneInch.GetExchangeTokens(walletInfo, nativeTokenInfo)
-		} else {
-			return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
-		}
-	case "dzap":
-		if source.ChainName == request.Chain && source.DZapSwapConfig.IsSupported == true {
-			exchangeLogoUrl = s.config.Swap.DZapLogoUrl
-			return s.services.DZap.GetExchangeTokens(walletInfo)
-		} else {
-			return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
-		}
-	case "zeroswap":
-		if source.ChainName == request.Chain && source.ZeroswapSwapConfig.IsSupported == true {
-			exchangeLogoUrl = s.config.Swap.ZeroSwapLogoUrl
-			return s.services.ZeroSwap.GetExchangeTokens(source)
-		} else {
-			return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
-		}
-	case "cowswap":
-		if source.ChainName == request.Chain && source.CowSwapConfig.IsSupported == true {
-			return s.services.CowSwap.GetExchangeTokens(source, walletInfo)
-		} else {
-			return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
-		}
+	// case "lifi":
+	// 	if source.ChainName == request.Chain && source.LiFiSwapConfig.IsSupported == true {
+	// 		exchangeLogoUrl = s.config.Swap.LIFILogoUrl
+	// 		res, err := s.services.LiFi.GetExchangeTokens(&pb.BridgeChainTokensRequest{
+	// 			Chain:     request.Chain,
+	// 			FromChain: "",
+	// 			ToChain:   "",
+	// 		})
+	// 		if err != nil {
+	// 			return nil, err
+	// 		}
+	// 		responseStruct := pb.ExchangeTokenResponse{}
+	// 		for _, item := range res.Tokens {
+	// 			exchangeTokenInfo := pb.ExchangeTokenInfo{
+	// 				TokenAddress:  item.TokenAddress,
+	// 				TokenDecimals: fmt.Sprint(item.TokenDecimals),
+	// 				TokenLogoUrl:  item.TokenLogoUrl,
+	// 				TokenSymbol:   item.TokenSymbol,
+	// 				TokenName:     item.TokenName,
+	// 				LogoUrl:       exchangeLogoUrl,
+	// 			}
+	// 			responseStruct.ExchangeTokens = append(responseStruct.ExchangeTokens, &exchangeTokenInfo)
+	// 		}
+	// 		if nativeTokenInfo.TokenAddress != "" {
+	// 			addressExists, _ := s.helper.CheckTokenListData(nativeTokenInfo.TokenAddress, "TokenAddress", reflect.ValueOf(&responseStruct.ExchangeTokens), reflect.TypeOf(responseStruct.ExchangeTokens), "TokenAddress")
+	// 			if !addressExists {
+	// 				responseStruct.ExchangeTokens = append(responseStruct.ExchangeTokens, nativeTokenInfo)
+	// 			}
+	// 		}
+	// 		return &responseStruct, nil
+	// 	} else {
+	// 		return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
+	// 	}
+	// case "1inch":
+	// 	if source.ChainName == request.Chain && source.OneInchSwapConfig.IsSupported == true {
+	// 		exchangeLogoUrl = s.config.Swap.OneInchLogoUrl
+	// 		return s.services.OneInch.GetExchangeTokens(walletInfo, nativeTokenInfo)
+	// 	} else {
+	// 		return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
+	// 	}
+	// case "dzap":
+	// 	if source.ChainName == request.Chain && source.DZapSwapConfig.IsSupported == true {
+	// 		exchangeLogoUrl = s.config.Swap.DZapLogoUrl
+	// 		return s.services.DZap.GetExchangeTokens(walletInfo)
+	// 	} else {
+	// 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
+	// 	}
+	// case "zeroswap":
+	// 	if source.ChainName == request.Chain && source.ZeroswapSwapConfig.IsSupported == true {
+	// 		exchangeLogoUrl = s.config.Swap.ZeroSwapLogoUrl
+	// 		return s.services.ZeroSwap.GetExchangeTokens(source)
+	// 	} else {
+	// 		return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
+	// 	}
+	// case "cowswap":
+	// 	if source.ChainName == request.Chain && source.CowSwapConfig.IsSupported == true {
+	// 		return s.services.CowSwap.GetExchangeTokens(source, walletInfo)
+	// 	} else {
+	// 		return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
+	// 	}
 	default:
 		for _, proxy := range s.config.Proxies.ExchangeTypes {
 			if request.ExchangeType == proxy {
@@ -236,8 +236,8 @@ func (s *Swap) GetExchangeQuote(request *pb.ExchangeQuoteRequest) (*pb.ExchangeQ
 		s.logger.Errorf("Error for Exchange Quote request  is : %v", err.Error())
 		return &pb.ExchangeQuoteResponse{}, err
 	}
-	source := s.GetSwapSource(request.Chain)
-	walletInfo := s.util.GetWalletInfo(request.Chain)
+	// source := s.GetSwapSource(request.Chain)
+	// walletInfo := s.util.GetWalletInfo(request.Chain)
 	_, srcTokenDecimals := CheckExistsWithValueData(strings.ToLower(request.SellToken), "TokenDecimals", reflect.ValueOf(&chainTokens.ExchangeTokens), reflect.TypeOf(chainTokens.ExchangeTokens), "TokenAddress")
 	_, dstTokenDecimals := CheckExistsWithValueData(strings.ToLower(request.BuyToken), "TokenDecimals", reflect.ValueOf(&chainTokens.ExchangeTokens), reflect.TypeOf(chainTokens.ExchangeTokens), "TokenAddress")
 	if srcTokenDecimals == "" {
@@ -254,45 +254,45 @@ func (s *Swap) GetExchangeQuote(request *pb.ExchangeQuoteRequest) (*pb.ExchangeQ
 	}
 	if srcTokenDecimals != "" && dstTokenDecimals != "" {
 		switch request.ExchangeType {
-		case "0x":
-			if source.ChainName == request.Chain && source.ZeroxSwapConfig.IsSupported == true {
-				return s.services.ZeroX.GetExchangeQuote(request.SellToken,
-					request.BuyToken, request.SellAmount, source.ZeroxSwapConfig.EndPoint, request.Chain, srcTokenDecimals, dstTokenDecimals, request.Slippage)
-			} else {
-				return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
-			}
-		case "dodo":
-			if source.ChainName == request.Chain && source.DodoSwapConfig.IsSupported == true {
-				return s.services.DodoSwap.GetExchangeQuote(request.SellToken,
-					request.BuyToken, request.SellAmount, request.Chain, fmt.Sprint(source.ChainId), srcTokenDecimals, dstTokenDecimals, request.Slippage, request.TakerAddress, s.config.Swap.DodoEndpoint, source.DodoSwapConfig.ApproveAddress)
-			} else {
-				return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
-			}
-		case "lifi":
-			if source.ChainName == request.Chain && source.LiFiSwapConfig.IsSupported == true {
-				return s.services.LiFi.GetLiFiQuote(request.SellToken, request.BuyToken, request.SellAmount, request.Chain,
-					srcTokenDecimals, dstTokenDecimals, request.TakerAddress, request.Slippage)
-			} else {
-				return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
-			}
-		case "1inch":
-			if source.ChainName == request.Chain && source.OneInchSwapConfig.IsSupported == true {
-				return s.services.OneInch.GetExchangeQuote(request, source, srcTokenDecimals)
-			} else {
-				return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
-			}
-		case "zeroswap":
-			if source.ChainName == request.Chain && source.ZeroswapSwapConfig.IsSupported == true {
-				return s.services.ZeroSwap.GetExchangeQuote(request, source, walletInfo)
-			} else {
-				return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
-			}
-		case "cowswap":
-			if source.ChainName == request.Chain && source.CowSwapConfig.IsSupported == true {
-				return s.services.CowSwap.GetExchangeQuote(request, source, srcTokenDecimals, dstTokenDecimals, walletInfo)
-			} else {
-				return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
-			}
+		// case "0x":
+		// 	if source.ChainName == request.Chain && source.ZeroxSwapConfig.IsSupported == true {
+		// 		return s.services.ZeroX.GetExchangeQuote(request.SellToken,
+		// 			request.BuyToken, request.SellAmount, source.ZeroxSwapConfig.EndPoint, request.Chain, srcTokenDecimals, dstTokenDecimals, request.Slippage)
+		// 	} else {
+		// 		return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
+		// 	}
+		// case "dodo":
+		// 	if source.ChainName == request.Chain && source.DodoSwapConfig.IsSupported == true {
+		// 		return s.services.DodoSwap.GetExchangeQuote(request.SellToken,
+		// 			request.BuyToken, request.SellAmount, request.Chain, fmt.Sprint(source.ChainId), srcTokenDecimals, dstTokenDecimals, request.Slippage, request.TakerAddress, s.config.Swap.DodoEndpoint, source.DodoSwapConfig.ApproveAddress)
+		// 	} else {
+		// 		return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
+		// 	}
+		// case "lifi":
+		// 	if source.ChainName == request.Chain && source.LiFiSwapConfig.IsSupported == true {
+		// 		return s.services.LiFi.GetLiFiQuote(request.SellToken, request.BuyToken, request.SellAmount, request.Chain,
+		// 			srcTokenDecimals, dstTokenDecimals, request.TakerAddress, request.Slippage)
+		// 	} else {
+		// 		return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
+		// 	}
+		// case "1inch":
+		// 	if source.ChainName == request.Chain && source.OneInchSwapConfig.IsSupported == true {
+		// 		return s.services.OneInch.GetExchangeQuote(request, source, srcTokenDecimals)
+		// 	} else {
+		// 		return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
+		// 	}
+		// case "zeroswap":
+		// 	if source.ChainName == request.Chain && source.ZeroswapSwapConfig.IsSupported == true {
+		// 		return s.services.ZeroSwap.GetExchangeQuote(request, source, walletInfo)
+		// 	} else {
+		// 		return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
+		// 	}
+		// case "cowswap":
+		// 	if source.ChainName == request.Chain && source.CowSwapConfig.IsSupported == true {
+		// 		return s.services.CowSwap.GetExchangeQuote(request, source, srcTokenDecimals, dstTokenDecimals, walletInfo)
+		// 	} else {
+		// 		return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
+		// 	}
 		default:
 			for _, proxy := range s.config.Proxies.ExchangeTypes {
 				if request.ExchangeType == proxy {
@@ -307,119 +307,120 @@ func (s *Swap) GetExchangeQuote(request *pb.ExchangeQuoteRequest) (*pb.ExchangeQ
 
 func (s *Swap) GetExchangeMultiQuote(request *pb.ExchangeMultiQuoteRequest) (*pb.ExchangeMultiQuoteResponse, error) {
 	chainTokens, err := s.GetExchangeTokens(&pb.ExchangeTokenRequest{Chain: request.Chain, ExchangeType: request.ExchangeType})
+	fmt.Println(chainTokens)
 	if err != nil {
 		s.logger.Errorf("Error for Exchange Quote request  is : %v", err.Error())
 		return &pb.ExchangeMultiQuoteResponse{}, err
 	}
-	source := s.GetSwapSource(request.Chain)
-	walletInfo := s.util.GetWalletInfo(request.Chain)
-	decimalMapperSrc, decimalMapperDst := s.GetDecimalMapperQuote(request, chainTokens)
+	// source := s.GetSwapSource(request.Chain)
+	// walletInfo := s.util.GetWalletInfo(request.Chain)
+	// decimalMapperSrc, decimalMapperDst := s.GetDecimalMapperQuote(request, chainTokens)
 	switch request.ExchangeType {
-	case "dzap":
-		if source.ChainName == request.Chain && source.OneInchSwapConfig.IsSupported == true {
-			return s.services.DZap.GetExchangeQuote(request, walletInfo, decimalMapperSrc)
-		} else {
-			return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
-		}
-	case "0x":
-		if source.ChainName == request.Chain && source.ZeroxSwapConfig.IsSupported == true {
-			returnData, err := s.services.ZeroX.GetExchangeQuote(request.MultiChainRequests[0].SellToken,
-				request.MultiChainRequests[0].BuyToken, request.MultiChainRequests[0].SellAmount, source.ZeroxSwapConfig.EndPoint, request.Chain, decimalMapperSrc[request.MultiChainRequests[0].SellToken], decimalMapperDst[request.MultiChainRequests[0].BuyToken], request.MultiChainRequests[0].Slippage)
-			if err != nil {
-				return nil, err
-			}
-			// convert to Multiresponse
-			return s.ConvertSingleQuoteToMultiQuoteResponse(returnData, request.Chain), err
-		} else {
-			return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
-		}
-	case "dodo":
-		if source.ChainName == request.Chain && source.DodoSwapConfig.IsSupported == true {
-			returnData, err := s.services.DodoSwap.GetExchangeQuote(request.MultiChainRequests[0].SellToken,
-				request.MultiChainRequests[0].BuyToken, request.MultiChainRequests[0].SellAmount, request.Chain,
-				fmt.Sprint(source.ChainId), decimalMapperSrc[request.MultiChainRequests[0].SellToken],
-				decimalMapperDst[request.MultiChainRequests[0].BuyToken],
-				request.MultiChainRequests[0].Slippage, request.TakerAddress, s.config.Swap.DodoEndpoint, source.DodoSwapConfig.ApproveAddress)
-			if err != nil {
-				return nil, err
-			}
-			// convert to Multiresponse
-			return s.ConvertSingleQuoteToMultiQuoteResponse(returnData, request.Chain), err
-		} else {
-			return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
-		}
-	case "lifi":
-		if source.ChainName == request.Chain && source.LiFiSwapConfig.IsSupported == true {
-			returnData, err := s.services.LiFi.GetLiFiQuote(request.MultiChainRequests[0].SellToken,
-				request.MultiChainRequests[0].BuyToken, request.MultiChainRequests[0].SellAmount, request.Chain,
-				decimalMapperSrc[request.MultiChainRequests[0].SellToken],
-				decimalMapperDst[request.MultiChainRequests[0].BuyToken], request.TakerAddress, request.MultiChainRequests[0].Slippage)
-			if err != nil {
-				return nil, err
-			}
-			// convert to Multiresponse
-			return s.ConvertSingleQuoteToMultiQuoteResponse(returnData, request.Chain), err
-		} else {
-			return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
-		}
-	case "1inch":
-		if source.ChainName == request.Chain && source.OneInchSwapConfig.IsSupported == true {
-			returnData, err := s.services.OneInch.GetExchangeQuote(&pb.ExchangeQuoteRequest{
-				Chain:        request.Chain,
-				TakerAddress: request.TakerAddress,
-				SellToken:    request.MultiChainRequests[0].SellToken,
-				BuyToken:     request.MultiChainRequests[0].BuyToken,
-				SellAmount:   request.MultiChainRequests[0].SellAmount,
-				Slippage:     request.MultiChainRequests[0].Slippage,
-				ExchangeType: request.ExchangeType,
-			}, source, decimalMapperSrc[request.MultiChainRequests[0].SellToken])
-			if err != nil {
-				return nil, err
-			}
-			// convert to Multiresponse
-			return s.ConvertSingleQuoteToMultiQuoteResponse(returnData, request.Chain), err
-		} else {
-			return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
-		}
-	case "zeroswap":
-		if source.ChainName == request.Chain && source.ZeroswapSwapConfig.IsSupported == true {
-			returnData, err := s.services.ZeroSwap.GetExchangeQuote(&pb.ExchangeQuoteRequest{
-				Chain:        request.Chain,
-				TakerAddress: request.TakerAddress,
-				SellToken:    request.MultiChainRequests[0].SellToken,
-				BuyToken:     request.MultiChainRequests[0].BuyToken,
-				SellAmount:   request.MultiChainRequests[0].SellAmount,
-				Slippage:     request.MultiChainRequests[0].Slippage,
-				ExchangeType: request.ExchangeType,
-			}, source, walletInfo)
-			if err != nil {
-				return nil, err
-			}
-			// convert to Multiresponse
-			return s.ConvertSingleQuoteToMultiQuoteResponse(returnData, request.Chain), err
-		} else {
-			return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
-		}
-	case "cowswap":
-		if source.ChainName == request.Chain && source.ZeroswapSwapConfig.IsSupported == true {
-			returnData, err := s.services.CowSwap.GetExchangeQuote(&pb.ExchangeQuoteRequest{
-				Chain:        request.Chain,
-				TakerAddress: request.TakerAddress,
-				SellToken:    request.MultiChainRequests[0].SellToken,
-				BuyToken:     request.MultiChainRequests[0].BuyToken,
-				SellAmount:   request.MultiChainRequests[0].SellAmount,
-				Slippage:     request.MultiChainRequests[0].Slippage,
-				ExchangeType: request.ExchangeType,
-			}, source, decimalMapperSrc[request.MultiChainRequests[0].SellToken],
-				decimalMapperDst[request.MultiChainRequests[0].BuyToken], walletInfo)
-			if err != nil {
-				return nil, err
-			}
-			// convert to Multiresponse
-			return s.ConvertSingleQuoteToMultiQuoteResponse(returnData, request.Chain), err
-		} else {
-			return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
-		}
+	// case "dzap":
+	// 	if source.ChainName == request.Chain && source.OneInchSwapConfig.IsSupported == true {
+	// 		return s.services.DZap.GetExchangeQuote(request, walletInfo, decimalMapperSrc)
+	// 	} else {
+	// 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
+	// 	}
+	// case "0x":
+	// 	if source.ChainName == request.Chain && source.ZeroxSwapConfig.IsSupported == true {
+	// 		returnData, err := s.services.ZeroX.GetExchangeQuote(request.MultiChainRequests[0].SellToken,
+	// 			request.MultiChainRequests[0].BuyToken, request.MultiChainRequests[0].SellAmount, source.ZeroxSwapConfig.EndPoint, request.Chain, decimalMapperSrc[request.MultiChainRequests[0].SellToken], decimalMapperDst[request.MultiChainRequests[0].BuyToken], request.MultiChainRequests[0].Slippage)
+	// 		if err != nil {
+	// 			return nil, err
+	// 		}
+	// 		// convert to Multiresponse
+	// 		return s.ConvertSingleQuoteToMultiQuoteResponse(returnData, request.Chain), err
+	// 	} else {
+	// 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
+	// 	}
+	// case "dodo":
+	// 	if source.ChainName == request.Chain && source.DodoSwapConfig.IsSupported == true {
+	// 		returnData, err := s.services.DodoSwap.GetExchangeQuote(request.MultiChainRequests[0].SellToken,
+	// 			request.MultiChainRequests[0].BuyToken, request.MultiChainRequests[0].SellAmount, request.Chain,
+	// 			fmt.Sprint(source.ChainId), decimalMapperSrc[request.MultiChainRequests[0].SellToken],
+	// 			decimalMapperDst[request.MultiChainRequests[0].BuyToken],
+	// 			request.MultiChainRequests[0].Slippage, request.TakerAddress, s.config.Swap.DodoEndpoint, source.DodoSwapConfig.ApproveAddress)
+	// 		if err != nil {
+	// 			return nil, err
+	// 		}
+	// 		// convert to Multiresponse
+	// 		return s.ConvertSingleQuoteToMultiQuoteResponse(returnData, request.Chain), err
+	// 	} else {
+	// 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
+	// 	}
+	// case "lifi":
+	// 	if source.ChainName == request.Chain && source.LiFiSwapConfig.IsSupported == true {
+	// 		returnData, err := s.services.LiFi.GetLiFiQuote(request.MultiChainRequests[0].SellToken,
+	// 			request.MultiChainRequests[0].BuyToken, request.MultiChainRequests[0].SellAmount, request.Chain,
+	// 			decimalMapperSrc[request.MultiChainRequests[0].SellToken],
+	// 			decimalMapperDst[request.MultiChainRequests[0].BuyToken], request.TakerAddress, request.MultiChainRequests[0].Slippage)
+	// 		if err != nil {
+	// 			return nil, err
+	// 		}
+	// 		// convert to Multiresponse
+	// 		return s.ConvertSingleQuoteToMultiQuoteResponse(returnData, request.Chain), err
+	// 	} else {
+	// 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
+	// 	}
+	// case "1inch":
+	// 	if source.ChainName == request.Chain && source.OneInchSwapConfig.IsSupported == true {
+	// 		returnData, err := s.services.OneInch.GetExchangeQuote(&pb.ExchangeQuoteRequest{
+	// 			Chain:        request.Chain,
+	// 			TakerAddress: request.TakerAddress,
+	// 			SellToken:    request.MultiChainRequests[0].SellToken,
+	// 			BuyToken:     request.MultiChainRequests[0].BuyToken,
+	// 			SellAmount:   request.MultiChainRequests[0].SellAmount,
+	// 			Slippage:     request.MultiChainRequests[0].Slippage,
+	// 			ExchangeType: request.ExchangeType,
+	// 		}, source, decimalMapperSrc[request.MultiChainRequests[0].SellToken])
+	// 		if err != nil {
+	// 			return nil, err
+	// 		}
+	// 		// convert to Multiresponse
+	// 		return s.ConvertSingleQuoteToMultiQuoteResponse(returnData, request.Chain), err
+	// 	} else {
+	// 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
+	// 	}
+	// case "zeroswap":
+	// 	if source.ChainName == request.Chain && source.ZeroswapSwapConfig.IsSupported == true {
+	// 		returnData, err := s.services.ZeroSwap.GetExchangeQuote(&pb.ExchangeQuoteRequest{
+	// 			Chain:        request.Chain,
+	// 			TakerAddress: request.TakerAddress,
+	// 			SellToken:    request.MultiChainRequests[0].SellToken,
+	// 			BuyToken:     request.MultiChainRequests[0].BuyToken,
+	// 			SellAmount:   request.MultiChainRequests[0].SellAmount,
+	// 			Slippage:     request.MultiChainRequests[0].Slippage,
+	// 			ExchangeType: request.ExchangeType,
+	// 		}, source, walletInfo)
+	// 		if err != nil {
+	// 			return nil, err
+	// 		}
+	// 		// convert to Multiresponse
+	// 		return s.ConvertSingleQuoteToMultiQuoteResponse(returnData, request.Chain), err
+	// 	} else {
+	// 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
+	// 	}
+	// case "cowswap":
+	// 	if source.ChainName == request.Chain && source.ZeroswapSwapConfig.IsSupported == true {
+	// 		returnData, err := s.services.CowSwap.GetExchangeQuote(&pb.ExchangeQuoteRequest{
+	// 			Chain:        request.Chain,
+	// 			TakerAddress: request.TakerAddress,
+	// 			SellToken:    request.MultiChainRequests[0].SellToken,
+	// 			BuyToken:     request.MultiChainRequests[0].BuyToken,
+	// 			SellAmount:   request.MultiChainRequests[0].SellAmount,
+	// 			Slippage:     request.MultiChainRequests[0].Slippage,
+	// 			ExchangeType: request.ExchangeType,
+	// 		}, source, decimalMapperSrc[request.MultiChainRequests[0].SellToken],
+	// 			decimalMapperDst[request.MultiChainRequests[0].BuyToken], walletInfo)
+	// 		if err != nil {
+	// 			return nil, err
+	// 		}
+	// 		// convert to Multiresponse
+	// 		return s.ConvertSingleQuoteToMultiQuoteResponse(returnData, request.Chain), err
+	// 	} else {
+	// 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
+	// 	}
 	default:
 		for _, proxy := range s.config.Proxies.ExchangeTypes {
 			if request.ExchangeType == proxy {
@@ -468,8 +469,8 @@ func (s *Swap) GetExchangeSwap(request *pb.ExchangeSwapRequest) (*pb.ExchangeSwa
 		s.logger.Errorf("Error for Exchange Quote request  is : %v", err.Error())
 		return nil, err
 	}
-	walletInfo := s.util.GetWalletInfo(request.Chain)
-	source := s.GetSwapSource(request.Chain)
+	// walletInfo := s.util.GetWalletInfo(request.Chain)
+	// source := s.GetSwapSource(request.Chain)
 
 	_, srcTokenDecimals := CheckExistsWithValueData(strings.ToLower(request.SellToken), "TokenDecimals", reflect.ValueOf(&chainTokens.ExchangeTokens), reflect.TypeOf(chainTokens.ExchangeTokens), "TokenAddress")
 	_, dstTokenDecimals := CheckExistsWithValueData(strings.ToLower(request.BuyToken), "TokenDecimals", reflect.ValueOf(&chainTokens.ExchangeTokens), reflect.TypeOf(chainTokens.ExchangeTokens), "TokenAddress")
@@ -489,41 +490,41 @@ func (s *Swap) GetExchangeSwap(request *pb.ExchangeSwapRequest) (*pb.ExchangeSwa
 	}
 	if srcTokenDecimals != "" && dstTokenDecimals != "" {
 		switch request.ExchangeType {
-		case "0x":
-			if source.ChainName == request.Chain && source.ZeroxSwapConfig.IsSupported == true {
-				return s.services.ZeroX.GetExchangeSwap(request, source.ZeroxSwapConfig.EndPoint, srcTokenDecimals, walletInfo)
-			} else {
-				return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "chain not supported")
-			}
-		case "dodo":
-			if source.ChainName == request.Chain && source.DodoSwapConfig.IsSupported == true {
-				//Temporarily use V1 to route dodo swap requests
-				if request.Chain == "heco" || request.Chain == "boba" || request.Chain == "aurora" || request.Chain == "arbitrum" || request.Chain == "moonriver" || request.Chain == "ethereum" {
-					return s.services.DodoSwap.GetExchangeSwap(request, fmt.Sprint(source.ChainId), srcTokenDecimals, dstTokenDecimals, s.config.Swap.DodoEndpoint, walletInfo)
-				} else {
-					return s.exchangeSwapV1Proxy(request, s.config.PROXIES_ENDPOINT, srcTokenDecimals)
-				}
-			} else {
-				return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain))
-			}
-		case "lifi":
-			if source.ChainName == request.Chain && source.LiFiSwapConfig.IsSupported == true {
-				return s.services.LiFi.GetLiFiSwap(request, srcTokenDecimals)
-			} else {
-				return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "chain not supported")
-			}
-		case "1inch":
-			if source.ChainName == request.Chain && source.OneInchSwapConfig.IsSupported == true {
-				return s.services.OneInch.GetExchangeSwap(request, walletInfo, source, srcTokenDecimals)
-			} else {
-				return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "chain not supported")
-			}
-		case "zeroswap":
-			if source.ChainName == request.Chain && source.ZeroswapSwapConfig.IsSupported == true {
-				return s.services.ZeroSwap.GetExchangeSwap(request, source, srcTokenDecimals)
-			} else {
-				return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "chain not supported")
-			}
+		// case "0x":
+		// 	if source.ChainName == request.Chain && source.ZeroxSwapConfig.IsSupported == true {
+		// 		return s.services.ZeroX.GetExchangeSwap(request, source.ZeroxSwapConfig.EndPoint, srcTokenDecimals, walletInfo)
+		// 	} else {
+		// 		return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "chain not supported")
+		// 	}
+		// case "dodo":
+		// 	if source.ChainName == request.Chain && source.DodoSwapConfig.IsSupported == true {
+		// 		//Temporarily use V1 to route dodo swap requests
+		// 		if request.Chain == "heco" || request.Chain == "boba" || request.Chain == "aurora" || request.Chain == "arbitrum" || request.Chain == "moonriver" || request.Chain == "ethereum" {
+		// 			return s.services.DodoSwap.GetExchangeSwap(request, fmt.Sprint(source.ChainId), srcTokenDecimals, dstTokenDecimals, s.config.Swap.DodoEndpoint, walletInfo)
+		// 		} else {
+		// 			return s.exchangeSwapV1Proxy(request, s.config.PROXIES_ENDPOINT, srcTokenDecimals)
+		// 		}
+		// 	} else {
+		// 		return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain))
+		// 	}
+		// case "lifi":
+		// 	if source.ChainName == request.Chain && source.LiFiSwapConfig.IsSupported == true {
+		// 		return s.services.LiFi.GetLiFiSwap(request, srcTokenDecimals)
+		// 	} else {
+		// 		return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "chain not supported")
+		// 	}
+		// case "1inch":
+		// 	if source.ChainName == request.Chain && source.OneInchSwapConfig.IsSupported == true {
+		// 		return s.services.OneInch.GetExchangeSwap(request, walletInfo, source, srcTokenDecimals)
+		// 	} else {
+		// 		return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "chain not supported")
+		// 	}
+		// case "zeroswap":
+		// 	if source.ChainName == request.Chain && source.ZeroswapSwapConfig.IsSupported == true {
+		// 		return s.services.ZeroSwap.GetExchangeSwap(request, source, srcTokenDecimals)
+		// 	} else {
+		// 		return nil, status.Errorf(codes.Unavailable, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "chain not supported")
+		// 	}
 		default:
 			for _, proxy := range s.config.Proxies.ExchangeTypes {
 				if request.ExchangeType == proxy {
@@ -536,220 +537,222 @@ func (s *Swap) GetExchangeSwap(request *pb.ExchangeSwapRequest) (*pb.ExchangeSwa
 		fmt.Sprintf("Unsupported operation: Source %v is unsupported", request.ExchangeType), "chain not supported")
 }
 
-func (s *Swap) GetExchangeMultiSwap(request *pb.ExchangeMultiSwapRequest) (*pb.ExchangeMultipleSwapResponse, error) {
-	chainTokens, err := s.GetExchangeTokens(&pb.ExchangeTokenRequest{Chain: request.Chain, ExchangeType: request.ExchangeType})
-	if err != nil {
-		s.logger.Errorf("Error for Exchange Quote request  is : %v", err.Error())
-		return nil, err
-	}
-	source := s.GetSwapSource(request.Chain)
-	walletInfo := s.util.GetWalletInfo(request.Chain)
-	decimalMapperSrc, decimalMapperDst := s.GetDecimalMapperSwap(request, chainTokens)
-	var multipleSwapResponse pb.ExchangeMultipleSwapResponse
-	switch request.ExchangeType {
-	case "dzap":
-		if source.ChainName == request.Chain && source.OneInchSwapConfig.IsSupported == true {
-			res, err := s.services.DZap.GetExchangeSwap(request, walletInfo, decimalMapperSrc)
-			if err != nil {
-				return nil, err
-			}
-			dataResponse, err2 := s.GetMultipleSwapData(request, res.To)
-			if err2 != nil {
-				s.logger.Errorf("Error for getting multiple swap data : %v", err2.Error())
-			}
-			multipleSwapResponse = dataResponse
-			multipleSwapResponse.Transaction = &pb.ExchangeSwapResponse{
-				To:       res.To,
-				Data:     res.Data,
-				Value:    res.Value,
-				GasLimit: res.GasLimit,
-				Gas:      res.Gas,
-				TxLink:   res.TxLink,
-			}
-			return &multipleSwapResponse, nil
-		} else {
-			return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
-		}
-	case "0x":
-		if source.ChainName == request.Chain && source.ZeroxSwapConfig.IsSupported == true {
-			returnData, err := s.services.ZeroX.GetExchangeSwap(&pb.ExchangeSwapRequest{
-				Chain:        request.Chain,
-				TakerAddress: request.TakerAddress,
-				SellToken:    request.MultiChainRequests[0].SellToken,
-				BuyToken:     request.MultiChainRequests[0].BuyToken,
-				SellAmount:   request.MultiChainRequests[0].SellAmount,
-				Slippage:     request.MultiChainRequests[0].Slippage,
-				ExchangeType: request.ExchangeType,
-			},
-				source.ZeroxSwapConfig.EndPoint,
-				decimalMapperSrc[request.MultiChainRequests[0].SellToken], walletInfo)
-			if err != nil {
-				return nil, err
-			}
-			dataResponse, err2 := s.GetMultipleSwapData(request, returnData.To)
-			if err2 != nil {
-				s.logger.Errorf("Error for getting multiple swap data : %v", err2.Error())
-			}
-			multipleSwapResponse = dataResponse
-			multipleSwapResponse.Transaction = returnData
-			return &multipleSwapResponse, nil
-		} else {
-			return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "chain not supported")
-		}
-	case "dodo":
-		if source.ChainName == request.Chain && source.DodoSwapConfig.IsSupported == true {
-			//Temporarily use V1 to route dodo swap requests
-			var res *pb.ExchangeSwapResponse
-			if request.Chain == "heco" {
-				returnData, err := s.services.DodoSwap.GetExchangeSwap(&pb.ExchangeSwapRequest{
-					Chain:        request.Chain,
-					TakerAddress: request.TakerAddress,
-					SellToken:    request.MultiChainRequests[0].SellToken,
-					BuyToken:     request.MultiChainRequests[0].BuyToken,
-					SellAmount:   request.MultiChainRequests[0].SellAmount,
-					Slippage:     request.MultiChainRequests[0].Slippage,
-					ExchangeType: request.ExchangeType,
-				},
-					fmt.Sprint(source.ChainId),
-					decimalMapperSrc[request.MultiChainRequests[0].SellToken],
-					decimalMapperDst[request.MultiChainRequests[0].BuyToken], s.config.Swap.DodoEndpoint, walletInfo)
-				if err != nil {
-					return nil, err
-				}
-				res = returnData
-			} else {
-				returnData, err := s.exchangeSwapV1Proxy(&pb.ExchangeSwapRequest{
-					Chain:        request.Chain,
-					TakerAddress: request.TakerAddress,
-					SellToken:    request.MultiChainRequests[0].SellToken,
-					BuyToken:     request.MultiChainRequests[0].BuyToken,
-					SellAmount:   request.MultiChainRequests[0].SellAmount,
-					Slippage:     request.MultiChainRequests[0].Slippage,
-					ExchangeType: request.ExchangeType,
-				}, s.config.PROXIES_ENDPOINT, decimalMapperSrc[request.MultiChainRequests[0].SellToken])
-				if err != nil {
-					return nil, err
-				}
-				res = returnData
-			}
-			dataResponse, err2 := s.GetMultipleSwapData(request, res.To)
-			if err2 != nil {
-				s.logger.Errorf("Error for getting multiple swap data : %v", err2.Error())
-			}
-			multipleSwapResponse = dataResponse
-			multipleSwapResponse.Transaction = res
-			return &multipleSwapResponse, nil
-		} else {
-			return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "chain not supported")
-		}
-	case "lifi":
-		if source.ChainName == request.Chain && source.LiFiSwapConfig.IsSupported == true {
-			returnData, err := s.services.LiFi.GetLiFiSwap(&pb.ExchangeSwapRequest{
-				Chain:        request.Chain,
-				TakerAddress: request.TakerAddress,
-				SellToken:    request.MultiChainRequests[0].SellToken,
-				BuyToken:     request.MultiChainRequests[0].BuyToken,
-				SellAmount:   request.MultiChainRequests[0].SellAmount,
-				Slippage:     request.MultiChainRequests[0].Slippage,
-				ExchangeType: request.ExchangeType,
-			},
-				decimalMapperSrc[request.MultiChainRequests[0].SellToken])
-			if err != nil {
-				return nil, err
-			}
-			dataResponse, err2 := s.GetMultipleSwapData(request, returnData.To)
-			if err2 != nil {
-				s.logger.Errorf("Error for getting multiple swap data : %v", err2.Error())
-			}
-			multipleSwapResponse = dataResponse
-			multipleSwapResponse.Transaction = returnData
-			return &multipleSwapResponse, nil
-		} else {
-			return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "chain not supported")
-		}
-	case "1inch":
-		if source.ChainName == request.Chain && source.OneInchSwapConfig.IsSupported == true {
-			returnData, err := s.services.OneInch.GetExchangeSwap(&pb.ExchangeSwapRequest{
-				Chain:        request.Chain,
-				TakerAddress: request.TakerAddress,
-				SellToken:    request.MultiChainRequests[0].SellToken,
-				BuyToken:     request.MultiChainRequests[0].BuyToken,
-				SellAmount:   request.MultiChainRequests[0].SellAmount,
-				Slippage:     request.MultiChainRequests[0].Slippage,
-				ExchangeType: request.ExchangeType,
-			}, walletInfo, source, decimalMapperSrc[request.MultiChainRequests[0].SellToken])
-			if err != nil {
-				return nil, err
-			}
-			dataResponse, err2 := s.GetMultipleSwapData(request, returnData.To)
-			if err2 != nil {
-				s.logger.Errorf("Error for getting multiple swap data : %v", err2.Error())
-			}
-			multipleSwapResponse = dataResponse
-			multipleSwapResponse.Transaction = returnData
-			return &multipleSwapResponse, nil
-		} else {
-			return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "chain not supported")
-		}
-	case "zeroswap":
-		if source.ChainName == request.Chain && source.ZeroswapSwapConfig.IsSupported == true {
-			returnData, err := s.services.ZeroSwap.GetExchangeSwap(&pb.ExchangeSwapRequest{
-				Chain:        request.Chain,
-				TakerAddress: request.TakerAddress,
-				SellToken:    request.MultiChainRequests[0].SellToken,
-				BuyToken:     request.MultiChainRequests[0].BuyToken,
-				SellAmount:   request.MultiChainRequests[0].SellAmount,
-				Slippage:     request.MultiChainRequests[0].Slippage,
-				ExchangeType: request.ExchangeType,
-			}, source, decimalMapperSrc[request.MultiChainRequests[0].SellToken])
-			if err != nil {
-				return nil, err
-			}
-			dataResponse, err2 := s.GetMultipleSwapData(request, returnData.To)
-			if err2 != nil {
-				s.logger.Errorf("Error for getting multiple swap data : %v", err2.Error())
-			}
-			multipleSwapResponse = dataResponse
-			multipleSwapResponse.Transaction = returnData
-			return &multipleSwapResponse, nil
-		} else {
-			return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "chain not supported")
-		}
-	default:
-		for _, proxy := range s.config.Proxies.ExchangeTypes {
-			if request.ExchangeType == proxy {
-				returnData, err := s.exchangeSwapV1Proxy(&pb.ExchangeSwapRequest{
-					Chain:        request.Chain,
-					TakerAddress: request.TakerAddress,
-					SellToken:    request.MultiChainRequests[0].SellToken,
-					BuyToken:     request.MultiChainRequests[0].BuyToken,
-					SellAmount:   request.MultiChainRequests[0].SellAmount,
-					Slippage:     request.MultiChainRequests[0].Slippage,
-					ExchangeType: request.ExchangeType,
-				}, s.config.PROXIES_ENDPOINT, "")
-				if err != nil {
-					return nil, err
-				}
-				dataResponse, err2 := s.GetMultipleSwapData(request, returnData.To)
-				if err2 != nil {
-					s.logger.Errorf("Error for getting multiple swap data : %v", err2.Error())
-				}
-				multipleSwapResponse = dataResponse
-				multipleSwapResponse.Transaction = returnData
-				return &multipleSwapResponse, nil
-			}
-		}
-	}
-	return nil, status.Errorf(codes.Unimplemented,
-		fmt.Sprintf("Unsupported operation: Source %v is unsupported", request.ExchangeType), "Unsupported source")
-}
+// func (s *Swap) GetExchangeMultiSwap(request *pb.ExchangeMultiSwapRequest) (*pb.ExchangeMultipleSwapResponse, error) {
+// 	chainTokens, err := s.GetExchangeTokens(&pb.ExchangeTokenRequest{Chain: request.Chain, ExchangeType: request.ExchangeType})
+// 	fmt.Println(chainTokens)
+// 	if err != nil {
+// 		s.logger.Errorf("Error for Exchange Quote request  is : %v", err.Error())
+// 		return nil, err
+// 	}
+// 	// source := s.GetSwapSource(request.Chain)
+// 	// walletInfo := s.util.GetWalletInfo(request.Chain)
+// 	// decimalMapperSrc, decimalMapperDst := s.GetDecimalMapperSwap(request, chainTokens)
+// 	// fmt.Println(decimalMapperDst)
+// 	var multipleSwapResponse pb.ExchangeMultipleSwapResponse
+// 	switch request.ExchangeType {
+	// case "dzap":
+	// 	if source.ChainName == request.Chain && source.OneInchSwapConfig.IsSupported == true {
+	// 		res, err := s.services.DZap.GetExchangeSwap(request, walletInfo, decimalMapperSrc)
+	// 		if err != nil {
+	// 			return nil, err
+	// 		}
+	// 		dataResponse, err2 := s.GetMultipleSwapData(request, res.To)
+	// 		if err2 != nil {
+	// 			s.logger.Errorf("Error for getting multiple swap data : %v", err2.Error())
+	// 		}
+	// 		multipleSwapResponse = dataResponse
+	// 		multipleSwapResponse.Transaction = &pb.ExchangeSwapResponse{
+	// 			To:       res.To,
+	// 			Data:     res.Data,
+	// 			Value:    res.Value,
+	// 			GasLimit: res.GasLimit,
+	// 			Gas:      res.Gas,
+	// 			TxLink:   res.TxLink,
+	// 		}
+	// 		return &multipleSwapResponse, nil
+	// 	} else {
+	// 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "Chain not supported")
+	// 	}
+	// case "0x":
+	// 	if source.ChainName == request.Chain && source.ZeroxSwapConfig.IsSupported == true {
+	// 		returnData, err := s.services.ZeroX.GetExchangeSwap(&pb.ExchangeSwapRequest{
+	// 			Chain:        request.Chain,
+	// 			TakerAddress: request.TakerAddress,
+	// 			SellToken:    request.MultiChainRequests[0].SellToken,
+	// 			BuyToken:     request.MultiChainRequests[0].BuyToken,
+	// 			SellAmount:   request.MultiChainRequests[0].SellAmount,
+	// 			Slippage:     request.MultiChainRequests[0].Slippage,
+	// 			ExchangeType: request.ExchangeType,
+	// 		},
+	// 			source.ZeroxSwapConfig.EndPoint,
+	// 			decimalMapperSrc[request.MultiChainRequests[0].SellToken], walletInfo)
+	// 		if err != nil {
+	// 			return nil, err
+	// 		}
+	// 		dataResponse, err2 := s.GetMultipleSwapData(request, returnData.To)
+	// 		if err2 != nil {
+	// 			s.logger.Errorf("Error for getting multiple swap data : %v", err2.Error())
+	// 		}
+	// 		multipleSwapResponse = dataResponse
+	// 		multipleSwapResponse.Transaction = returnData
+	// 		return &multipleSwapResponse, nil
+	// 	} else {
+	// 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "chain not supported")
+	// 	}
+	// case "dodo":
+	// 	if source.ChainName == request.Chain && source.DodoSwapConfig.IsSupported == true {
+	// 		//Temporarily use V1 to route dodo swap requests
+	// 		var res *pb.ExchangeSwapResponse
+	// 		if request.Chain == "heco" {
+	// 			returnData, err := s.services.DodoSwap.GetExchangeSwap(&pb.ExchangeSwapRequest{
+	// 				Chain:        request.Chain,
+	// 				TakerAddress: request.TakerAddress,
+	// 				SellToken:    request.MultiChainRequests[0].SellToken,
+	// 				BuyToken:     request.MultiChainRequests[0].BuyToken,
+	// 				SellAmount:   request.MultiChainRequests[0].SellAmount,
+	// 				Slippage:     request.MultiChainRequests[0].Slippage,
+	// 				ExchangeType: request.ExchangeType,
+	// 			},
+	// 				fmt.Sprint(source.ChainId),
+	// 				decimalMapperSrc[request.MultiChainRequests[0].SellToken],
+	// 				decimalMapperDst[request.MultiChainRequests[0].BuyToken], s.config.Swap.DodoEndpoint, walletInfo)
+	// 			if err != nil {
+	// 				return nil, err
+	// 			}
+	// 			res = returnData
+	// 		} else {
+	// 			returnData, err := s.exchangeSwapV1Proxy(&pb.ExchangeSwapRequest{
+	// 				Chain:        request.Chain,
+	// 				TakerAddress: request.TakerAddress,
+	// 				SellToken:    request.MultiChainRequests[0].SellToken,
+	// 				BuyToken:     request.MultiChainRequests[0].BuyToken,
+	// 				SellAmount:   request.MultiChainRequests[0].SellAmount,
+	// 				Slippage:     request.MultiChainRequests[0].Slippage,
+	// 				ExchangeType: request.ExchangeType,
+	// 			}, s.config.PROXIES_ENDPOINT, decimalMapperSrc[request.MultiChainRequests[0].SellToken])
+	// 			if err != nil {
+	// 				return nil, err
+	// 			}
+	// 			res = returnData
+	// 		}
+	// 		dataResponse, err2 := s.GetMultipleSwapData(request, res.To)
+	// 		if err2 != nil {
+	// 			s.logger.Errorf("Error for getting multiple swap data : %v", err2.Error())
+	// 		}
+	// 		multipleSwapResponse = dataResponse
+	// 		multipleSwapResponse.Transaction = res
+	// 		return &multipleSwapResponse, nil
+	// 	} else {
+	// 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "chain not supported")
+	// 	}
+	// case "lifi":
+	// 	if source.ChainName == request.Chain && source.LiFiSwapConfig.IsSupported == true {
+	// 		returnData, err := s.services.LiFi.GetLiFiSwap(&pb.ExchangeSwapRequest{
+	// 			Chain:        request.Chain,
+	// 			TakerAddress: request.TakerAddress,
+	// 			SellToken:    request.MultiChainRequests[0].SellToken,
+	// 			BuyToken:     request.MultiChainRequests[0].BuyToken,
+	// 			SellAmount:   request.MultiChainRequests[0].SellAmount,
+	// 			Slippage:     request.MultiChainRequests[0].Slippage,
+	// 			ExchangeType: request.ExchangeType,
+	// 		},
+	// 			decimalMapperSrc[request.MultiChainRequests[0].SellToken])
+	// 		if err != nil {
+	// 			return nil, err
+	// 		}
+	// 		dataResponse, err2 := s.GetMultipleSwapData(request, returnData.To)
+	// 		if err2 != nil {
+	// 			s.logger.Errorf("Error for getting multiple swap data : %v", err2.Error())
+	// 		}
+	// 		multipleSwapResponse = dataResponse
+	// 		multipleSwapResponse.Transaction = returnData
+	// 		return &multipleSwapResponse, nil
+	// 	} else {
+	// 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "chain not supported")
+	// 	}
+	// case "1inch":
+	// 	if source.ChainName == request.Chain && source.OneInchSwapConfig.IsSupported == true {
+	// 		returnData, err := s.services.OneInch.GetExchangeSwap(&pb.ExchangeSwapRequest{
+	// 			Chain:        request.Chain,
+	// 			TakerAddress: request.TakerAddress,
+	// 			SellToken:    request.MultiChainRequests[0].SellToken,
+	// 			BuyToken:     request.MultiChainRequests[0].BuyToken,
+	// 			SellAmount:   request.MultiChainRequests[0].SellAmount,
+	// 			Slippage:     request.MultiChainRequests[0].Slippage,
+	// 			ExchangeType: request.ExchangeType,
+	// 		}, walletInfo, source, decimalMapperSrc[request.MultiChainRequests[0].SellToken])
+	// 		if err != nil {
+	// 			return nil, err
+	// 		}
+	// 		dataResponse, err2 := s.GetMultipleSwapData(request, returnData.To)
+	// 		if err2 != nil {
+	// 			s.logger.Errorf("Error for getting multiple swap data : %v", err2.Error())
+	// 		}
+	// 		multipleSwapResponse = dataResponse
+	// 		multipleSwapResponse.Transaction = returnData
+	// 		return &multipleSwapResponse, nil
+	// 	} else {
+	// 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "chain not supported")
+	// 	}
+	// case "zeroswap":
+	// 	if source.ChainName == request.Chain && source.ZeroswapSwapConfig.IsSupported == true {
+	// 		returnData, err := s.services.ZeroSwap.GetExchangeSwap(&pb.ExchangeSwapRequest{
+	// 			Chain:        request.Chain,
+	// 			TakerAddress: request.TakerAddress,
+	// 			SellToken:    request.MultiChainRequests[0].SellToken,
+	// 			BuyToken:     request.MultiChainRequests[0].BuyToken,
+	// 			SellAmount:   request.MultiChainRequests[0].SellAmount,
+	// 			Slippage:     request.MultiChainRequests[0].Slippage,
+	// 			ExchangeType: request.ExchangeType,
+	// 		}, source, decimalMapperSrc[request.MultiChainRequests[0].SellToken])
+	// 		if err != nil {
+	// 			return nil, err
+	// 		}
+	// 		dataResponse, err2 := s.GetMultipleSwapData(request, returnData.To)
+	// 		if err2 != nil {
+	// 			s.logger.Errorf("Error for getting multiple swap data : %v", err2.Error())
+	// 		}
+	// 		multipleSwapResponse = dataResponse
+	// 		multipleSwapResponse.Transaction = returnData
+	// 		return &multipleSwapResponse, nil
+	// 	} else {
+	// 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Exchange type %s not supports for %s", request.ExchangeType, request.Chain), "chain not supported")
+	// 	}
+// 	default:
+// 		for _, proxy := range s.config.Proxies.ExchangeTypes {
+// 			if request.ExchangeType == proxy {
+// 				returnData, err := s.exchangeSwapV1Proxy(&pb.ExchangeSwapRequest{
+// 					Chain:        request.Chain,
+// 					TakerAddress: request.TakerAddress,
+// 					SellToken:    request.MultiChainRequests[0].SellToken,
+// 					BuyToken:     request.MultiChainRequests[0].BuyToken,
+// 					SellAmount:   request.MultiChainRequests[0].SellAmount,
+// 					Slippage:     request.MultiChainRequests[0].Slippage,
+// 					ExchangeType: request.ExchangeType,
+// 				}, s.config.PROXIES_ENDPOINT, "")
+// 				if err != nil {
+// 					return nil, err
+// 				}
+// 				dataResponse, err2 := s.GetMultipleSwapData(request, returnData.To)
+// 				if err2 != nil {
+// 					s.logger.Errorf("Error for getting multiple swap data : %v", err2.Error())
+// 				}
+// 				multipleSwapResponse = dataResponse
+// 				multipleSwapResponse.Transaction = returnData
+// 				return &multipleSwapResponse, nil
+// 			}
+// 		}
+// 	}
+// 	return nil, status.Errorf(codes.Unimplemented,
+// 		fmt.Sprintf("Unsupported operation: Source %v is unsupported", request.ExchangeType), "Unsupported source")
+// }
 
 func (s *Swap) GetFreeTradeCount(request *pb.FreeTradeCountRequest) (*pb.FreeTradeCountResponse, error) {
-	source := s.GetSwapSource(request.Chain)
+	// source := s.GetSwapSource(request.Chain)
 	swapExchange := request.ExchangeType
 	switch swapExchange {
-	case "zeroswap":
-		return s.services.ZeroSwap.GetFreeTradeCount(request, source)
+	// case "zeroswap":
+	// 	return s.services.ZeroSwap.GetFreeTradeCount(request, source)
 	default:
 		return nil, status.Errorf(codes.Unimplemented,
 			fmt.Sprintf("Unsupported operation: Source %v is unsupported", request.ExchangeType), "chain not supported")
@@ -757,11 +760,11 @@ func (s *Swap) GetFreeTradeCount(request *pb.FreeTradeCountRequest) (*pb.FreeTra
 }
 
 func (s *Swap) GetTokenApproval(request *pb.TokenApprovalRequest) (*pb.TokenApprovalResponse, error) {
-	source := s.GetSwapSource(request.Chain)
+	// source := s.GetSwapSource(request.Chain)
 	swapExchange := request.ExchangeType
 	switch swapExchange {
-	case "zeroswap":
-		return s.services.ZeroSwap.GetTokenApproval(request, source)
+	// case "zeroswap":
+	// 	return s.services.ZeroSwap.GetTokenApproval(request, source)
 	default:
 		return nil, status.Errorf(codes.Unimplemented,
 			fmt.Sprintf("Unsupported operation: Source %v is unsupported", request.ExchangeType), "chain not supported")
@@ -769,7 +772,7 @@ func (s *Swap) GetTokenApproval(request *pb.TokenApprovalRequest) (*pb.TokenAppr
 }
 
 func (s *Swap) GetExchangeSignature(request *pb.ExchangeSignatureRequest) (*pb.ExchangeSignatureResponse, error) {
-	source := s.GetSwapSource(request.Chain)
+	// source := s.GetSwapSource(request.Chain)
 	var srcTokenDecimals, dstTokenDecimals string
 	if request.ExchangeType == "cowswap" {
 		chainTokens, err := s.GetExchangeTokens(&pb.ExchangeTokenRequest{Chain: request.Chain, ExchangeType: request.ExchangeType})
@@ -797,13 +800,13 @@ func (s *Swap) GetExchangeSignature(request *pb.ExchangeSignatureRequest) (*pb.E
 			dstTokenDecimals = strconv.Itoa(decimals)
 		}
 	}
-	walletInfo := s.util.GetWalletInfo(request.Chain)
+	// walletInfo := s.util.GetWalletInfo(request.Chain)
 	swapExchange := request.ExchangeType
 	switch swapExchange {
-	case "zeroswap":
-		return s.services.ZeroSwap.GetSignatureData(request, source)
-	case "cowswap":
-		return s.services.CowSwap.GetSignatureData(request, source, srcTokenDecimals, dstTokenDecimals, walletInfo)
+	// case "zeroswap":
+	// 	return s.services.ZeroSwap.GetSignatureData(request, source)
+	// case "cowswap":
+	// 	return s.services.CowSwap.GetSignatureData(request, source, srcTokenDecimals, dstTokenDecimals, walletInfo)
 	default:
 		return nil, status.Errorf(codes.Unimplemented,
 			fmt.Sprintf("Unsupported operation: Source %v is unsupported", request.ExchangeType), "chain not supported")
@@ -811,13 +814,13 @@ func (s *Swap) GetExchangeSignature(request *pb.ExchangeSignatureRequest) (*pb.E
 }
 
 func (s *Swap) GetExchangeSwapExecute(request *pb.ExchangeSwapExecuteRequest) (*pb.ExchangeSwapExecuteResponse, error) {
-	source := s.GetSwapSource(request.Chain)
+	// source := s.GetSwapSource(request.Chain)
 	chainTokens, err := s.GetExchangeTokens(&pb.ExchangeTokenRequest{Chain: request.Chain, ExchangeType: request.ExchangeType})
 	if err != nil {
 		s.logger.Errorf("Error for Exchange Quote request  is : %v", err.Error())
 		return nil, err
 	}
-	walletInfo := s.util.GetWalletInfo(request.Chain)
+	// walletInfo := s.util.GetWalletInfo(request.Chain)
 
 	var sellToken, buyToken string
 	if request.ExchangeType == "zeroswap" {
@@ -850,10 +853,10 @@ func (s *Swap) GetExchangeSwapExecute(request *pb.ExchangeSwapExecuteRequest) (*
 
 	swapExchange := request.ExchangeType
 	switch swapExchange {
-	case "zeroswap":
-		return s.services.ZeroSwap.ExecuteZeroSwap(request, source, srcTokenDecimals, walletInfo)
-	case "cowswap":
-		return s.services.CowSwap.ExecuteCowSwapOrder(request, source, srcTokenDecimals, dstTokenDecimals, walletInfo)
+	// case "zeroswap":
+	// 	return s.services.ZeroSwap.ExecuteZeroSwap(request, source, srcTokenDecimals, walletInfo)
+	// case "cowswap":
+	// 	return s.services.CowSwap.ExecuteCowSwapOrder(request, source, srcTokenDecimals, dstTokenDecimals, walletInfo)
 	default:
 		return nil, status.Errorf(codes.Unimplemented,
 			fmt.Sprintf("Unsupported operation: Source %v is unsupported", request.ExchangeType), "chain not supported")
@@ -1066,54 +1069,54 @@ func (s *Swap) GetSwapSource(chain string) config.ChainData {
 	return config.ChainData{}
 }
 
-func (s *Swap) GetMultipleSwapData(request *pb.ExchangeMultiSwapRequest, spender string) (pb.ExchangeMultipleSwapResponse, error) {
-	var multipleSwapResponse pb.ExchangeMultipleSwapResponse
-	nonceRequest := &pb.NonceRequest{
-		Address: request.TakerAddress,
-		Chain:   request.Chain,
-	}
-	nonceResponse, err1 := s.evmCore.GetNonce(nonceRequest)
-	if err1 != nil {
-		s.logger.Errorf("Error for getting nonce response : %v", err1.Error())
-	}
-	multipleSwapResponse.QuoteValue = nonceResponse.QuoteValue
-	multipleSwapResponse.OpL1Fee = nonceResponse.OpL1Fee
-	multipleSwapResponse.GasPrice = nonceResponse.GasPrice
-	var contractArray []string
-	for _, multiChainRequest := range request.MultiChainRequests {
-		contractArray = append(contractArray, multiChainRequest.SellToken)
-	}
-	allowanceContracts := strings.Join(contractArray, ",")
-	allowanceRequest := &pb.AllowanceRequest{
-		Chain:    request.Chain,
-		Owner:    request.TakerAddress,
-		Spender:  spender,
-		Contract: allowanceContracts,
-	}
-	allowanceResonse, err2 := s.evmCore.BulkAllowance(allowanceRequest)
-	if err2 != nil {
-		s.logger.Errorf("Error for getting allowances response : %v", err1.Error())
-	}
-	var approvalArray []string
-	for index, responseItem := range allowanceResonse.Response {
-		if responseItem.Allowance == "0" {
-			approvalArray = append(approvalArray, contractArray[index])
-		}
-	}
-	approvalContracts := strings.Join(approvalArray, ",")
-	if len(approvalContracts) > 0 {
-		approvalRequest := &pb.ApprovalRequest{
-			Target: spender,
-			Chain:  request.Chain,
-			Token:  approvalContracts,
-		}
-		approvalResponse, err3 := s.evmCore.BulkApproval(approvalRequest)
-		if err3 != nil {
-			s.logger.Errorf("Error for getting approval response : %v", err1.Error())
-		}
-		multipleSwapResponse.Approval = approvalResponse.Response
-	} else {
-		multipleSwapResponse.Approval = []*pb.ApprovalResponse{}
-	}
-	return multipleSwapResponse, nil
-}
+// func (s *Swap) GetMultipleSwapData(request *pb.ExchangeMultiSwapRequest, spender string) (pb.ExchangeMultipleSwapResponse, error) {
+// 	var multipleSwapResponse pb.ExchangeMultipleSwapResponse
+// 	nonceRequest := &pb.NonceRequest{
+// 		Address: request.TakerAddress,
+// 		Chain:   request.Chain,
+// 	}
+// 	nonceResponse, err1 := s.evmCore.GetNonce(nonceRequest)
+// 	if err1 != nil {
+// 		s.logger.Errorf("Error for getting nonce response : %v", err1.Error())
+// 	}
+// 	multipleSwapResponse.QuoteValue = nonceResponse.QuoteValue
+// 	multipleSwapResponse.OpL1Fee = nonceResponse.OpL1Fee
+// 	multipleSwapResponse.GasPrice = nonceResponse.GasPrice
+// 	var contractArray []string
+// 	for _, multiChainRequest := range request.MultiChainRequests {
+// 		contractArray = append(contractArray, multiChainRequest.SellToken)
+// 	}
+// 	allowanceContracts := strings.Join(contractArray, ",")
+// 	allowanceRequest := &pb.AllowanceRequest{
+// 		Chain:    request.Chain,
+// 		Owner:    request.TakerAddress,
+// 		Spender:  spender,
+// 		Contract: allowanceContracts,
+// 	}
+// 	allowanceResonse, err2 := s.evmCore.BulkAllowance(allowanceRequest)
+// 	if err2 != nil {
+// 		s.logger.Errorf("Error for getting allowances response : %v", err1.Error())
+// 	}
+// 	var approvalArray []string
+// 	for index, responseItem := range allowanceResonse.Response {
+// 		if responseItem.Allowance == "0" {
+// 			approvalArray = append(approvalArray, contractArray[index])
+// 		}
+// 	}
+// 	approvalContracts := strings.Join(approvalArray, ",")
+// 	if len(approvalContracts) > 0 {
+// 		approvalRequest := &pb.ApprovalRequest{
+// 			Target: spender,
+// 			Chain:  request.Chain,
+// 			Token:  approvalContracts,
+// 		}
+// 		approvalResponse, err3 := s.evmCore.BulkApproval(approvalRequest)
+// 		if err3 != nil {
+// 			s.logger.Errorf("Error for getting approval response : %v", err1.Error())
+// 		}
+// 		multipleSwapResponse.Approval = approvalResponse.Response
+// 	} else {
+// 		multipleSwapResponse.Approval = []*pb.ApprovalResponse{}
+// 	}
+// 	return multipleSwapResponse, nil
+// }

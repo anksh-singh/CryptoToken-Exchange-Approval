@@ -2,10 +2,10 @@ package core
 
 import (
 	"bridge-allowance/config"
-	"bridge-allowance/pkg/coingecko"
+// 	// "bridge-allowance/pkg/coingecko"
 	"bridge-allowance/pkg/grpc/proto/pb"
 	"bridge-allowance/utils"
-	"bridge-allowance/utils/models"
+	// "bridge-allowance/utils/models"
 	"bytes"
 	runtimev1alpha1 "cosmossdk.io/api/cosmos/app/runtime/v1alpha1"
 	appv1alpha1 "cosmossdk.io/api/cosmos/app/v1alpha1"
@@ -30,7 +30,7 @@ import (
 
 type Handler struct {
 	env             *config.Config
-	coingecko       *coingecko.CoinGecko
+	// coingecko       *coingecko.CoinGecko
 	logger          *zap.SugaredLogger
 	rpcClientMap    map[string]jsonrpc.RPCClient
 	chainConfigData map[string]config.CosmosWallets
@@ -49,7 +49,7 @@ type ConfMap struct {
 }
 
 func NewCosmosHandler(config *config.Config, logger *zap.SugaredLogger, httpRequest utils.IHttpRequest,
-	utilsConf *utils.UtilConf, coingecko *coingecko.CoinGecko) (*Handler, error) {
+	utilsConf *utils.UtilConf) (*Handler, error) {
 	confMap, err := getRpcAndRestInfo(config.Cosmos, logger, httpRequest)
 	helper := utils.Helpers{}
 	if err != nil {
@@ -58,7 +58,7 @@ func NewCosmosHandler(config *config.Config, logger *zap.SugaredLogger, httpRequ
 	}
 	return &Handler{
 		config,
-		coingecko,
+		// coingecko,
 		logger,
 		confMap.rpcClientMap,
 		confMap.chainConfigData,
@@ -665,225 +665,225 @@ func reverse(less func(i, j int) bool) func(i, j int) bool {
 	}
 }
 
-func (h *Handler) getBlueZelleAssets(in *pb.BalanceRequest, chainConf config.CosmosWallets) (*pb.CosmosAssetResponse, error) {
-	balanceEndpoint := fmt.Sprintf(chainConf.REST+"/bank/balances/%s", in.Address)
-	body, err := h.httpRequest.GetRequest(balanceEndpoint)
-	if err != nil {
-		h.logger.Errorf("Error calling %s balance end point %s", in.Chain, err.Error())
-		return nil, err
-	}
-	var tokenBalance []*pb.CosmosTokenBalance
-	var balanceRes BluzelleBalanceRes
-	var quote, quoteRate float64
-	var quoteMarketData coingecko.QuoteData
-	var accountInfo BluzelleAccountInfo
-	err = json.Unmarshal(body, &balanceRes)
-	if err != nil {
-		h.logger.Errorf("Error in Unmarshalling Json: %v", err.Error())
-		return nil, status.Errorf(codes.Internal, err.Error(), "json unmarshalling error")
-	}
-	for _, balanceData := range balanceRes.Result {
-		tokenPrice, err := h.coingecko.GetTokenExchangeByCoingeckoId("usd", blzInfo.CoingeckoId)
-		if err != nil {
-			return nil, err
-		}
-		quoteRate = tokenPrice
-		amount, err := strconv.ParseFloat(balanceData.Amount, 64)
-		if err != nil {
-			h.logger.Errorf("Error in Float Conversion %v", amount)
-		}
-		amount = amount / math.Pow10(int(chainConf.Decimals))
-		quote = amount * quoteRate
-		quoteMarketData, err = h.coingecko.GetCosmosTokenMarketInfo(blzInfo.CoingeckoId)
-		if err != nil {
-			h.logger.Errorf("Error in Fetching Market Info %v", err)
-		}
-		if quoteMarketData.QuoteRateChange24h == "" {
-			quoteMarketData.QuoteRateChange24h = "0" //"0" is default string fpr this key (client's expectation)
-		}
-		tokenData := pb.CosmosTokenBalance{
-			ContractName:         blzInfo.Description,
-			ContractDecimals:     int32(chainConf.Decimals),
-			ContractTickerSymbol: blzInfo.Symbol,
-			Balance:              balanceData.Amount,
-			LogoUrl:              blzInfo.LogoUrl,
-			QuotePrice:           strconv.FormatFloat(quote, 'f', -1, 64),
-			QuoteRate:            quoteRate,
-			QuoteRate_24H:        quoteMarketData.QuoteRateChange24h,
-			QuotePctChange_24H:   quoteMarketData.QuoteRatePctChange24h,
-			Denom:                balanceData.Denom,
-		}
-		tokenBalance = append(tokenBalance, &tokenData)
+// func (h *Handler) getBlueZelleAssets(in *pb.BalanceRequest, chainConf config.CosmosWallets) (*pb.CosmosAssetResponse, error) {
+// 	balanceEndpoint := fmt.Sprintf(chainConf.REST+"/bank/balances/%s", in.Address)
+// 	body, err := h.httpRequest.GetRequest(balanceEndpoint)
+// 	if err != nil {
+// 		h.logger.Errorf("Error calling %s balance end point %s", in.Chain, err.Error())
+// 		return nil, err
+// 	}
+// 	var tokenBalance []*pb.CosmosTokenBalance
+// 	var balanceRes BluzelleBalanceRes
+// 	var quote, quoteRate float64
+// 	// var quoteMarketData coingecko.QuoteData
+// 	var accountInfo BluzelleAccountInfo
+// 	err = json.Unmarshal(body, &balanceRes)
+// 	if err != nil {
+// 		h.logger.Errorf("Error in Unmarshalling Json: %v", err.Error())
+// 		return nil, status.Errorf(codes.Internal, err.Error(), "json unmarshalling error")
+// 	}
+// 	for _, balanceData := range balanceRes.Result {
+// 		tokenPrice, err := h.coingecko.GetTokenExchangeByCoingeckoId("usd", blzInfo.CoingeckoId)
+// 		if err != nil {
+// 			return nil, err
+// 		}
+// 		quoteRate = tokenPrice
+// 		amount, err := strconv.ParseFloat(balanceData.Amount, 64)
+// 		if err != nil {
+// 			h.logger.Errorf("Error in Float Conversion %v", amount)
+// 		}
+// 		amount = amount / math.Pow10(int(chainConf.Decimals))
+// 		quote = amount * quoteRate
+// 		quoteMarketData, err = h.coingecko.GetCosmosTokenMarketInfo(blzInfo.CoingeckoId)
+// 		if err != nil {
+// 			h.logger.Errorf("Error in Fetching Market Info %v", err)
+// 		}
+// 		if quoteMarketData.QuoteRateChange24h == "" {
+// 			quoteMarketData.QuoteRateChange24h = "0" //"0" is default string fpr this key (client's expectation)
+// 		}
+// 		tokenData := pb.CosmosTokenBalance{
+// 			ContractName:         blzInfo.Description,
+// 			ContractDecimals:     int32(chainConf.Decimals),
+// 			ContractTickerSymbol: blzInfo.Symbol,
+// 			Balance:              balanceData.Amount,
+// 			LogoUrl:              blzInfo.LogoUrl,
+// 			QuotePrice:           strconv.FormatFloat(quote, 'f', -1, 64),
+// 			QuoteRate:            quoteRate,
+// 			QuoteRate_24H:        quoteMarketData.QuoteRateChange24h,
+// 			QuotePctChange_24H:   quoteMarketData.QuoteRatePctChange24h,
+// 			Denom:                balanceData.Denom,
+// 		}
+// 		tokenBalance = append(tokenBalance, &tokenData)
 
-	}
-	less := func(i, j int) bool {
-		return tokenBalance[i].QuotePrice < tokenBalance[j].QuotePrice
-	}
-	sort.Slice(tokenBalance, reverse(less))
+// 	}
+// 	less := func(i, j int) bool {
+// 		return tokenBalance[i].QuotePrice < tokenBalance[j].QuotePrice
+// 	}
+// 	sort.Slice(tokenBalance, reverse(less))
 
-	if len(tokenBalance) != 0 {
-		accountInfoEndpoint := fmt.Sprintf(chainConf.REST+"/auth/accounts//%s", in.Address)
-		accountBody, accErr := h.httpRequest.GetRequest(accountInfoEndpoint)
-		if accErr != nil {
-			h.logger.Errorf("Error calling %s cosmos account info end point %s", in.Chain, err.Error())
-			return nil, err
-		}
-		err = json.Unmarshal(accountBody, &accountInfo)
-		if err != nil {
-			h.logger.Errorf("Error in Unmarshalling Json: %v", err.Error())
-			return nil, status.Errorf(codes.Internal, err.Error(), "json unmarshalling error")
-		}
-	} else {
-		accountInfo.Result.Value.AccountNumber = "0"
-		accountInfo.Result.Value.Sequence = "0"
-	}
-	var accountNum, sequence string
-	accountNum = accountInfo.Result.Value.AccountNumber
-	sequence = accountInfo.Result.Value.Sequence
-	accountNumberInt, _ := strconv.Atoi(accountNum)
-	sequenceInt, _ := strconv.Atoi(sequence)
-	return &pb.CosmosAssetResponse{
-		AccountNumber: int64(accountNumberInt),
-		ChainId:       chainConf.ChainID,
-		Sequence:      int64(sequenceInt),
-		Token:         tokenBalance,
-	}, nil
-}
+// 	if len(tokenBalance) != 0 {
+// 		accountInfoEndpoint := fmt.Sprintf(chainConf.REST+"/auth/accounts//%s", in.Address)
+// 		accountBody, accErr := h.httpRequest.GetRequest(accountInfoEndpoint)
+// 		if accErr != nil {
+// 			h.logger.Errorf("Error calling %s cosmos account info end point %s", in.Chain, err.Error())
+// 			return nil, err
+// 		}
+// 		err = json.Unmarshal(accountBody, &accountInfo)
+// 		if err != nil {
+// 			h.logger.Errorf("Error in Unmarshalling Json: %v", err.Error())
+// 			return nil, status.Errorf(codes.Internal, err.Error(), "json unmarshalling error")
+// 		}
+// 	} else {
+// 		accountInfo.Result.Value.AccountNumber = "0"
+// 		accountInfo.Result.Value.Sequence = "0"
+// 	}
+// 	var accountNum, sequence string
+// 	accountNum = accountInfo.Result.Value.AccountNumber
+// 	sequence = accountInfo.Result.Value.Sequence
+// 	accountNumberInt, _ := strconv.Atoi(accountNum)
+// 	sequenceInt, _ := strconv.Atoi(sequence)
+// 	return &pb.CosmosAssetResponse{
+// 		AccountNumber: int64(accountNumberInt),
+// 		ChainId:       chainConf.ChainID,
+// 		Sequence:      int64(sequenceInt),
+// 		Token:         tokenBalance,
+// 	}, nil
+// }
 
-func (h *Handler) GetBalance(in *pb.BalanceRequest) (*pb.CosmosAssetResponse, error) {
-	chainConf := h.chainConfigData[in.Chain]
-	if in.Chain == "bluzelle" {
-		return h.getBlueZelleAssets(in, chainConf)
-	}
-	balanceEndpoint := fmt.Sprintf(chainConf.REST+"/cosmos/bank/v1beta1/balances/%s", in.Address)
-	body, err := h.httpRequest.GetRequest(balanceEndpoint)
-	if err != nil {
-		h.logger.Errorf("Error calling %s balance end point %s", in.Chain, err.Error())
-		if strings.Contains(err.Error(), "429") || strings.Contains(err.Error(), "No servers available") {
-			endpoint := h.env.Cosmos.Cfg.BackUpUrls[in.Chain]
-			if endpoint != "" {
-				balanceEndpoint = fmt.Sprintf(endpoint+"cosmos/bank/v1beta1/balances/%s", in.Address)
-				body, err = h.httpRequest.GetRequest(balanceEndpoint)
-				if err != nil {
-					h.logger.Errorf("Error calling %s balance end point %s", in.Chain, err.Error())
-					return nil, err
-				}
-				err = nil
-			}
-		}
-		if err != nil {
-			return nil, err
-		}
-	}
-	var balanceRes CosmosBalanceRes
-	var tokenBalance []*pb.CosmosTokenBalance
-	var accountInfo CosmosAccountInfo
-	err = json.Unmarshal(body, &balanceRes)
-	if err != nil {
-		h.logger.Errorf("Error in Unmarshalling Json: %v", err.Error())
-		return nil, status.Errorf(codes.Internal, err.Error(), "json unmarshalling error")
-	}
-	for _, balanceData := range balanceRes.Balances {
-		var balanceDenom = balanceData.Denom
-		var assetKey, contractName string
-		var decimals int32
-		var quote, quoteRate float64
-		var quoteMarketData coingecko.QuoteData
-		if in.Chain == "cryptoorg" && balanceData.Denom == "basecro" { //basecro and uluna present in two chain networks, basecro handled,uluna need to check
-			balanceDenom = balanceData.Denom + "__cryptoorgchain"
-		} else {
-			balanceDenom = balanceData.Denom + "__" + in.Chain //To match it with key name of ibc data
-		}
+// func (h *Handler) GetBalance(in *pb.BalanceRequest) (*pb.CosmosAssetResponse, error) {
+// 	chainConf := h.chainConfigData[in.Chain]
+// 	if in.Chain == "bluzelle" {
+// 		return h.getBlueZelleAssets(in, chainConf)
+// 	}
+// 	balanceEndpoint := fmt.Sprintf(chainConf.REST+"/cosmos/bank/v1beta1/balances/%s", in.Address)
+// 	body, err := h.httpRequest.GetRequest(balanceEndpoint)
+// 	if err != nil {
+// 		h.logger.Errorf("Error calling %s balance end point %s", in.Chain, err.Error())
+// 		if strings.Contains(err.Error(), "429") || strings.Contains(err.Error(), "No servers available") {
+// 			endpoint := h.env.Cosmos.Cfg.BackUpUrls[in.Chain]
+// 			if endpoint != "" {
+// 				balanceEndpoint = fmt.Sprintf(endpoint+"cosmos/bank/v1beta1/balances/%s", in.Address)
+// 				body, err = h.httpRequest.GetRequest(balanceEndpoint)
+// 				if err != nil {
+// 					h.logger.Errorf("Error calling %s balance end point %s", in.Chain, err.Error())
+// 					return nil, err
+// 				}
+// 				err = nil
+// 			}
+// 		}
+// 		if err != nil {
+// 			return nil, err
+// 		}
+// 	}
+// 	var balanceRes CosmosBalanceRes
+// 	var tokenBalance []*pb.CosmosTokenBalance
+// 	var accountInfo CosmosAccountInfo
+// 	err = json.Unmarshal(body, &balanceRes)
+// 	if err != nil {
+// 		h.logger.Errorf("Error in Unmarshalling Json: %v", err.Error())
+// 		return nil, status.Errorf(codes.Internal, err.Error(), "json unmarshalling error")
+// 	}
+// 	for _, balanceData := range balanceRes.Balances {
+// 		var balanceDenom = balanceData.Denom
+// 		var assetKey, contractName string
+// 		var decimals int32
+// 		var quote, quoteRate float64
+// 		// var quoteMarketData coingecko.QuoteData
+// 		if in.Chain == "cryptoorg" && balanceData.Denom == "basecro" { //basecro and uluna present in two chain networks, basecro handled,uluna need to check
+// 			balanceDenom = balanceData.Denom + "__cryptoorgchain"
+// 		} else {
+// 			balanceDenom = balanceData.Denom + "__" + in.Chain //To match it with key name of ibc data
+// 		}
 
-		if strings.Contains(balanceData.Denom, "ibc") {
-			ibcInfo := h.ibcTokenInfo[balanceDenom]
-			if ibcInfo.Origin.Chain != nil && ibcInfo.Origin.Denom != nil {
-				assetKey = ibcInfo.Origin.Denom.(string) + "__" + ibcInfo.Origin.Chain.(string)
-				contractName = "IBC Token"
-			}
-		} else {
-			assetKey = balanceData.Denom + "__" + in.Chain //To match it with key name of ibc data
-		}
-		denomInfo := h.denomInfo[assetKey]
-		if denomValue, ok := h.denomInfo[assetKey]; ok && denomValue.CoingeckoID != "" {
-			tokenPrice, err := h.coingecko.GetTokenExchangeByCoingeckoId("usd", denomValue.CoingeckoID)
-			if err != nil {
-				return nil, status.Errorf(codes.Internal, err.Error(), "Internal Error")
-			}
-			quoteRate = tokenPrice
-			amount, err := strconv.ParseFloat(balanceData.Amount, 64)
-			if err != nil {
-				h.logger.Errorf("Error in Float Conversion %v", amount)
-			}
-			amount = amount / math.Pow10(denomValue.Decimals)
-			quote = amount * quoteRate
-			quoteMarketData, err = h.coingecko.GetCosmosTokenMarketInfo(denomValue.CoingeckoID)
-			if err != nil {
-				h.logger.Errorf("Error in Fetching Market Info %v", err)
-			}
-		}
-		if quoteMarketData.QuoteRateChange24h == "" {
-			quoteMarketData.QuoteRateChange24h = "0" //"0" is default string fpr this key (client's expectation)
-		}
-		if contractName == "" { //For the Identified IBC Tokens
-			contractName = denomInfo.Description
-		}
-		if contractName == "" { //For the UnIdentified IBC Tokens
-			contractName = "Unknown"
-			denomInfo.Symbol = "Unknown"
-		}
-		if denomInfo.Decimals == 0 {
-			decimals = 6
-		} else {
-			decimals = int32(denomInfo.Decimals)
-		}
-		tokenData := pb.CosmosTokenBalance{
-			ContractName:         contractName,
-			ContractDecimals:     decimals,
-			ContractTickerSymbol: denomInfo.Symbol,
-			Balance:              balanceData.Amount,
-			LogoUrl:              denomInfo.Logos.Png,
-			QuotePrice:           strconv.FormatFloat(quote, 'f', -1, 64),
-			QuoteRate:            quoteRate,
-			QuoteRate_24H:        quoteMarketData.QuoteRateChange24h,
-			QuotePctChange_24H:   quoteMarketData.QuoteRatePctChange24h,
-			Denom:                balanceData.Denom,
-		}
-		tokenBalance = append(tokenBalance, &tokenData)
-	}
+// 		if strings.Contains(balanceData.Denom, "ibc") {
+// 			ibcInfo := h.ibcTokenInfo[balanceDenom]
+// 			if ibcInfo.Origin.Chain != nil && ibcInfo.Origin.Denom != nil {
+// 				assetKey = ibcInfo.Origin.Denom.(string) + "__" + ibcInfo.Origin.Chain.(string)
+// 				contractName = "IBC Token"
+// 			}
+// 		} else {
+// 			assetKey = balanceData.Denom + "__" + in.Chain //To match it with key name of ibc data
+// 		}
+// 		denomInfo := h.denomInfo[assetKey]
+// 		if denomValue, ok := h.denomInfo[assetKey]; ok && denomValue.CoingeckoID != "" {
+// 			tokenPrice, err := h.coingecko.GetTokenExchangeByCoingeckoId("usd", denomValue.CoingeckoID)
+// 			if err != nil {
+// 				return nil, status.Errorf(codes.Internal, err.Error(), "Internal Error")
+// 			}
+// 			quoteRate = tokenPrice
+// 			amount, err := strconv.ParseFloat(balanceData.Amount, 64)
+// 			if err != nil {
+// 				h.logger.Errorf("Error in Float Conversion %v", amount)
+// 			}
+// 			amount = amount / math.Pow10(denomValue.Decimals)
+// 			quote = amount * quoteRate
+// 			quoteMarketData, err = h.coingecko.GetCosmosTokenMarketInfo(denomValue.CoingeckoID)
+// 			if err != nil {
+// 				h.logger.Errorf("Error in Fetching Market Info %v", err)
+// 			}
+// 		}
+// 		if quoteMarketData.QuoteRateChange24h == "" {
+// 			quoteMarketData.QuoteRateChange24h = "0" //"0" is default string fpr this key (client's expectation)
+// 		}
+// 		if contractName == "" { //For the Identified IBC Tokens
+// 			contractName = denomInfo.Description
+// 		}
+// 		if contractName == "" { //For the UnIdentified IBC Tokens
+// 			contractName = "Unknown"
+// 			denomInfo.Symbol = "Unknown"
+// 		}
+// 		if denomInfo.Decimals == 0 {
+// 			decimals = 6
+// 		} else {
+// 			decimals = int32(denomInfo.Decimals)
+// 		}
+// 		tokenData := pb.CosmosTokenBalance{
+// 			ContractName:         contractName,
+// 			ContractDecimals:     decimals,
+// 			ContractTickerSymbol: denomInfo.Symbol,
+// 			Balance:              balanceData.Amount,
+// 			LogoUrl:              denomInfo.Logos.Png,
+// 			QuotePrice:           strconv.FormatFloat(quote, 'f', -1, 64),
+// 			QuoteRate:            quoteRate,
+// 			QuoteRate_24H:        quoteMarketData.QuoteRateChange24h,
+// 			QuotePctChange_24H:   quoteMarketData.QuoteRatePctChange24h,
+// 			Denom:                balanceData.Denom,
+// 		}
+// 		tokenBalance = append(tokenBalance, &tokenData)
+// 	}
 
-	less := func(i, j int) bool {
-		return tokenBalance[i].QuotePrice < tokenBalance[j].QuotePrice
-	}
-	sort.Slice(tokenBalance, reverse(less))
+// 	less := func(i, j int) bool {
+// 		return tokenBalance[i].QuotePrice < tokenBalance[j].QuotePrice
+// 	}
+// 	sort.Slice(tokenBalance, reverse(less))
 
-	if len(tokenBalance) != 0 {
-		accountInfo, err = h.getCosmosAccountInfo(in.Address, in.Chain)
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		accountInfo.Account.AccountNumber = "0"
-		accountInfo.Account.Sequence = "0"
-	}
-	var accountNum, sequence string
-	accountNum = accountInfo.Account.AccountNumber
-	sequence = accountInfo.Account.Sequence
-	if accountNum == "" {
-		accountNum = accountInfo.Account.BaseAccount.AccountNumber
-	}
-	if sequence == "" {
-		sequence = accountInfo.Account.BaseAccount.Sequence
-	}
-	accountNumberInt, _ := strconv.Atoi(accountNum)
-	sequenceInt, _ := strconv.Atoi(sequence)
-	return &pb.CosmosAssetResponse{
-		AccountNumber: int64(accountNumberInt),
-		ChainId:       chainConf.ChainID,
-		Sequence:      int64(sequenceInt),
-		Token:         tokenBalance,
-	}, nil
-}
+// 	if len(tokenBalance) != 0 {
+// 		accountInfo, err = h.getCosmosAccountInfo(in.Address, in.Chain)
+// 		if err != nil {
+// 			return nil, err
+// 		}
+// 	} else {
+// 		accountInfo.Account.AccountNumber = "0"
+// 		accountInfo.Account.Sequence = "0"
+// 	}
+// 	var accountNum, sequence string
+// 	accountNum = accountInfo.Account.AccountNumber
+// 	sequence = accountInfo.Account.Sequence
+// 	if accountNum == "" {
+// 		accountNum = accountInfo.Account.BaseAccount.AccountNumber
+// 	}
+// 	if sequence == "" {
+// 		sequence = accountInfo.Account.BaseAccount.Sequence
+// 	}
+// 	accountNumberInt, _ := strconv.Atoi(accountNum)
+// 	sequenceInt, _ := strconv.Atoi(sequence)
+// 	return &pb.CosmosAssetResponse{
+// 		AccountNumber: int64(accountNumberInt),
+// 		ChainId:       chainConf.ChainID,
+// 		Sequence:      int64(sequenceInt),
+// 		Token:         tokenBalance,
+// 	}, nil
+// }
 
 func newCosmosTxConfig() (client.TxConfig, codec.Codec, error) {
 	var TestConfig = appconfig.Compose(&appv1alpha1.Config{
@@ -1056,1387 +1056,1387 @@ func (cosmos *Handler) SendTx(request *pb.CosmosSendTxRequest) (*pb.SendTransact
 
 // GetDelegations Lists the Delegations for any wallet address
 // TODO: Add support for 3P services
-func (cosmos *Handler) GetDelegations(request *pb.CosmosDelegationsRequest) (*pb.CosmosDelegationsResponse, error) {
-	walletInfo := cosmos.utils.GetCosmosWalletInfo(request.Chain)
-	// , _ = strconv.ParseInt(request.PageSize, 0, 64)
-	var respo pb.CosmosDelegationsResponse
-	var reqUrlValidators, reqUrlDelegations, reqUrlRewards, reqUrlUnboundDelegations, reqUrlValidatorsForDelegator, reqUrlPools, reqUrlInflation, reqUrlAnnualProv, reqUrlDistrParams string
-	if request.Chain == "bluzelle" {
-		var pageOffSet = 1
-		var pageSizeForValidators = int64(1000)
-		reqUrlValidators = fmt.Sprintf(walletInfo.REST+"/staking/validators?status=bonded&page=%v&limit=%v", pageOffSet, pageSizeForValidators)
-		reqUrlDelegations = fmt.Sprintf(walletInfo.REST+"/staking/delegators/%v/delegations", request.Address)
-		reqUrlRewards = fmt.Sprintf(walletInfo.REST+"/distribution/delegators/%v/rewards", request.Address)
-		reqUrlUnboundDelegations = fmt.Sprintf(walletInfo.REST+"/staking/delegators/%v/unbonding_delegations", request.Address)
-		reqUrlValidatorsForDelegator = fmt.Sprintf(walletInfo.REST+"/staking/delegators/%v/validators", request.Address)
-		reqUrlInflation = fmt.Sprintf(walletInfo.REST + "/minting/inflation")
-		reqUrlPools = fmt.Sprintf(walletInfo.REST + "/staking/pool")
-		reqUrlAnnualProv = fmt.Sprintf(walletInfo.REST + "/minting/annual-provisions")
-		reqUrlDistrParams = fmt.Sprintf(walletInfo.REST + "/distribution/parameters")
+// func (cosmos *Handler) GetDelegations(request *pb.CosmosDelegationsRequest) (*pb.CosmosDelegationsResponse, error) {
+// 	walletInfo := cosmos.utils.GetCosmosWalletInfo(request.Chain)
+// 	// , _ = strconv.ParseInt(request.PageSize, 0, 64)
+// 	var respo pb.CosmosDelegationsResponse
+// 	var reqUrlValidators, reqUrlDelegations, reqUrlRewards, reqUrlUnboundDelegations, reqUrlValidatorsForDelegator, reqUrlPools, reqUrlInflation, reqUrlAnnualProv, reqUrlDistrParams string
+// 	if request.Chain == "bluzelle" {
+// 		var pageOffSet = 1
+// 		var pageSizeForValidators = int64(1000)
+// 		reqUrlValidators = fmt.Sprintf(walletInfo.REST+"/staking/validators?status=bonded&page=%v&limit=%v", pageOffSet, pageSizeForValidators)
+// 		reqUrlDelegations = fmt.Sprintf(walletInfo.REST+"/staking/delegators/%v/delegations", request.Address)
+// 		reqUrlRewards = fmt.Sprintf(walletInfo.REST+"/distribution/delegators/%v/rewards", request.Address)
+// 		reqUrlUnboundDelegations = fmt.Sprintf(walletInfo.REST+"/staking/delegators/%v/unbonding_delegations", request.Address)
+// 		reqUrlValidatorsForDelegator = fmt.Sprintf(walletInfo.REST+"/staking/delegators/%v/validators", request.Address)
+// 		reqUrlInflation = fmt.Sprintf(walletInfo.REST + "/minting/inflation")
+// 		reqUrlPools = fmt.Sprintf(walletInfo.REST + "/staking/pool")
+// 		reqUrlAnnualProv = fmt.Sprintf(walletInfo.REST + "/minting/annual-provisions")
+// 		reqUrlDistrParams = fmt.Sprintf(walletInfo.REST + "/distribution/parameters")
 
-		bodyValidators, errValidators := cosmos.httpRequest.GetRequest(reqUrlValidators)
-		bodyDelegations, errDelegations := cosmos.httpRequest.GetRequest(reqUrlDelegations)
-		bodyRewards, errRewards := cosmos.httpRequest.GetRequest(reqUrlRewards)
-		bodyUnboundDelegations, errUnboundDelegations := cosmos.httpRequest.GetRequest(reqUrlUnboundDelegations)
-		bodyValidatorsForDelegator, errDValidatorsForDelegator := cosmos.httpRequest.GetRequest(reqUrlValidatorsForDelegator)
-		bodyInflation, errInflation := cosmos.httpRequest.GetRequest(reqUrlInflation)
-		bodyPools, errPools := cosmos.httpRequest.GetRequest(reqUrlPools)
-		bodyAnnualProv, errAnnualProv := cosmos.httpRequest.GetRequest(reqUrlAnnualProv)
-		bodyDistrParams, errDistrParams := cosmos.httpRequest.GetRequest(reqUrlDistrParams)
+// 		bodyValidators, errValidators := cosmos.httpRequest.GetRequest(reqUrlValidators)
+// 		bodyDelegations, errDelegations := cosmos.httpRequest.GetRequest(reqUrlDelegations)
+// 		bodyRewards, errRewards := cosmos.httpRequest.GetRequest(reqUrlRewards)
+// 		bodyUnboundDelegations, errUnboundDelegations := cosmos.httpRequest.GetRequest(reqUrlUnboundDelegations)
+// 		bodyValidatorsForDelegator, errDValidatorsForDelegator := cosmos.httpRequest.GetRequest(reqUrlValidatorsForDelegator)
+// 		bodyInflation, errInflation := cosmos.httpRequest.GetRequest(reqUrlInflation)
+// 		bodyPools, errPools := cosmos.httpRequest.GetRequest(reqUrlPools)
+// 		bodyAnnualProv, errAnnualProv := cosmos.httpRequest.GetRequest(reqUrlAnnualProv)
+// 		bodyDistrParams, errDistrParams := cosmos.httpRequest.GetRequest(reqUrlDistrParams)
 
-		var cosmosValidators CosmosValidatorsLaunchPad
-		var cosmosDelegations CosmosDelegationsLaunchPad
-		var cosmosRewards CosmosRewardsLaunchPad
-		var cosmosUnboundDelegations AutoGeneratedLaunchPad
-		var cosmosValidatorsForDelegator CosmosValidatorsForDelegatorLaunchPad
-		var cosmosInflation CosmosInflationLaunchPad
-		var cosmosPool CosmosPoolLaunchPad
-		var cosmosAnnualProvision CosmosAnnualProvisionLaunchPad
-		var cosmosDistributionParams CosmosDistributionParamsLaunchPad
+// 		var cosmosValidators CosmosValidatorsLaunchPad
+// 		var cosmosDelegations CosmosDelegationsLaunchPad
+// 		var cosmosRewards CosmosRewardsLaunchPad
+// 		var cosmosUnboundDelegations AutoGeneratedLaunchPad
+// 		var cosmosValidatorsForDelegator CosmosValidatorsForDelegatorLaunchPad
+// 		var cosmosInflation CosmosInflationLaunchPad
+// 		var cosmosPool CosmosPoolLaunchPad
+// 		var cosmosAnnualProvision CosmosAnnualProvisionLaunchPad
+// 		var cosmosDistributionParams CosmosDistributionParamsLaunchPad
 
-		if errValidators != nil {
-			cosmos.logger.Error("Error fetching Validators. Err: ", errValidators)
-		} else {
-			errValidators = json.Unmarshal(bodyValidators, &cosmosValidators)
-			if errValidators != nil {
-				cosmos.logger.Error("Error unmarshalling Validators List. Err: ", errValidators)
-				return nil, status.Errorf(codes.Internal, errValidators.Error(), "json unmarshalling error")
-			}
-		}
+// 		if errValidators != nil {
+// 			cosmos.logger.Error("Error fetching Validators. Err: ", errValidators)
+// 		} else {
+// 			errValidators = json.Unmarshal(bodyValidators, &cosmosValidators)
+// 			if errValidators != nil {
+// 				cosmos.logger.Error("Error unmarshalling Validators List. Err: ", errValidators)
+// 				return nil, status.Errorf(codes.Internal, errValidators.Error(), "json unmarshalling error")
+// 			}
+// 		}
 
-		if errDelegations != nil {
-			cosmos.logger.Error("Error fetching Delegations. Err: ", errDelegations)
-		} else {
-			errDelegations = json.Unmarshal(bodyDelegations, &cosmosDelegations)
-			if errDelegations != nil {
-				cosmos.logger.Error("Error unmarshalling Delegations List. Err: ", errDelegations)
-				return nil, status.Errorf(codes.Internal, errDelegations.Error(), "json unmarshalling error")
-			}
-		}
+// 		if errDelegations != nil {
+// 			cosmos.logger.Error("Error fetching Delegations. Err: ", errDelegations)
+// 		} else {
+// 			errDelegations = json.Unmarshal(bodyDelegations, &cosmosDelegations)
+// 			if errDelegations != nil {
+// 				cosmos.logger.Error("Error unmarshalling Delegations List. Err: ", errDelegations)
+// 				return nil, status.Errorf(codes.Internal, errDelegations.Error(), "json unmarshalling error")
+// 			}
+// 		}
 
-		if errRewards != nil {
-			cosmos.logger.Error("Error fetching Rewards. Err: ", errRewards)
-		} else {
-			errRewards = json.Unmarshal(bodyRewards, &cosmosRewards)
-			if errRewards != nil {
-				cosmos.logger.Error("Error unmarshalling Rewards List. Err: ", errRewards)
-				return nil, status.Errorf(codes.Internal, errRewards.Error(), "json unmarshalling error")
-			}
-		}
+// 		if errRewards != nil {
+// 			cosmos.logger.Error("Error fetching Rewards. Err: ", errRewards)
+// 		} else {
+// 			errRewards = json.Unmarshal(bodyRewards, &cosmosRewards)
+// 			if errRewards != nil {
+// 				cosmos.logger.Error("Error unmarshalling Rewards List. Err: ", errRewards)
+// 				return nil, status.Errorf(codes.Internal, errRewards.Error(), "json unmarshalling error")
+// 			}
+// 		}
 
-		if errUnboundDelegations != nil {
-			cosmos.logger.Error("Error fetching Inflation. Err: ", errUnboundDelegations)
-		} else {
-			errUnboundDelegations = json.Unmarshal(bodyUnboundDelegations, &cosmosUnboundDelegations)
-			if errUnboundDelegations != nil {
-				cosmos.logger.Error("Error unmarshalling Unbonding delegations List. Err: ", errUnboundDelegations)
-				return nil, status.Errorf(codes.Internal, errUnboundDelegations.Error(), "json unmarshalling error")
-			}
-		}
-		if errDValidatorsForDelegator != nil {
-			cosmos.logger.Error("Error fetching Validator for the delegation. Err: ", errDValidatorsForDelegator)
-		} else {
-			errDValidatorsForDelegator = json.Unmarshal(bodyValidatorsForDelegator, &cosmosValidatorsForDelegator)
-			if errDValidatorsForDelegator != nil {
-				cosmos.logger.Error("Error unmarshalling Validator for the delegation. Err: ", errDValidatorsForDelegator)
-				return nil, status.Errorf(codes.Internal, errDValidatorsForDelegator.Error(), "json unmarshalling error")
-			}
-		}
-		if errInflation != nil {
-			cosmos.logger.Error("Error fetching Inflation. Err: ", errInflation)
-			cosmosInflation.Inflation = "0"
-		} else {
-			errInflation = json.Unmarshal(bodyInflation, &cosmosInflation)
-			if cosmosInflation.Inflation == "" {
-				cosmosInflation.Inflation = "0"
-			}
-			if errInflation != nil {
-				cosmos.logger.Error("Error unmarshalling Inflation data. Err: ", errInflation)
-				return nil, status.Errorf(codes.Internal, errInflation.Error(), "json unmarshalling error")
-			}
-		}
-		if errPools != nil {
-			cosmos.logger.Error("Error fetching Pool data. Err: ", errPools)
-		} else {
-			errPools = json.Unmarshal(bodyPools, &cosmosPool)
-			if errPools != nil {
-				cosmos.logger.Error("Error unmarshalling Pool data. Err: ", errInflation)
-				return nil, status.Errorf(codes.Internal, errInflation.Error(), "json unmarshalling error")
-			}
-		}
+// 		if errUnboundDelegations != nil {
+// 			cosmos.logger.Error("Error fetching Inflation. Err: ", errUnboundDelegations)
+// 		} else {
+// 			errUnboundDelegations = json.Unmarshal(bodyUnboundDelegations, &cosmosUnboundDelegations)
+// 			if errUnboundDelegations != nil {
+// 				cosmos.logger.Error("Error unmarshalling Unbonding delegations List. Err: ", errUnboundDelegations)
+// 				return nil, status.Errorf(codes.Internal, errUnboundDelegations.Error(), "json unmarshalling error")
+// 			}
+// 		}
+// 		if errDValidatorsForDelegator != nil {
+// 			cosmos.logger.Error("Error fetching Validator for the delegation. Err: ", errDValidatorsForDelegator)
+// 		} else {
+// 			errDValidatorsForDelegator = json.Unmarshal(bodyValidatorsForDelegator, &cosmosValidatorsForDelegator)
+// 			if errDValidatorsForDelegator != nil {
+// 				cosmos.logger.Error("Error unmarshalling Validator for the delegation. Err: ", errDValidatorsForDelegator)
+// 				return nil, status.Errorf(codes.Internal, errDValidatorsForDelegator.Error(), "json unmarshalling error")
+// 			}
+// 		}
+// 		if errInflation != nil {
+// 			cosmos.logger.Error("Error fetching Inflation. Err: ", errInflation)
+// 			cosmosInflation.Inflation = "0"
+// 		} else {
+// 			errInflation = json.Unmarshal(bodyInflation, &cosmosInflation)
+// 			if cosmosInflation.Inflation == "" {
+// 				cosmosInflation.Inflation = "0"
+// 			}
+// 			if errInflation != nil {
+// 				cosmos.logger.Error("Error unmarshalling Inflation data. Err: ", errInflation)
+// 				return nil, status.Errorf(codes.Internal, errInflation.Error(), "json unmarshalling error")
+// 			}
+// 		}
+// 		if errPools != nil {
+// 			cosmos.logger.Error("Error fetching Pool data. Err: ", errPools)
+// 		} else {
+// 			errPools = json.Unmarshal(bodyPools, &cosmosPool)
+// 			if errPools != nil {
+// 				cosmos.logger.Error("Error unmarshalling Pool data. Err: ", errInflation)
+// 				return nil, status.Errorf(codes.Internal, errInflation.Error(), "json unmarshalling error")
+// 			}
+// 		}
 
-		if errAnnualProv != nil {
-			cosmos.logger.Error("Error fetching Annual Provision data. Err: ", errAnnualProv)
-		} else {
-			errAnnualProv = json.Unmarshal(bodyAnnualProv, &cosmosAnnualProvision)
-			if errAnnualProv != nil {
-				cosmos.logger.Error("Error unmarshalling Annual Provision data. Err: ", errAnnualProv)
-				return nil, status.Errorf(codes.Internal, errAnnualProv.Error(), "json unmarshalling error")
-			}
-		}
+// 		if errAnnualProv != nil {
+// 			cosmos.logger.Error("Error fetching Annual Provision data. Err: ", errAnnualProv)
+// 		} else {
+// 			errAnnualProv = json.Unmarshal(bodyAnnualProv, &cosmosAnnualProvision)
+// 			if errAnnualProv != nil {
+// 				cosmos.logger.Error("Error unmarshalling Annual Provision data. Err: ", errAnnualProv)
+// 				return nil, status.Errorf(codes.Internal, errAnnualProv.Error(), "json unmarshalling error")
+// 			}
+// 		}
 
-		if errDistrParams != nil {
-			cosmos.logger.Error("Error fetching Distribution Params data. Err: ", errDistrParams)
-		} else {
-			errDistrParams = json.Unmarshal(bodyDistrParams, &cosmosDistributionParams)
-			if errDistrParams != nil {
-				cosmos.logger.Error("Error unmarshalling Distribution Params data. Err: ", errDistrParams)
-				return nil, status.Errorf(codes.Internal, errDistrParams.Error(), "json unmarshalling error")
-			}
-		}
+// 		if errDistrParams != nil {
+// 			cosmos.logger.Error("Error fetching Distribution Params data. Err: ", errDistrParams)
+// 		} else {
+// 			errDistrParams = json.Unmarshal(bodyDistrParams, &cosmosDistributionParams)
+// 			if errDistrParams != nil {
+// 				cosmos.logger.Error("Error unmarshalling Distribution Params data. Err: ", errDistrParams)
+// 				return nil, status.Errorf(codes.Internal, errDistrParams.Error(), "json unmarshalling error")
+// 			}
+// 		}
 
-		var totalStakedValue = 0.0
-		var totalRewardsValue = 0.0
-		var totalUnStakedValue = 0.0
-		var totalStakedQuote = 0.0
-		var totalRewardsQuote = 0.0
-		var totalUnStakedQuote = 0.0
-		respo.Delegations = make([]*pb.DelegationsInfo, 0)
-		respo.UnboundDelegations = make([]*pb.UnDelegationsInfo, 0)
+// 		var totalStakedValue = 0.0
+// 		var totalRewardsValue = 0.0
+// 		var totalUnStakedValue = 0.0
+// 		var totalStakedQuote = 0.0
+// 		var totalRewardsQuote = 0.0
+// 		var totalUnStakedQuote = 0.0
+// 		respo.Delegations = make([]*pb.DelegationsInfo, 0)
+// 		respo.UnboundDelegations = make([]*pb.UnDelegationsInfo, 0)
 
-		var bondedToken = cosmosPool.Result.BondedTokens
-		var quoteRate string
-		var denomWiseData = make(map[string]pb.DenomsWiseValues)
-		for _, delegation := range cosmosDelegations.Result {
-			if delegation.Balance.Amount == "0" {
-				continue
-			}
-			var delegationInfo pb.DelegationsInfo
-			var rewardsInfo pb.RewardsInfo
-			var delegatorInfo pb.DelegationDetail
-			var balancerInfo pb.BalanceDetail
-			delegatorInfo.DelegatorAddress = delegation.DelegatorAddress
-			delegatorInfo.ValidatorAddress = delegation.ValidatorAddress
-			delegatorInfo.Shares = delegation.Shares
-			delegationInfo.Delegation = &delegatorInfo
+// 		var bondedToken = cosmosPool.Result.BondedTokens
+// 		var quoteRate string
+// 		var denomWiseData = make(map[string]pb.DenomsWiseValues)
+// 		for _, delegation := range cosmosDelegations.Result {
+// 			if delegation.Balance.Amount == "0" {
+// 				continue
+// 			}
+// 			var delegationInfo pb.DelegationsInfo
+// 			var rewardsInfo pb.RewardsInfo
+// 			var delegatorInfo pb.DelegationDetail
+// 			var balancerInfo pb.BalanceDetail
+// 			delegatorInfo.DelegatorAddress = delegation.DelegatorAddress
+// 			delegatorInfo.ValidatorAddress = delegation.ValidatorAddress
+// 			delegatorInfo.Shares = delegation.Shares
+// 			delegationInfo.Delegation = &delegatorInfo
 
-			balancerInfo.Denom = delegation.Balance.Denom
-			var balanceDenom = ""
-			var assetKey string
-			if request.Chain == "cryptoorg" && delegation.Balance.Denom == "basecro" { //basecro and uluna present in two chain networks, basecro handled,uluna need to check
-				balanceDenom = delegation.Balance.Denom + "__cryptoorgchain"
-			} else {
-				var chainName string
-				if delegation.Balance.Denom != "uluna" && request.Chain == "terra2" {
-					chainName = "terra"
-				} else {
-					chainName = request.Chain
+// 			balancerInfo.Denom = delegation.Balance.Denom
+// 			var balanceDenom = ""
+// 			var assetKey string
+// 			if request.Chain == "cryptoorg" && delegation.Balance.Denom == "basecro" { //basecro and uluna present in two chain networks, basecro handled,uluna need to check
+// 				balanceDenom = delegation.Balance.Denom + "__cryptoorgchain"
+// 			} else {
+// 				var chainName string
+// 				if delegation.Balance.Denom != "uluna" && request.Chain == "terra2" {
+// 					chainName = "terra"
+// 				} else {
+// 					chainName = request.Chain
 
-				}
-				balanceDenom = delegation.Balance.Denom + "__" + chainName //To match it with key name of ibc data
-			}
-			if strings.Contains(delegation.Balance.Denom, "ibc") {
-				ibcInfo := cosmos.ibcTokenInfo[balanceDenom]
-				if ibcInfo.Origin.Chain != nil && ibcInfo.Origin.Denom != nil {
-					assetKey = ibcInfo.Origin.Denom.(string) + "__" + ibcInfo.Origin.Chain.(string)
-				}
-			} else {
-				var chainName string
-				if delegation.Balance.Denom != "uluna" && request.Chain == "terra2" {
-					chainName = "terra"
-				} else {
-					chainName = request.Chain
+// 				}
+// 				balanceDenom = delegation.Balance.Denom + "__" + chainName //To match it with key name of ibc data
+// 			}
+// 			if strings.Contains(delegation.Balance.Denom, "ibc") {
+// 				ibcInfo := cosmos.ibcTokenInfo[balanceDenom]
+// 				if ibcInfo.Origin.Chain != nil && ibcInfo.Origin.Denom != nil {
+// 					assetKey = ibcInfo.Origin.Denom.(string) + "__" + ibcInfo.Origin.Chain.(string)
+// 				}
+// 			} else {
+// 				var chainName string
+// 				if delegation.Balance.Denom != "uluna" && request.Chain == "terra2" {
+// 					chainName = "terra"
+// 				} else {
+// 					chainName = request.Chain
 
-				}
-				assetKey = delegation.Balance.Denom + "__" + chainName //To match it with key name of ibc data
-			}
-			var tokenPrice float64
-			var tokenDecimals int
-			if denomValue, ok := cosmos.denomInfo[assetKey]; ok {
-				if denomValue.CoingeckoID != "" {
-					tokenPrice, _ = cosmos.coingecko.GetTokenExchangeByCoingeckoId("usd", denomValue.CoingeckoID)
-				}
-				quoteRate = strconv.FormatFloat(tokenPrice, 'f', -1, 64)
-				balancerInfo.TickerSymbol = denomValue.Symbol
-				balancerInfo.LogoUrl = denomValue.Logos.Png
-				if denomValue.CoingeckoID != "" {
-					balancerInfo.Decimals = int64(denomValue.Decimals)
-					tokenDecimals = denomValue.Decimals
-				} else {
-					balancerInfo.Decimals = walletInfo.Decimals
-					tokenDecimals = int(walletInfo.Decimals)
-				}
-			} else {
-				tokenPrice = cosmos.getTokenQuoteRateAsFloatVal(request.Chain)
-				quoteRate = strconv.FormatFloat(tokenPrice, 'f', -1, 64)
-				balancerInfo.Decimals = walletInfo.Decimals
-				tokenDecimals = int(walletInfo.Decimals)
-			}
-			totalStakedValue = totalStakedValue + cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)
-			totalStakedQuote = totalStakedQuote + (cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate)
-			balancerInfo.Amount = delegation.Balance.Amount
-			balancerInfo.QuoteRate = quoteRate
-			balancerInfo.Quote = strconv.FormatFloat((cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64)
-			delegationInfo.Balance = &balancerInfo
-			if denomWiseDataExists, ok := denomWiseData[delegation.Balance.Denom]; ok {
-				denomWiseData[delegation.Balance.Denom] = pb.DenomsWiseValues{
-					StakeBalance:       strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(denomWiseDataExists.StakeBalance)+(cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)/math.Pow10(tokenDecimals)), 'f', -1, 64),
-					TotalStakedQuote:   strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(denomWiseDataExists.TotalStakedQuote)+(cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64),
-					UnstakeBalance:     denomWiseDataExists.UnstakeBalance,
-					TotalUnstakedQuote: denomWiseDataExists.TotalUnstakedQuote,
-					RewardsBalance:     denomWiseDataExists.RewardsBalance,
-					TotalRewardsQuote:  denomWiseDataExists.TotalRewardsQuote,
-					Denom:              delegation.Balance.Denom,
-				}
-			} else {
-				denomWiseData[delegation.Balance.Denom] = pb.DenomsWiseValues{
+// 				}
+// 				assetKey = delegation.Balance.Denom + "__" + chainName //To match it with key name of ibc data
+// 			}
+// 			var tokenPrice float64
+// 			var tokenDecimals int
+// 			if denomValue, ok := cosmos.denomInfo[assetKey]; ok {
+// 				if denomValue.CoingeckoID != "" {
+// 					tokenPrice, _ = cosmos.coingecko.GetTokenExchangeByCoingeckoId("usd", denomValue.CoingeckoID)
+// 				}
+// 				quoteRate = strconv.FormatFloat(tokenPrice, 'f', -1, 64)
+// 				balancerInfo.TickerSymbol = denomValue.Symbol
+// 				balancerInfo.LogoUrl = denomValue.Logos.Png
+// 				if denomValue.CoingeckoID != "" {
+// 					balancerInfo.Decimals = int64(denomValue.Decimals)
+// 					tokenDecimals = denomValue.Decimals
+// 				} else {
+// 					balancerInfo.Decimals = walletInfo.Decimals
+// 					tokenDecimals = int(walletInfo.Decimals)
+// 				}
+// 			} else {
+// 				tokenPrice = cosmos.getTokenQuoteRateAsFloatVal(request.Chain)
+// 				quoteRate = strconv.FormatFloat(tokenPrice, 'f', -1, 64)
+// 				balancerInfo.Decimals = walletInfo.Decimals
+// 				tokenDecimals = int(walletInfo.Decimals)
+// 			}
+// 			totalStakedValue = totalStakedValue + cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)
+// 			totalStakedQuote = totalStakedQuote + (cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate)
+// 			balancerInfo.Amount = delegation.Balance.Amount
+// 			balancerInfo.QuoteRate = quoteRate
+// 			balancerInfo.Quote = strconv.FormatFloat((cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64)
+// 			delegationInfo.Balance = &balancerInfo
+// 			if denomWiseDataExists, ok := denomWiseData[delegation.Balance.Denom]; ok {
+// 				denomWiseData[delegation.Balance.Denom] = pb.DenomsWiseValues{
+// 					StakeBalance:       strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(denomWiseDataExists.StakeBalance)+(cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)/math.Pow10(tokenDecimals)), 'f', -1, 64),
+// 					TotalStakedQuote:   strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(denomWiseDataExists.TotalStakedQuote)+(cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64),
+// 					UnstakeBalance:     denomWiseDataExists.UnstakeBalance,
+// 					TotalUnstakedQuote: denomWiseDataExists.TotalUnstakedQuote,
+// 					RewardsBalance:     denomWiseDataExists.RewardsBalance,
+// 					TotalRewardsQuote:  denomWiseDataExists.TotalRewardsQuote,
+// 					Denom:              delegation.Balance.Denom,
+// 				}
+// 			} else {
+// 				denomWiseData[delegation.Balance.Denom] = pb.DenomsWiseValues{
 
-					StakeBalance:     strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)/math.Pow10(tokenDecimals), 'f', -1, 64),
-					TotalStakedQuote: strconv.FormatFloat((cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64),
-					Denom:            delegation.Balance.Denom,
-				}
-			}
+// 					StakeBalance:     strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)/math.Pow10(tokenDecimals), 'f', -1, 64),
+// 					TotalStakedQuote: strconv.FormatFloat((cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64),
+// 					Denom:            delegation.Balance.Denom,
+// 				}
+// 			}
 
-			for _, validator := range cosmosValidators.Result {
-				if delegation.ValidatorAddress == validator.OperatorAddress {
-					var info pb.ValidatorForDelegatorInfo
-					var description pb.ValidatorDescription
-					var validatorCommission pb.ValidatorCommission
-					var validatorCommissionRates pb.ValidatorCommissionRates
+// 			for _, validator := range cosmosValidators.Result {
+// 				if delegation.ValidatorAddress == validator.OperatorAddress {
+// 					var info pb.ValidatorForDelegatorInfo
+// 					var description pb.ValidatorDescription
+// 					var validatorCommission pb.ValidatorCommission
+// 					var validatorCommissionRates pb.ValidatorCommissionRates
 
-					info.OperatorAddress = validator.OperatorAddress
-					if len(validator.ConsensusPubkey) == 0 {
-						info.ConsensusPubkey = ""
-					} else {
-						info.ConsensusPubkey = validator.ConsensusPubkey
-					}
-					info.Jailed = validator.Jailed
-					info.Status = string(validator.Status)
-					info.Tokens = validator.Tokens
+// 					info.OperatorAddress = validator.OperatorAddress
+// 					if len(validator.ConsensusPubkey) == 0 {
+// 						info.ConsensusPubkey = ""
+// 					} else {
+// 						info.ConsensusPubkey = validator.ConsensusPubkey
+// 					}
+// 					info.Jailed = validator.Jailed
+// 					info.Status = string(validator.Status)
+// 					info.Tokens = validator.Tokens
 
-					var bignumTokens, errParseTokens = new(big.Float).SetString(validator.Tokens)
-					if !errParseTokens {
-						cosmos.logger.Error("Error converting Validator Tokens. Err: ", errInflation)
-					}
-					var bignumBondedToken, errParseBondedToken = new(big.Float).SetString(bondedToken)
-					if !errParseBondedToken {
-						cosmos.logger.Error("Error converting Bonded Token. Err: ", errInflation)
-					}
-					divResult := new(big.Float).Quo(bignumTokens, bignumBondedToken)
-					divResult = divResult.Mul(divResult, big.NewFloat(100))
-					info.DelegatorShares = strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(validator.DelegatorShares)/math.Pow10(int(walletInfo.Decimals)), 'f', -1, 64)
-					s := fmt.Sprintf("%.2f", divResult)
-					info.VotingPower = s
-					// Description Details
-					description.Moniker = validator.Description.Moniker
-					description.Identity = validator.Description.Identity
-					description.Website = validator.Description.Website
-					description.SecurityContact = validator.Description.SecurityContact
-					description.Details = validator.Description.Details
-					info.Description = &description
+// 					var bignumTokens, errParseTokens = new(big.Float).SetString(validator.Tokens)
+// 					if !errParseTokens {
+// 						cosmos.logger.Error("Error converting Validator Tokens. Err: ", errInflation)
+// 					}
+// 					var bignumBondedToken, errParseBondedToken = new(big.Float).SetString(bondedToken)
+// 					if !errParseBondedToken {
+// 						cosmos.logger.Error("Error converting Bonded Token. Err: ", errInflation)
+// 					}
+// 					divResult := new(big.Float).Quo(bignumTokens, bignumBondedToken)
+// 					divResult = divResult.Mul(divResult, big.NewFloat(100))
+// 					info.DelegatorShares = strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(validator.DelegatorShares)/math.Pow10(int(walletInfo.Decimals)), 'f', -1, 64)
+// 					s := fmt.Sprintf("%.2f", divResult)
+// 					info.VotingPower = s
+// 					// Description Details
+// 					description.Moniker = validator.Description.Moniker
+// 					description.Identity = validator.Description.Identity
+// 					description.Website = validator.Description.Website
+// 					description.SecurityContact = validator.Description.SecurityContact
+// 					description.Details = validator.Description.Details
+// 					info.Description = &description
 
-					info.UnbondingHeight = validator.UnbondingHeight
-					info.UnbondingTime = validator.UnbondingTime.String()
-					// Commission Details
-					var commRate, _ = strconv.ParseFloat(validator.Commission.CommissionRates.Rate, 64)
-					var commMaxRate, _ = strconv.ParseFloat(validator.Commission.CommissionRates.MaxRate, 64)
-					var maxChangeRate, _ = strconv.ParseFloat(validator.Commission.CommissionRates.MaxChangeRate, 64)
-					validatorCommissionRates.Rate = fmt.Sprintf("%.2f", commRate*100)
-					validatorCommissionRates.MaxRate = fmt.Sprintf("%.2f", commMaxRate*100)
-					validatorCommissionRates.MaxChangeRate = fmt.Sprintf("%.2f", maxChangeRate*100)
-					validatorCommission.CommissionRates = &validatorCommissionRates
-					info.Commission = &validatorCommission
-					info.Commission.UpdateTime = validator.Commission.UpdateTime.String()
+// 					info.UnbondingHeight = validator.UnbondingHeight
+// 					info.UnbondingTime = validator.UnbondingTime.String()
+// 					// Commission Details
+// 					var commRate, _ = strconv.ParseFloat(validator.Commission.CommissionRates.Rate, 64)
+// 					var commMaxRate, _ = strconv.ParseFloat(validator.Commission.CommissionRates.MaxRate, 64)
+// 					var maxChangeRate, _ = strconv.ParseFloat(validator.Commission.CommissionRates.MaxChangeRate, 64)
+// 					validatorCommissionRates.Rate = fmt.Sprintf("%.2f", commRate*100)
+// 					validatorCommissionRates.MaxRate = fmt.Sprintf("%.2f", commMaxRate*100)
+// 					validatorCommissionRates.MaxChangeRate = fmt.Sprintf("%.2f", maxChangeRate*100)
+// 					validatorCommission.CommissionRates = &validatorCommissionRates
+// 					info.Commission = &validatorCommission
+// 					info.Commission.UpdateTime = validator.Commission.UpdateTime.String()
 
-					info.MinSelfDelegation = validator.MinSelfDelegation
-					info.ImageUrl = cosmos.getImageURL(validator.Description.Identity)
-					if request.Chain == "bluzelle" {
-						info.Apr = 20
-					} else if request.Chain == "terra" {
-						commissionRate := cosmos.helper.ConvertStringToFloat64(validator.Commission.CommissionRates.Rate)
-						if commissionRate == 0 {
-							info.Apr = 12.9
-						} else {
-							commissionRate := cosmos.helper.ConvertStringToFloat64(validator.Commission.CommissionRates.Rate)
-							commissionConsume := commissionRate * 12.9
-							validatorApr := strconv.FormatFloat(12.9-commissionConsume, 'f', -1, 64)
-							info.Apr = math.Round(cosmos.helper.ConvertStringToFloat64(validatorApr)*100) / 100
-						}
-					} else {
-						if validator.Status == 2 {
-							if len(cosmosAnnualProvision.AnnualProvisions) != 0 {
-								var apr = cosmos.calculateRealAPR(cosmosAnnualProvision.AnnualProvisions, cosmosDistributionParams.Result.CommunityTax, cosmosPool.Result.BondedTokens, validator.Commission.CommissionRates.Rate)
-								if apr < 0 {
-									info.Apr = 0
-								} else {
-									info.Apr = Clean(apr * 100).(float64)
-								}
-							} else {
-								info.Apr = 0
-							}
-						} else {
-							info.Apr = 0
-						}
-					}
-					info.Apr = math.Round(info.Apr*100) / 100
-					delegationInfo.ValidatorDetails = &info
-					break
-				}
-			}
-			for _, reward := range cosmosRewards.Result.Rewards {
-				if reward.ValidatorAddress == delegation.ValidatorAddress {
-					rewardsInfo.ValidatorAddress = reward.ValidatorAddress
-					for _, rewardEnt := range reward.Reward {
-						var rewardLocal pb.RewardsListInfo
-						var tokenPrice float64
-						var assetKey, quoteRate string
-						var balanceDenom = ""
-						var tokenDecimals int
-						if request.Chain == "cryptoorg" && rewardEnt.Denom == "basecro" { //basecro and uluna present in two chain networks, basecro handled,uluna need to check
-							balanceDenom = rewardEnt.Denom + "__cryptoorgchain"
-						} else {
-							var chainName string
-							if rewardEnt.Denom != "uluna" && request.Chain == "terra2" {
-								chainName = "terra"
-							} else {
-								chainName = request.Chain
+// 					info.MinSelfDelegation = validator.MinSelfDelegation
+// 					info.ImageUrl = cosmos.getImageURL(validator.Description.Identity)
+// 					if request.Chain == "bluzelle" {
+// 						info.Apr = 20
+// 					} else if request.Chain == "terra" {
+// 						commissionRate := cosmos.helper.ConvertStringToFloat64(validator.Commission.CommissionRates.Rate)
+// 						if commissionRate == 0 {
+// 							info.Apr = 12.9
+// 						} else {
+// 							commissionRate := cosmos.helper.ConvertStringToFloat64(validator.Commission.CommissionRates.Rate)
+// 							commissionConsume := commissionRate * 12.9
+// 							validatorApr := strconv.FormatFloat(12.9-commissionConsume, 'f', -1, 64)
+// 							info.Apr = math.Round(cosmos.helper.ConvertStringToFloat64(validatorApr)*100) / 100
+// 						}
+// 					} else {
+// 						if validator.Status == 2 {
+// 							if len(cosmosAnnualProvision.AnnualProvisions) != 0 {
+// 								var apr = cosmos.calculateRealAPR(cosmosAnnualProvision.AnnualProvisions, cosmosDistributionParams.Result.CommunityTax, cosmosPool.Result.BondedTokens, validator.Commission.CommissionRates.Rate)
+// 								if apr < 0 {
+// 									info.Apr = 0
+// 								} else {
+// 									info.Apr = Clean(apr * 100).(float64)
+// 								}
+// 							} else {
+// 								info.Apr = 0
+// 							}
+// 						} else {
+// 							info.Apr = 0
+// 						}
+// 					}
+// 					info.Apr = math.Round(info.Apr*100) / 100
+// 					delegationInfo.ValidatorDetails = &info
+// 					break
+// 				}
+// 			}
+// 			for _, reward := range cosmosRewards.Result.Rewards {
+// 				if reward.ValidatorAddress == delegation.ValidatorAddress {
+// 					rewardsInfo.ValidatorAddress = reward.ValidatorAddress
+// 					for _, rewardEnt := range reward.Reward {
+// 						var rewardLocal pb.RewardsListInfo
+// 						var tokenPrice float64
+// 						var assetKey, quoteRate string
+// 						var balanceDenom = ""
+// 						var tokenDecimals int
+// 						if request.Chain == "cryptoorg" && rewardEnt.Denom == "basecro" { //basecro and uluna present in two chain networks, basecro handled,uluna need to check
+// 							balanceDenom = rewardEnt.Denom + "__cryptoorgchain"
+// 						} else {
+// 							var chainName string
+// 							if rewardEnt.Denom != "uluna" && request.Chain == "terra2" {
+// 								chainName = "terra"
+// 							} else {
+// 								chainName = request.Chain
 
-							}
-							balanceDenom = rewardEnt.Denom + "__" + chainName //To match it with key name of ibc data
-						}
-						if strings.Contains(rewardEnt.Denom, "ibc") {
-							ibcInfo := cosmos.ibcTokenInfo[balanceDenom]
-							if ibcInfo.Origin.Chain != nil && ibcInfo.Origin.Denom != nil {
-								assetKey = ibcInfo.Origin.Denom.(string) + "__" + ibcInfo.Origin.Chain.(string)
-							}
-						} else {
-							var chainName string
-							if rewardEnt.Denom != "uluna" && request.Chain == "terra2" {
-								chainName = "terra"
-							} else {
-								chainName = request.Chain
+// 							}
+// 							balanceDenom = rewardEnt.Denom + "__" + chainName //To match it with key name of ibc data
+// 						}
+// 						if strings.Contains(rewardEnt.Denom, "ibc") {
+// 							ibcInfo := cosmos.ibcTokenInfo[balanceDenom]
+// 							if ibcInfo.Origin.Chain != nil && ibcInfo.Origin.Denom != nil {
+// 								assetKey = ibcInfo.Origin.Denom.(string) + "__" + ibcInfo.Origin.Chain.(string)
+// 							}
+// 						} else {
+// 							var chainName string
+// 							if rewardEnt.Denom != "uluna" && request.Chain == "terra2" {
+// 								chainName = "terra"
+// 							} else {
+// 								chainName = request.Chain
 
-							}
-							assetKey = rewardEnt.Denom + "__" + chainName //To match it with key name of ibc data
-						}
-						if denomValue, ok := cosmos.denomInfo[assetKey]; ok {
-							if denomValue.CoingeckoID != "" {
-								tokenPrice, _ = cosmos.coingecko.GetTokenExchangeByCoingeckoId("usd", denomValue.CoingeckoID)
-							}
-							quoteRate = strconv.FormatFloat(tokenPrice, 'f', -1, 64)
-							rewardLocal.TickerSymbol = denomValue.Symbol
-							rewardLocal.LogoUrl = denomValue.Logos.Png
-							if denomValue.CoingeckoID != "" {
-								rewardLocal.Decimals = int64(denomValue.Decimals)
-								tokenDecimals = denomValue.Decimals
-							} else {
-								rewardLocal.Decimals = walletInfo.Decimals
-								tokenDecimals = int(walletInfo.Decimals)
-							}
-						} else {
-							tokenPrice = cosmos.getTokenQuoteRateAsFloatVal(request.Chain)
-							quoteRate = strconv.FormatFloat(tokenPrice, 'f', -1, 64)
-							rewardLocal.Decimals = walletInfo.Decimals
-							tokenDecimals = int(walletInfo.Decimals)
-						}
-						totalRewardsValue = totalRewardsValue + cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)
-						totalRewardsQuote = totalRewardsQuote + (cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate)
-						rewardLocal.Denom = rewardEnt.Denom
-						rewardLocal.Amount = rewardEnt.Amount
-						rewardLocal.Quote = strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)/math.Pow10(tokenDecimals)*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64)
-						rewardLocal.QuoteRate = quoteRate
-						rewardsInfo.Reward = append(rewardsInfo.Reward, &rewardLocal)
-						if denomWiseDataExists, ok := denomWiseData[rewardEnt.Denom]; ok {
-							denomWiseData[rewardEnt.Denom] = pb.DenomsWiseValues{
-								UnstakeBalance:     denomWiseDataExists.UnstakeBalance,
-								TotalUnstakedQuote: denomWiseDataExists.TotalUnstakedQuote,
-								StakeBalance:       denomWiseDataExists.StakeBalance,
-								TotalStakedQuote:   denomWiseDataExists.TotalStakedQuote,
-								RewardsBalance:     strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(denomWiseDataExists.RewardsBalance)+(cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)/math.Pow10(tokenDecimals)), 'f', -1, 64),
-								TotalRewardsQuote:  strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(denomWiseDataExists.TotalRewardsQuote)+(cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64),
-								Denom:              rewardEnt.Denom,
-							}
-						} else {
+// 							}
+// 							assetKey = rewardEnt.Denom + "__" + chainName //To match it with key name of ibc data
+// 						}
+// 						if denomValue, ok := cosmos.denomInfo[assetKey]; ok {
+// 							if denomValue.CoingeckoID != "" {
+// 								tokenPrice, _ = cosmos.coingecko.GetTokenExchangeByCoingeckoId("usd", denomValue.CoingeckoID)
+// 							}
+// 							quoteRate = strconv.FormatFloat(tokenPrice, 'f', -1, 64)
+// 							rewardLocal.TickerSymbol = denomValue.Symbol
+// 							rewardLocal.LogoUrl = denomValue.Logos.Png
+// 							if denomValue.CoingeckoID != "" {
+// 								rewardLocal.Decimals = int64(denomValue.Decimals)
+// 								tokenDecimals = denomValue.Decimals
+// 							} else {
+// 								rewardLocal.Decimals = walletInfo.Decimals
+// 								tokenDecimals = int(walletInfo.Decimals)
+// 							}
+// 						} else {
+// 							tokenPrice = cosmos.getTokenQuoteRateAsFloatVal(request.Chain)
+// 							quoteRate = strconv.FormatFloat(tokenPrice, 'f', -1, 64)
+// 							rewardLocal.Decimals = walletInfo.Decimals
+// 							tokenDecimals = int(walletInfo.Decimals)
+// 						}
+// 						totalRewardsValue = totalRewardsValue + cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)
+// 						totalRewardsQuote = totalRewardsQuote + (cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate)
+// 						rewardLocal.Denom = rewardEnt.Denom
+// 						rewardLocal.Amount = rewardEnt.Amount
+// 						rewardLocal.Quote = strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)/math.Pow10(tokenDecimals)*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64)
+// 						rewardLocal.QuoteRate = quoteRate
+// 						rewardsInfo.Reward = append(rewardsInfo.Reward, &rewardLocal)
+// 						if denomWiseDataExists, ok := denomWiseData[rewardEnt.Denom]; ok {
+// 							denomWiseData[rewardEnt.Denom] = pb.DenomsWiseValues{
+// 								UnstakeBalance:     denomWiseDataExists.UnstakeBalance,
+// 								TotalUnstakedQuote: denomWiseDataExists.TotalUnstakedQuote,
+// 								StakeBalance:       denomWiseDataExists.StakeBalance,
+// 								TotalStakedQuote:   denomWiseDataExists.TotalStakedQuote,
+// 								RewardsBalance:     strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(denomWiseDataExists.RewardsBalance)+(cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)/math.Pow10(tokenDecimals)), 'f', -1, 64),
+// 								TotalRewardsQuote:  strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(denomWiseDataExists.TotalRewardsQuote)+(cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64),
+// 								Denom:              rewardEnt.Denom,
+// 							}
+// 						} else {
 
-							denomWiseData[rewardEnt.Denom] = pb.DenomsWiseValues{
-								RewardsBalance:    strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)/math.Pow10(tokenDecimals), 'f', -1, 64),
-								TotalRewardsQuote: strconv.FormatFloat((cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64),
-								Denom:             rewardEnt.Denom,
-							}
-						}
-					}
-					break
-				}
-			}
-			delegationInfo.RewardsDetails = &rewardsInfo
-			respo.Delegations = append(respo.Delegations, &delegationInfo)
-		}
-		for _, unbondDelegation := range cosmosUnboundDelegations.Result {
-			var totalBalance = 0.0
-			var unbondDelegationInfo pb.UnDelegationsInfo
-			unbondDelegationInfo.DelegatorAddress = unbondDelegation.DelegatorAddress
-			unbondDelegationInfo.ValidatorAddress = unbondDelegation.ValidatorAddress
-			var quoteRate string
-			var entries pb.Entries
-			totalBalance = totalBalance + cosmos.helper.ConvertStringToFloat64(unbondDelegation.Balance)
-			entries.CreationHeight = ""
-			entries.CompletionTime = ""
-			entries.InitialBalance = unbondDelegation.InitialBalance
-			entries.Balance = unbondDelegation.Balance
-			unbondDelegationInfo.Entries = append(unbondDelegationInfo.Entries, &entries)
+// 							denomWiseData[rewardEnt.Denom] = pb.DenomsWiseValues{
+// 								RewardsBalance:    strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)/math.Pow10(tokenDecimals), 'f', -1, 64),
+// 								TotalRewardsQuote: strconv.FormatFloat((cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64),
+// 								Denom:             rewardEnt.Denom,
+// 							}
+// 						}
+// 					}
+// 					break
+// 				}
+// 			}
+// 			delegationInfo.RewardsDetails = &rewardsInfo
+// 			respo.Delegations = append(respo.Delegations, &delegationInfo)
+// 		}
+// 		for _, unbondDelegation := range cosmosUnboundDelegations.Result {
+// 			var totalBalance = 0.0
+// 			var unbondDelegationInfo pb.UnDelegationsInfo
+// 			unbondDelegationInfo.DelegatorAddress = unbondDelegation.DelegatorAddress
+// 			unbondDelegationInfo.ValidatorAddress = unbondDelegation.ValidatorAddress
+// 			var quoteRate string
+// 			var entries pb.Entries
+// 			totalBalance = totalBalance + cosmos.helper.ConvertStringToFloat64(unbondDelegation.Balance)
+// 			entries.CreationHeight = ""
+// 			entries.CompletionTime = ""
+// 			entries.InitialBalance = unbondDelegation.InitialBalance
+// 			entries.Balance = unbondDelegation.Balance
+// 			unbondDelegationInfo.Entries = append(unbondDelegationInfo.Entries, &entries)
 
-			var balancerInfo pb.BalanceDetail
-			balancerInfo.Denom = walletInfo.Denom
-			balancerInfo.Amount = strconv.FormatFloat(totalBalance, 'f', -1, 64)
-			balancerInfo.Decimals = walletInfo.Decimals
-			var tokenPrice float64
-			var assetKey string
-			var balanceDenom = ""
-			var tokenDecimals int
-			// Currently we are using the denom as the native token denom in unbonded delegations, once cosmos undelegate api response provides denom similer to delegations
-			// we can replace the below walletInfo.Denom to the one recieved in the response. with that the non native token support can also be added. (from line 1101 to 1112)
-			if request.Chain == "cryptoorg" && walletInfo.Denom == "basecro" { //basecro and uluna present in two chain networks, basecro handled,uluna need to check
-				balanceDenom = walletInfo.Denom + "__cryptoorgchain"
-			} else {
-				var chainName string
-				if walletInfo.Denom != "uluna" && request.Chain == "terra2" {
-					chainName = "terra"
-				} else {
-					chainName = request.Chain
+// 			var balancerInfo pb.BalanceDetail
+// 			balancerInfo.Denom = walletInfo.Denom
+// 			balancerInfo.Amount = strconv.FormatFloat(totalBalance, 'f', -1, 64)
+// 			balancerInfo.Decimals = walletInfo.Decimals
+// 			var tokenPrice float64
+// 			var assetKey string
+// 			var balanceDenom = ""
+// 			var tokenDecimals int
+// 			// Currently we are using the denom as the native token denom in unbonded delegations, once cosmos undelegate api response provides denom similer to delegations
+// 			// we can replace the below walletInfo.Denom to the one recieved in the response. with that the non native token support can also be added. (from line 1101 to 1112)
+// 			if request.Chain == "cryptoorg" && walletInfo.Denom == "basecro" { //basecro and uluna present in two chain networks, basecro handled,uluna need to check
+// 				balanceDenom = walletInfo.Denom + "__cryptoorgchain"
+// 			} else {
+// 				var chainName string
+// 				if walletInfo.Denom != "uluna" && request.Chain == "terra2" {
+// 					chainName = "terra"
+// 				} else {
+// 					chainName = request.Chain
 
-				}
-				balanceDenom = walletInfo.Denom + "__" + chainName //To match it with key name of ibc data
-			}
-			if strings.Contains(walletInfo.Denom, "ibc") {
-				ibcInfo := cosmos.ibcTokenInfo[balanceDenom]
-				if ibcInfo.Origin.Chain != nil && ibcInfo.Origin.Denom != nil {
-					assetKey = ibcInfo.Origin.Denom.(string) + "__" + ibcInfo.Origin.Chain.(string)
-				}
-			} else {
-				var chainName string
-				if walletInfo.Denom != "uluna" && request.Chain == "terra2" {
-					chainName = "terra"
-				} else {
-					chainName = request.Chain
+// 				}
+// 				balanceDenom = walletInfo.Denom + "__" + chainName //To match it with key name of ibc data
+// 			}
+// 			if strings.Contains(walletInfo.Denom, "ibc") {
+// 				ibcInfo := cosmos.ibcTokenInfo[balanceDenom]
+// 				if ibcInfo.Origin.Chain != nil && ibcInfo.Origin.Denom != nil {
+// 					assetKey = ibcInfo.Origin.Denom.(string) + "__" + ibcInfo.Origin.Chain.(string)
+// 				}
+// 			} else {
+// 				var chainName string
+// 				if walletInfo.Denom != "uluna" && request.Chain == "terra2" {
+// 					chainName = "terra"
+// 				} else {
+// 					chainName = request.Chain
 
-				}
-				assetKey = walletInfo.Denom + "__" + chainName //To match it with key name of ibc data
-			}
-			if denomValue, ok := cosmos.denomInfo[assetKey]; ok {
-				if denomValue.CoingeckoID != "" {
-					tokenPrice, _ = cosmos.coingecko.GetTokenExchangeByCoingeckoId("usd", denomValue.CoingeckoID)
-				}
-				quoteRate = strconv.FormatFloat(tokenPrice, 'f', -1, 64)
-				balancerInfo.TickerSymbol = denomValue.Symbol
-				balancerInfo.LogoUrl = denomValue.Logos.Png
-				if denomValue.CoingeckoID != "" {
-					balancerInfo.Decimals = int64(denomValue.Decimals)
-					tokenDecimals = denomValue.Decimals
-				} else {
-					balancerInfo.Decimals = walletInfo.Decimals
-					tokenDecimals = int(walletInfo.Decimals)
-				}
-			} else {
-				tokenPrice = cosmos.getTokenQuoteRateAsFloatVal(request.Chain)
-				quoteRate = strconv.FormatFloat(tokenPrice, 'f', -1, 64)
-				balancerInfo.Decimals = walletInfo.Decimals
-				tokenDecimals = int(walletInfo.Decimals)
-			}
-			totalUnStakedValue = totalUnStakedValue + totalBalance
-			totalUnStakedQuote = totalUnStakedQuote + (totalBalance/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate)
-			balancerInfo.QuoteRate = quoteRate
-			balancerInfo.Quote = strconv.FormatFloat((totalBalance/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64)
-			if denomWiseDataExists, ok := denomWiseData[walletInfo.Denom]; ok {
-				denomWiseData[walletInfo.Denom] = pb.DenomsWiseValues{
-					RewardsBalance:     denomWiseDataExists.RewardsBalance,
-					TotalRewardsQuote:  denomWiseDataExists.TotalRewardsQuote,
-					StakeBalance:       denomWiseDataExists.StakeBalance,
-					TotalStakedQuote:   denomWiseDataExists.TotalStakedQuote,
-					UnstakeBalance:     strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(denomWiseDataExists.UnstakeBalance)+(totalBalance/math.Pow10(tokenDecimals)), 'f', -1, 64),
-					TotalUnstakedQuote: strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(denomWiseDataExists.TotalUnstakedQuote)+(totalBalance/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64),
-					Denom:              walletInfo.Denom,
-				}
-			} else {
-				denomWiseData[walletInfo.Denom] = pb.DenomsWiseValues{
-					UnstakeBalance:     strconv.FormatFloat(totalBalance/math.Pow10(tokenDecimals), 'f', -1, 64),
-					TotalUnstakedQuote: strconv.FormatFloat((totalBalance/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64),
-					Denom:              walletInfo.Denom,
-				}
-			}
-			unbondDelegationInfo.Balance = &balancerInfo
-			// unbondDelegationInfo.QuoteRate = cosmos.getTokenQuoteRate(request.Chain)
-			for _, validator := range cosmosValidators.Result {
-				if unbondDelegation.ValidatorAddress == validator.OperatorAddress {
-					var info pb.ValidatorForDelegatorInfo
-					var description pb.ValidatorDescription
-					var validatorCommission pb.ValidatorCommission
-					var validatorCommissionRates pb.ValidatorCommissionRates
+// 				}
+// 				assetKey = walletInfo.Denom + "__" + chainName //To match it with key name of ibc data
+// 			}
+// 			if denomValue, ok := cosmos.denomInfo[assetKey]; ok {
+// 				if denomValue.CoingeckoID != "" {
+// 					tokenPrice, _ = cosmos.coingecko.GetTokenExchangeByCoingeckoId("usd", denomValue.CoingeckoID)
+// 				}
+// 				quoteRate = strconv.FormatFloat(tokenPrice, 'f', -1, 64)
+// 				balancerInfo.TickerSymbol = denomValue.Symbol
+// 				balancerInfo.LogoUrl = denomValue.Logos.Png
+// 				if denomValue.CoingeckoID != "" {
+// 					balancerInfo.Decimals = int64(denomValue.Decimals)
+// 					tokenDecimals = denomValue.Decimals
+// 				} else {
+// 					balancerInfo.Decimals = walletInfo.Decimals
+// 					tokenDecimals = int(walletInfo.Decimals)
+// 				}
+// 			} else {
+// 				tokenPrice = cosmos.getTokenQuoteRateAsFloatVal(request.Chain)
+// 				quoteRate = strconv.FormatFloat(tokenPrice, 'f', -1, 64)
+// 				balancerInfo.Decimals = walletInfo.Decimals
+// 				tokenDecimals = int(walletInfo.Decimals)
+// 			}
+// 			totalUnStakedValue = totalUnStakedValue + totalBalance
+// 			totalUnStakedQuote = totalUnStakedQuote + (totalBalance/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate)
+// 			balancerInfo.QuoteRate = quoteRate
+// 			balancerInfo.Quote = strconv.FormatFloat((totalBalance/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64)
+// 			if denomWiseDataExists, ok := denomWiseData[walletInfo.Denom]; ok {
+// 				denomWiseData[walletInfo.Denom] = pb.DenomsWiseValues{
+// 					RewardsBalance:     denomWiseDataExists.RewardsBalance,
+// 					TotalRewardsQuote:  denomWiseDataExists.TotalRewardsQuote,
+// 					StakeBalance:       denomWiseDataExists.StakeBalance,
+// 					TotalStakedQuote:   denomWiseDataExists.TotalStakedQuote,
+// 					UnstakeBalance:     strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(denomWiseDataExists.UnstakeBalance)+(totalBalance/math.Pow10(tokenDecimals)), 'f', -1, 64),
+// 					TotalUnstakedQuote: strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(denomWiseDataExists.TotalUnstakedQuote)+(totalBalance/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64),
+// 					Denom:              walletInfo.Denom,
+// 				}
+// 			} else {
+// 				denomWiseData[walletInfo.Denom] = pb.DenomsWiseValues{
+// 					UnstakeBalance:     strconv.FormatFloat(totalBalance/math.Pow10(tokenDecimals), 'f', -1, 64),
+// 					TotalUnstakedQuote: strconv.FormatFloat((totalBalance/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64),
+// 					Denom:              walletInfo.Denom,
+// 				}
+// 			}
+// 			unbondDelegationInfo.Balance = &balancerInfo
+// 			// unbondDelegationInfo.QuoteRate = cosmos.getTokenQuoteRate(request.Chain)
+// 			for _, validator := range cosmosValidators.Result {
+// 				if unbondDelegation.ValidatorAddress == validator.OperatorAddress {
+// 					var info pb.ValidatorForDelegatorInfo
+// 					var description pb.ValidatorDescription
+// 					var validatorCommission pb.ValidatorCommission
+// 					var validatorCommissionRates pb.ValidatorCommissionRates
 
-					info.OperatorAddress = validator.OperatorAddress
-					if len(validator.ConsensusPubkey) == 0 {
-						info.ConsensusPubkey = ""
-					} else {
-						info.ConsensusPubkey = validator.ConsensusPubkey
-					}
-					info.Jailed = validator.Jailed
-					info.Status = string(validator.Status)
-					info.Tokens = validator.Tokens
+// 					info.OperatorAddress = validator.OperatorAddress
+// 					if len(validator.ConsensusPubkey) == 0 {
+// 						info.ConsensusPubkey = ""
+// 					} else {
+// 						info.ConsensusPubkey = validator.ConsensusPubkey
+// 					}
+// 					info.Jailed = validator.Jailed
+// 					info.Status = string(validator.Status)
+// 					info.Tokens = validator.Tokens
 
-					var bignumTokens, errParseTokens = new(big.Float).SetString(validator.Tokens)
-					if !errParseTokens {
-						cosmos.logger.Error("Error converting Validator Tokens. Err: ", errInflation)
-					}
-					var bignumBondedToken, errParseBondedToken = new(big.Float).SetString(bondedToken)
-					if !errParseBondedToken {
-						cosmos.logger.Error("Error converting Bonded Token. Err: ", errInflation)
-					}
-					divResult := new(big.Float).Quo(bignumTokens, bignumBondedToken)
-					divResult = divResult.Mul(divResult, big.NewFloat(100))
-					info.DelegatorShares = strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(validator.DelegatorShares)/math.Pow10(int(walletInfo.Decimals)), 'f', -1, 64)
-					s := fmt.Sprintf("%.2f", divResult)
-					info.VotingPower = s
-					// Description Details
-					description.Moniker = validator.Description.Moniker
-					description.Identity = validator.Description.Identity
-					description.Website = validator.Description.Website
-					description.SecurityContact = validator.Description.SecurityContact
-					description.Details = validator.Description.Details
-					info.Description = &description
+// 					var bignumTokens, errParseTokens = new(big.Float).SetString(validator.Tokens)
+// 					if !errParseTokens {
+// 						cosmos.logger.Error("Error converting Validator Tokens. Err: ", errInflation)
+// 					}
+// 					var bignumBondedToken, errParseBondedToken = new(big.Float).SetString(bondedToken)
+// 					if !errParseBondedToken {
+// 						cosmos.logger.Error("Error converting Bonded Token. Err: ", errInflation)
+// 					}
+// 					divResult := new(big.Float).Quo(bignumTokens, bignumBondedToken)
+// 					divResult = divResult.Mul(divResult, big.NewFloat(100))
+// 					info.DelegatorShares = strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(validator.DelegatorShares)/math.Pow10(int(walletInfo.Decimals)), 'f', -1, 64)
+// 					s := fmt.Sprintf("%.2f", divResult)
+// 					info.VotingPower = s
+// 					// Description Details
+// 					description.Moniker = validator.Description.Moniker
+// 					description.Identity = validator.Description.Identity
+// 					description.Website = validator.Description.Website
+// 					description.SecurityContact = validator.Description.SecurityContact
+// 					description.Details = validator.Description.Details
+// 					info.Description = &description
 
-					info.UnbondingHeight = validator.UnbondingHeight
-					info.UnbondingTime = validator.UnbondingTime.String()
-					// Commission Details
-					var commRate, _ = strconv.ParseFloat(validator.Commission.CommissionRates.Rate, 64)
-					var commMaxRate, _ = strconv.ParseFloat(validator.Commission.CommissionRates.MaxRate, 64)
-					var maxChangeRate, _ = strconv.ParseFloat(validator.Commission.CommissionRates.MaxChangeRate, 64)
-					validatorCommissionRates.Rate = fmt.Sprintf("%.2f", commRate*100)
-					validatorCommissionRates.MaxRate = fmt.Sprintf("%.2f", commMaxRate*100)
-					validatorCommissionRates.MaxChangeRate = fmt.Sprintf("%.2f", maxChangeRate*100)
-					validatorCommission.CommissionRates = &validatorCommissionRates
-					info.Commission = &validatorCommission
-					info.Commission.UpdateTime = validator.Commission.UpdateTime.String()
-					info.MinSelfDelegation = validator.MinSelfDelegation
-					info.ImageUrl = cosmos.getImageURL(validator.Description.Identity)
-					if request.Chain == "bluzelle" {
-						info.Apr = 20
-					} else if request.Chain == "terra" {
-						commissionRate := cosmos.helper.ConvertStringToFloat64(validator.Commission.CommissionRates.Rate)
-						if commissionRate == 0 {
-							info.Apr = 12.9
-						} else {
-							commissionRate := cosmos.helper.ConvertStringToFloat64(validator.Commission.CommissionRates.Rate)
-							commissionConsume := commissionRate * 12.9
-							validatorApr := strconv.FormatFloat(12.9-commissionConsume, 'f', -1, 64)
-							info.Apr = math.Round(cosmos.helper.ConvertStringToFloat64(validatorApr)*100) / 100
-						}
-					} else {
-						if validator.Status == 2 {
-							if len(cosmosAnnualProvision.AnnualProvisions) != 0 {
-								var apr = cosmos.calculateRealAPR(cosmosAnnualProvision.AnnualProvisions, cosmosDistributionParams.Result.CommunityTax, cosmosPool.Result.BondedTokens, validator.Commission.CommissionRates.Rate)
-								if apr < 0 {
-									info.Apr = 0
-								} else {
-									info.Apr = Clean(apr * 100).(float64)
-								}
-							} else {
-								info.Apr = 0
-							}
-						} else {
-							info.Apr = 0
-						}
-					}
-					info.Apr = math.Round(info.Apr*100) / 100
-					unbondDelegationInfo.ValidatorDetails = &info
-					break
-				}
-			}
-			respo.UnboundDelegations = append(respo.UnboundDelegations, &unbondDelegationInfo)
-		}
-		getCosmosAPRRequest := &pb.CosmosAprRatesRequest{
-			Testnet: false,
-			Chain:   request.Chain,
-		}
-		var cosmosAPRRates, _ = cosmos.GetCosmosAprRates(getCosmosAPRRequest)
-		if cosmosAPRRates != nil {
-			respo.Apr = cosmosAPRRates.Apr
-		}
-		var overallDenomsValuesInfo pb.OverallDenomsValues
-		overallDenomsValuesInfo.TotalStakedQuote = strconv.FormatFloat(totalStakedQuote, 'f', -1, 64)
-		overallDenomsValuesInfo.TotalUnstakedQuote = strconv.FormatFloat(totalUnStakedQuote, 'f', -1, 64)
-		overallDenomsValuesInfo.TotalRewardsQuote = strconv.FormatFloat(totalRewardsQuote, 'f', -1, 64)
-		respo.NetStakeValues = &overallDenomsValuesInfo
+// 					info.UnbondingHeight = validator.UnbondingHeight
+// 					info.UnbondingTime = validator.UnbondingTime.String()
+// 					// Commission Details
+// 					var commRate, _ = strconv.ParseFloat(validator.Commission.CommissionRates.Rate, 64)
+// 					var commMaxRate, _ = strconv.ParseFloat(validator.Commission.CommissionRates.MaxRate, 64)
+// 					var maxChangeRate, _ = strconv.ParseFloat(validator.Commission.CommissionRates.MaxChangeRate, 64)
+// 					validatorCommissionRates.Rate = fmt.Sprintf("%.2f", commRate*100)
+// 					validatorCommissionRates.MaxRate = fmt.Sprintf("%.2f", commMaxRate*100)
+// 					validatorCommissionRates.MaxChangeRate = fmt.Sprintf("%.2f", maxChangeRate*100)
+// 					validatorCommission.CommissionRates = &validatorCommissionRates
+// 					info.Commission = &validatorCommission
+// 					info.Commission.UpdateTime = validator.Commission.UpdateTime.String()
+// 					info.MinSelfDelegation = validator.MinSelfDelegation
+// 					info.ImageUrl = cosmos.getImageURL(validator.Description.Identity)
+// 					if request.Chain == "bluzelle" {
+// 						info.Apr = 20
+// 					} else if request.Chain == "terra" {
+// 						commissionRate := cosmos.helper.ConvertStringToFloat64(validator.Commission.CommissionRates.Rate)
+// 						if commissionRate == 0 {
+// 							info.Apr = 12.9
+// 						} else {
+// 							commissionRate := cosmos.helper.ConvertStringToFloat64(validator.Commission.CommissionRates.Rate)
+// 							commissionConsume := commissionRate * 12.9
+// 							validatorApr := strconv.FormatFloat(12.9-commissionConsume, 'f', -1, 64)
+// 							info.Apr = math.Round(cosmos.helper.ConvertStringToFloat64(validatorApr)*100) / 100
+// 						}
+// 					} else {
+// 						if validator.Status == 2 {
+// 							if len(cosmosAnnualProvision.AnnualProvisions) != 0 {
+// 								var apr = cosmos.calculateRealAPR(cosmosAnnualProvision.AnnualProvisions, cosmosDistributionParams.Result.CommunityTax, cosmosPool.Result.BondedTokens, validator.Commission.CommissionRates.Rate)
+// 								if apr < 0 {
+// 									info.Apr = 0
+// 								} else {
+// 									info.Apr = Clean(apr * 100).(float64)
+// 								}
+// 							} else {
+// 								info.Apr = 0
+// 							}
+// 						} else {
+// 							info.Apr = 0
+// 						}
+// 					}
+// 					info.Apr = math.Round(info.Apr*100) / 100
+// 					unbondDelegationInfo.ValidatorDetails = &info
+// 					break
+// 				}
+// 			}
+// 			respo.UnboundDelegations = append(respo.UnboundDelegations, &unbondDelegationInfo)
+// 		}
+// 		getCosmosAPRRequest := &pb.CosmosAprRatesRequest{
+// 			Testnet: false,
+// 			Chain:   request.Chain,
+// 		}
+// 		var cosmosAPRRates, _ = cosmos.GetCosmosAprRates(getCosmosAPRRequest)
+// 		if cosmosAPRRates != nil {
+// 			respo.Apr = cosmosAPRRates.Apr
+// 		}
+// 		var overallDenomsValuesInfo pb.OverallDenomsValues
+// 		overallDenomsValuesInfo.TotalStakedQuote = strconv.FormatFloat(totalStakedQuote, 'f', -1, 64)
+// 		overallDenomsValuesInfo.TotalUnstakedQuote = strconv.FormatFloat(totalUnStakedQuote, 'f', -1, 64)
+// 		overallDenomsValuesInfo.TotalRewardsQuote = strconv.FormatFloat(totalRewardsQuote, 'f', -1, 64)
+// 		respo.NetStakeValues = &overallDenomsValuesInfo
 
-		var denomStakeInfo []*pb.DenomsWiseValues
-		for key, value := range denomWiseData {
-			data := pb.DenomsWiseValues{
-				StakeBalance:       value.StakeBalance,
-				UnstakeBalance:     value.UnstakeBalance,
-				RewardsBalance:     value.RewardsBalance,
-				TotalStakedQuote:   value.TotalStakedQuote,
-				TotalUnstakedQuote: value.TotalUnstakedQuote,
-				TotalRewardsQuote:  value.TotalRewardsQuote,
-				Denom:              key,
-			}
-			denomStakeInfo = append(denomStakeInfo, &data)
-		}
-		respo.IndividualStakeValues = denomStakeInfo
-	} else {
-		var pageSize = int64(100)
-		var pageOffSet = 0
-		var pageSizeForValidators = int64(1000)
-		if request.Chain == "terra2" {
-			reqUrlDelegations = fmt.Sprintf(walletInfo.REST+"/cosmos/staking/v1beta1/delegations/%v?pagination.limit=%v&pagination.count_total=true", request.Address, pageSize)
-			reqUrlValidators = fmt.Sprintf(walletInfo.REST+"/cosmos/staking/v1beta1/validators?pagination.limit=%v&pagination.count_total=true", pageSizeForValidators)
-			reqUrlUnboundDelegations = fmt.Sprintf(walletInfo.REST+"/cosmos/staking/v1beta1/delegators/%v/unbonding_delegations?pagination.limit=%v&pagination.count_total=true", request.Address, pageSize)
+// 		var denomStakeInfo []*pb.DenomsWiseValues
+// 		for key, value := range denomWiseData {
+// 			data := pb.DenomsWiseValues{
+// 				StakeBalance:       value.StakeBalance,
+// 				UnstakeBalance:     value.UnstakeBalance,
+// 				RewardsBalance:     value.RewardsBalance,
+// 				TotalStakedQuote:   value.TotalStakedQuote,
+// 				TotalUnstakedQuote: value.TotalUnstakedQuote,
+// 				TotalRewardsQuote:  value.TotalRewardsQuote,
+// 				Denom:              key,
+// 			}
+// 			denomStakeInfo = append(denomStakeInfo, &data)
+// 		}
+// 		respo.IndividualStakeValues = denomStakeInfo
+// 	} else {
+// 		var pageSize = int64(100)
+// 		var pageOffSet = 0
+// 		var pageSizeForValidators = int64(1000)
+// 		if request.Chain == "terra2" {
+// 			reqUrlDelegations = fmt.Sprintf(walletInfo.REST+"/cosmos/staking/v1beta1/delegations/%v?pagination.limit=%v&pagination.count_total=true", request.Address, pageSize)
+// 			reqUrlValidators = fmt.Sprintf(walletInfo.REST+"/cosmos/staking/v1beta1/validators?pagination.limit=%v&pagination.count_total=true", pageSizeForValidators)
+// 			reqUrlUnboundDelegations = fmt.Sprintf(walletInfo.REST+"/cosmos/staking/v1beta1/delegators/%v/unbonding_delegations?pagination.limit=%v&pagination.count_total=true", request.Address, pageSize)
 
-		} else {
-			reqUrlDelegations = fmt.Sprintf(walletInfo.REST+"/cosmos/staking/v1beta1/delegations/%v?pagination.offset=%v&pagination.limit=%v&pagination.count_total=true", request.Address, pageOffSet, pageSize)
-			reqUrlValidators = fmt.Sprintf(walletInfo.REST+"/cosmos/staking/v1beta1/validators?pagination.offset=%v&pagination.limit=%v&pagination.count_total=true", pageOffSet, pageSizeForValidators)
-			reqUrlUnboundDelegations = fmt.Sprintf(walletInfo.REST+"/cosmos/staking/v1beta1/delegators/%v/unbonding_delegations?pagination.offset=%v&pagination.limit=%v&pagination.count_total=true", request.Address, pageOffSet, pageSize)
-		}
-		reqUrlRewards = fmt.Sprintf(walletInfo.REST+"/cosmos/distribution/v1beta1/delegators/%v/rewards", request.Address)
-		reqUrlValidatorsForDelegator = fmt.Sprintf(walletInfo.REST+"/cosmos/staking/v1beta1/delegators/%v/validators?pagination.offset=%v&pagination.limit=%v&pagination.count_total=true", request.Address, pageOffSet, pageSize)
-		reqUrlInflation = fmt.Sprintf(walletInfo.REST + "/cosmos/mint/v1beta1/inflation")
-		reqUrlPools = fmt.Sprintf(walletInfo.REST + "/cosmos/staking/v1beta1/pool")
-		reqUrlAnnualProv = fmt.Sprintf(walletInfo.REST + "/cosmos/mint/v1beta1/annual_provisions")
-		reqUrlDistrParams = fmt.Sprintf(walletInfo.REST + "/cosmos/distribution/v1beta1/params")
+// 		} else {
+// 			reqUrlDelegations = fmt.Sprintf(walletInfo.REST+"/cosmos/staking/v1beta1/delegations/%v?pagination.offset=%v&pagination.limit=%v&pagination.count_total=true", request.Address, pageOffSet, pageSize)
+// 			reqUrlValidators = fmt.Sprintf(walletInfo.REST+"/cosmos/staking/v1beta1/validators?pagination.offset=%v&pagination.limit=%v&pagination.count_total=true", pageOffSet, pageSizeForValidators)
+// 			reqUrlUnboundDelegations = fmt.Sprintf(walletInfo.REST+"/cosmos/staking/v1beta1/delegators/%v/unbonding_delegations?pagination.offset=%v&pagination.limit=%v&pagination.count_total=true", request.Address, pageOffSet, pageSize)
+// 		}
+// 		reqUrlRewards = fmt.Sprintf(walletInfo.REST+"/cosmos/distribution/v1beta1/delegators/%v/rewards", request.Address)
+// 		reqUrlValidatorsForDelegator = fmt.Sprintf(walletInfo.REST+"/cosmos/staking/v1beta1/delegators/%v/validators?pagination.offset=%v&pagination.limit=%v&pagination.count_total=true", request.Address, pageOffSet, pageSize)
+// 		reqUrlInflation = fmt.Sprintf(walletInfo.REST + "/cosmos/mint/v1beta1/inflation")
+// 		reqUrlPools = fmt.Sprintf(walletInfo.REST + "/cosmos/staking/v1beta1/pool")
+// 		reqUrlAnnualProv = fmt.Sprintf(walletInfo.REST + "/cosmos/mint/v1beta1/annual_provisions")
+// 		reqUrlDistrParams = fmt.Sprintf(walletInfo.REST + "/cosmos/distribution/v1beta1/params")
 
-		bodyValidators, errValidators := cosmos.httpRequest.GetRequest(reqUrlValidators)
-		bodyDelegations, errDelegations := cosmos.httpRequest.GetRequest(reqUrlDelegations)
-		bodyRewards, errRewards := cosmos.httpRequest.GetRequest(reqUrlRewards)
-		bodyUnboundDelegations, errUnboundDelegations := cosmos.httpRequest.GetRequest(reqUrlUnboundDelegations)
-		bodyValidatorsForDelegator, errDValidatorsForDelegator := cosmos.httpRequest.GetRequest(reqUrlValidatorsForDelegator)
-		bodyInflation, errInflation := cosmos.httpRequest.GetRequest(reqUrlInflation)
-		bodyPools, errPools := cosmos.httpRequest.GetRequest(reqUrlPools)
-		bodyAnnualProv, errAnnualProv := cosmos.httpRequest.GetRequest(reqUrlAnnualProv)
-		bodyDistrParams, errDistrParams := cosmos.httpRequest.GetRequest(reqUrlDistrParams)
+// 		bodyValidators, errValidators := cosmos.httpRequest.GetRequest(reqUrlValidators)
+// 		bodyDelegations, errDelegations := cosmos.httpRequest.GetRequest(reqUrlDelegations)
+// 		bodyRewards, errRewards := cosmos.httpRequest.GetRequest(reqUrlRewards)
+// 		bodyUnboundDelegations, errUnboundDelegations := cosmos.httpRequest.GetRequest(reqUrlUnboundDelegations)
+// 		bodyValidatorsForDelegator, errDValidatorsForDelegator := cosmos.httpRequest.GetRequest(reqUrlValidatorsForDelegator)
+// 		bodyInflation, errInflation := cosmos.httpRequest.GetRequest(reqUrlInflation)
+// 		bodyPools, errPools := cosmos.httpRequest.GetRequest(reqUrlPools)
+// 		bodyAnnualProv, errAnnualProv := cosmos.httpRequest.GetRequest(reqUrlAnnualProv)
+// 		bodyDistrParams, errDistrParams := cosmos.httpRequest.GetRequest(reqUrlDistrParams)
 
-		var cosmosValidators CosmosValidators
-		var cosmosDelegations CosmosDelegations
-		var cosmosRewards CosmosRewards
-		var cosmosUnboundDelegations CosmosUnboundDelegations
-		var cosmosValidatorsForDelegator CosmosValidatorsForDelegator
-		var cosmosInflation CosmosInflation
-		var cosmosPool CosmosPool
-		var cosmosAnnualProvision CosmosAnnualProvision
-		var cosmosDistributionParams CosmosDistributionParams
+// 		var cosmosValidators CosmosValidators
+// 		var cosmosDelegations CosmosDelegations
+// 		var cosmosRewards CosmosRewards
+// 		var cosmosUnboundDelegations CosmosUnboundDelegations
+// 		var cosmosValidatorsForDelegator CosmosValidatorsForDelegator
+// 		var cosmosInflation CosmosInflation
+// 		var cosmosPool CosmosPool
+// 		var cosmosAnnualProvision CosmosAnnualProvision
+// 		var cosmosDistributionParams CosmosDistributionParams
 
-		if errValidators != nil {
-			if strings.Contains(errValidators.Error(), "429") || strings.Contains(errValidators.Error(), "No servers available") {
-				endpoint := cosmos.env.Cosmos.Cfg.BackUpUrls[request.Chain]
-				if endpoint != "" {
-					reqUrlValidators = fmt.Sprintf(endpoint+"/cosmos/staking/v1beta1/validators?pagination.offset=%v&pagination.limit=%v&pagination.count_total=true", pageOffSet, pageSizeForValidators)
-					if request.Chain == "terra2" {
-						reqUrlValidators = fmt.Sprintf(endpoint+"/cosmos/staking/v1beta1/validators?pagination.limit=%v&pagination.count_total=true", pageSizeForValidators)
-					}
-					bodyValidators, errValidators = cosmos.httpRequest.GetRequest(reqUrlValidators)
-					if errValidators != nil {
-						cosmos.logger.Error("Error fetching Validators. Err: ", errValidators)
-					}
-					errValidators = json.Unmarshal(bodyValidators, &cosmosValidators)
-					if errValidators != nil {
-						cosmos.logger.Error("Error unmarshalling Validators List. Err: ", errValidators)
-						return nil, status.Errorf(codes.Internal, errValidators.Error(), "json unmarshalling error")
-					}
-					errValidators = nil
-				}
-			}
-			if errValidators != nil {
-				cosmos.logger.Error("Error fetching Validators. Err: ", errValidators)
-			}
-		} else {
-			errValidators = json.Unmarshal(bodyValidators, &cosmosValidators)
-			if errValidators != nil {
-				cosmos.logger.Error("Error unmarshalling Validators List. Err: ", errValidators)
-				return nil, status.Errorf(codes.Internal, errValidators.Error(), "json unmarshalling error")
-			}
-		}
+// 		if errValidators != nil {
+// 			if strings.Contains(errValidators.Error(), "429") || strings.Contains(errValidators.Error(), "No servers available") {
+// 				endpoint := cosmos.env.Cosmos.Cfg.BackUpUrls[request.Chain]
+// 				if endpoint != "" {
+// 					reqUrlValidators = fmt.Sprintf(endpoint+"/cosmos/staking/v1beta1/validators?pagination.offset=%v&pagination.limit=%v&pagination.count_total=true", pageOffSet, pageSizeForValidators)
+// 					if request.Chain == "terra2" {
+// 						reqUrlValidators = fmt.Sprintf(endpoint+"/cosmos/staking/v1beta1/validators?pagination.limit=%v&pagination.count_total=true", pageSizeForValidators)
+// 					}
+// 					bodyValidators, errValidators = cosmos.httpRequest.GetRequest(reqUrlValidators)
+// 					if errValidators != nil {
+// 						cosmos.logger.Error("Error fetching Validators. Err: ", errValidators)
+// 					}
+// 					errValidators = json.Unmarshal(bodyValidators, &cosmosValidators)
+// 					if errValidators != nil {
+// 						cosmos.logger.Error("Error unmarshalling Validators List. Err: ", errValidators)
+// 						return nil, status.Errorf(codes.Internal, errValidators.Error(), "json unmarshalling error")
+// 					}
+// 					errValidators = nil
+// 				}
+// 			}
+// 			if errValidators != nil {
+// 				cosmos.logger.Error("Error fetching Validators. Err: ", errValidators)
+// 			}
+// 		} else {
+// 			errValidators = json.Unmarshal(bodyValidators, &cosmosValidators)
+// 			if errValidators != nil {
+// 				cosmos.logger.Error("Error unmarshalling Validators List. Err: ", errValidators)
+// 				return nil, status.Errorf(codes.Internal, errValidators.Error(), "json unmarshalling error")
+// 			}
+// 		}
 
-		if errDelegations != nil {
-			if strings.Contains(errDelegations.Error(), "429") || strings.Contains(errDelegations.Error(), "No servers available") {
-				endpoint := cosmos.env.Cosmos.Cfg.BackUpUrls[request.Chain]
-				if endpoint != "" {
-					reqUrlDelegations = fmt.Sprintf(endpoint+"/cosmos/staking/v1beta1/delegations/%v?pagination.offset=%v&pagination.limit=%v&pagination.count_total=true", request.Address, pageOffSet, pageSize)
-					if request.Chain == "terra2" {
-						reqUrlDelegations = fmt.Sprintf(endpoint+"/cosmos/staking/v1beta1/delegations/%v?pagination.limit=%v&pagination.count_total=true", request.Address, pageSize)
-					}
-					bodyDelegations, errDelegations = cosmos.httpRequest.GetRequest(reqUrlDelegations)
-					if errDelegations != nil {
-						cosmos.logger.Error("Error fetching Validators. Err: ", errDelegations)
-					}
-					errDelegations = json.Unmarshal(bodyDelegations, &cosmosDelegations)
-					if errDelegations != nil {
-						cosmos.logger.Error("Error unmarshalling Delegations List. Err: ", errDelegations)
-						return nil, status.Errorf(codes.Internal, errDelegations.Error(), "json unmarshalling error")
-					}
-					errDelegations = nil
-				}
-			}
-			if errDelegations != nil {
-				cosmos.logger.Error("Error fetching Delegations. Err: ", errDelegations)
-			}
-		} else {
-			errDelegations = json.Unmarshal(bodyDelegations, &cosmosDelegations)
-			if errDelegations != nil {
-				cosmos.logger.Error("Error unmarshalling Delegations List. Err: ", errDelegations)
-				return nil, status.Errorf(codes.Internal, errDelegations.Error(), "json unmarshalling error")
-			}
-		}
+// 		if errDelegations != nil {
+// 			if strings.Contains(errDelegations.Error(), "429") || strings.Contains(errDelegations.Error(), "No servers available") {
+// 				endpoint := cosmos.env.Cosmos.Cfg.BackUpUrls[request.Chain]
+// 				if endpoint != "" {
+// 					reqUrlDelegations = fmt.Sprintf(endpoint+"/cosmos/staking/v1beta1/delegations/%v?pagination.offset=%v&pagination.limit=%v&pagination.count_total=true", request.Address, pageOffSet, pageSize)
+// 					if request.Chain == "terra2" {
+// 						reqUrlDelegations = fmt.Sprintf(endpoint+"/cosmos/staking/v1beta1/delegations/%v?pagination.limit=%v&pagination.count_total=true", request.Address, pageSize)
+// 					}
+// 					bodyDelegations, errDelegations = cosmos.httpRequest.GetRequest(reqUrlDelegations)
+// 					if errDelegations != nil {
+// 						cosmos.logger.Error("Error fetching Validators. Err: ", errDelegations)
+// 					}
+// 					errDelegations = json.Unmarshal(bodyDelegations, &cosmosDelegations)
+// 					if errDelegations != nil {
+// 						cosmos.logger.Error("Error unmarshalling Delegations List. Err: ", errDelegations)
+// 						return nil, status.Errorf(codes.Internal, errDelegations.Error(), "json unmarshalling error")
+// 					}
+// 					errDelegations = nil
+// 				}
+// 			}
+// 			if errDelegations != nil {
+// 				cosmos.logger.Error("Error fetching Delegations. Err: ", errDelegations)
+// 			}
+// 		} else {
+// 			errDelegations = json.Unmarshal(bodyDelegations, &cosmosDelegations)
+// 			if errDelegations != nil {
+// 				cosmos.logger.Error("Error unmarshalling Delegations List. Err: ", errDelegations)
+// 				return nil, status.Errorf(codes.Internal, errDelegations.Error(), "json unmarshalling error")
+// 			}
+// 		}
 
-		if errRewards != nil {
-			if strings.Contains(errRewards.Error(), "429") || strings.Contains(errRewards.Error(), "No servers available") {
-				endpoint := cosmos.env.Cosmos.Cfg.BackUpUrls[request.Chain]
-				if endpoint != "" {
-					reqUrlRewards = fmt.Sprintf(endpoint+"/cosmos/distribution/v1beta1/delegators/%v/rewards", request.Address)
-					bodyRewards, errRewards = cosmos.httpRequest.GetRequest(reqUrlRewards)
-					if errRewards != nil {
-						cosmos.logger.Error("Error fetching Rewards. Err: ", errRewards)
-					}
-					errRewards = json.Unmarshal(bodyRewards, &cosmosRewards)
-					if errRewards != nil {
-						cosmos.logger.Error("Error unmarshalling Rewards List. Err: ", errRewards)
-						return nil, status.Errorf(codes.Internal, errRewards.Error(), "json unmarshalling error")
-					}
-					errRewards = nil
-				}
-			}
-			if errRewards != nil {
-				cosmos.logger.Error("Error fetching Rewards. Err: ", errRewards)
-			}
-		} else {
-			errRewards = json.Unmarshal(bodyRewards, &cosmosRewards)
-			if errRewards != nil {
-				cosmos.logger.Error("Error unmarshalling Rewards List. Err: ", errRewards)
-				return nil, status.Errorf(codes.Internal, errRewards.Error(), "json unmarshalling error")
-			}
-		}
+// 		if errRewards != nil {
+// 			if strings.Contains(errRewards.Error(), "429") || strings.Contains(errRewards.Error(), "No servers available") {
+// 				endpoint := cosmos.env.Cosmos.Cfg.BackUpUrls[request.Chain]
+// 				if endpoint != "" {
+// 					reqUrlRewards = fmt.Sprintf(endpoint+"/cosmos/distribution/v1beta1/delegators/%v/rewards", request.Address)
+// 					bodyRewards, errRewards = cosmos.httpRequest.GetRequest(reqUrlRewards)
+// 					if errRewards != nil {
+// 						cosmos.logger.Error("Error fetching Rewards. Err: ", errRewards)
+// 					}
+// 					errRewards = json.Unmarshal(bodyRewards, &cosmosRewards)
+// 					if errRewards != nil {
+// 						cosmos.logger.Error("Error unmarshalling Rewards List. Err: ", errRewards)
+// 						return nil, status.Errorf(codes.Internal, errRewards.Error(), "json unmarshalling error")
+// 					}
+// 					errRewards = nil
+// 				}
+// 			}
+// 			if errRewards != nil {
+// 				cosmos.logger.Error("Error fetching Rewards. Err: ", errRewards)
+// 			}
+// 		} else {
+// 			errRewards = json.Unmarshal(bodyRewards, &cosmosRewards)
+// 			if errRewards != nil {
+// 				cosmos.logger.Error("Error unmarshalling Rewards List. Err: ", errRewards)
+// 				return nil, status.Errorf(codes.Internal, errRewards.Error(), "json unmarshalling error")
+// 			}
+// 		}
 
-		if errUnboundDelegations != nil {
-			if strings.Contains(errUnboundDelegations.Error(), "429") || strings.Contains(errUnboundDelegations.Error(), "No servers available") {
-				endpoint := cosmos.env.Cosmos.Cfg.BackUpUrls[request.Chain]
-				if endpoint != "" {
-					reqUrlUnboundDelegations = fmt.Sprintf(endpoint+"/cosmos/staking/v1beta1/delegators/%v/unbonding_delegations?pagination.offset=%v&pagination.limit=%v&pagination.count_total=true", request.Address, pageOffSet, pageSize)
-					if request.Chain == "terra2" {
-						reqUrlUnboundDelegations = fmt.Sprintf(endpoint+"/cosmos/staking/v1beta1/delegators/%v/unbonding_delegations?pagination.limit=%v&pagination.count_total=true", request.Address, pageSize)
-					}
-					bodyUnboundDelegations, errUnboundDelegations = cosmos.httpRequest.GetRequest(reqUrlUnboundDelegations)
-					if errUnboundDelegations != nil {
-						cosmos.logger.Error("Error fetching Inflation. Err: ", errUnboundDelegations)
-					}
-					errUnboundDelegations = json.Unmarshal(bodyUnboundDelegations, &cosmosUnboundDelegations)
-					if errUnboundDelegations != nil {
-						cosmos.logger.Error("Error unmarshalling Unbonding delegations List. Err: ", errUnboundDelegations)
-						return nil, status.Errorf(codes.Internal, errUnboundDelegations.Error(), "json unmarshalling error")
-					}
-					errUnboundDelegations = nil
-				}
-			}
-			if errUnboundDelegations != nil {
-				cosmos.logger.Error("Error fetching Inflation. Err: ", errUnboundDelegations)
-			}
-		} else {
-			errUnboundDelegations = json.Unmarshal(bodyUnboundDelegations, &cosmosUnboundDelegations)
-			if errUnboundDelegations != nil {
-				cosmos.logger.Error("Error unmarshalling Unbonding delegations List. Err: ", errUnboundDelegations)
-				return nil, status.Errorf(codes.Internal, errUnboundDelegations.Error(), "json unmarshalling error")
-			}
-		}
+// 		if errUnboundDelegations != nil {
+// 			if strings.Contains(errUnboundDelegations.Error(), "429") || strings.Contains(errUnboundDelegations.Error(), "No servers available") {
+// 				endpoint := cosmos.env.Cosmos.Cfg.BackUpUrls[request.Chain]
+// 				if endpoint != "" {
+// 					reqUrlUnboundDelegations = fmt.Sprintf(endpoint+"/cosmos/staking/v1beta1/delegators/%v/unbonding_delegations?pagination.offset=%v&pagination.limit=%v&pagination.count_total=true", request.Address, pageOffSet, pageSize)
+// 					if request.Chain == "terra2" {
+// 						reqUrlUnboundDelegations = fmt.Sprintf(endpoint+"/cosmos/staking/v1beta1/delegators/%v/unbonding_delegations?pagination.limit=%v&pagination.count_total=true", request.Address, pageSize)
+// 					}
+// 					bodyUnboundDelegations, errUnboundDelegations = cosmos.httpRequest.GetRequest(reqUrlUnboundDelegations)
+// 					if errUnboundDelegations != nil {
+// 						cosmos.logger.Error("Error fetching Inflation. Err: ", errUnboundDelegations)
+// 					}
+// 					errUnboundDelegations = json.Unmarshal(bodyUnboundDelegations, &cosmosUnboundDelegations)
+// 					if errUnboundDelegations != nil {
+// 						cosmos.logger.Error("Error unmarshalling Unbonding delegations List. Err: ", errUnboundDelegations)
+// 						return nil, status.Errorf(codes.Internal, errUnboundDelegations.Error(), "json unmarshalling error")
+// 					}
+// 					errUnboundDelegations = nil
+// 				}
+// 			}
+// 			if errUnboundDelegations != nil {
+// 				cosmos.logger.Error("Error fetching Inflation. Err: ", errUnboundDelegations)
+// 			}
+// 		} else {
+// 			errUnboundDelegations = json.Unmarshal(bodyUnboundDelegations, &cosmosUnboundDelegations)
+// 			if errUnboundDelegations != nil {
+// 				cosmos.logger.Error("Error unmarshalling Unbonding delegations List. Err: ", errUnboundDelegations)
+// 				return nil, status.Errorf(codes.Internal, errUnboundDelegations.Error(), "json unmarshalling error")
+// 			}
+// 		}
 
-		if errDValidatorsForDelegator != nil {
-			if strings.Contains(errDValidatorsForDelegator.Error(), "429") || strings.Contains(errDValidatorsForDelegator.Error(), "No servers available") {
-				endpoint := cosmos.env.Cosmos.Cfg.BackUpUrls[request.Chain]
-				if endpoint != "" {
-					reqUrlValidatorsForDelegator = fmt.Sprintf(endpoint+"/cosmos/staking/v1beta1/delegators/%v/validators?pagination.offset=%v&pagination.limit=%v&pagination.count_total=true", request.Address, pageOffSet, pageSize)
-					bodyValidatorsForDelegator, errDValidatorsForDelegator = cosmos.httpRequest.GetRequest(reqUrlValidatorsForDelegator)
-					if errDValidatorsForDelegator != nil {
-						cosmos.logger.Error("Error fetching Validator for the delegation. Err: ", errDValidatorsForDelegator)
-					}
-					errDValidatorsForDelegator = json.Unmarshal(bodyValidatorsForDelegator, &cosmosValidatorsForDelegator)
-					if errDValidatorsForDelegator != nil {
-						cosmos.logger.Error("Error unmarshalling Validator for the delegation. Err: ", errDValidatorsForDelegator)
-						return nil, status.Errorf(codes.Internal, errDValidatorsForDelegator.Error(), "json unmarshalling error")
-					}
-					errDValidatorsForDelegator = nil
-				}
-			}
-			if errDValidatorsForDelegator != nil {
-				cosmos.logger.Error("Error fetching Validator for the delegation. Err: ", errDValidatorsForDelegator)
-			}
-		} else {
-			errDValidatorsForDelegator = json.Unmarshal(bodyValidatorsForDelegator, &cosmosValidatorsForDelegator)
-			if errDValidatorsForDelegator != nil {
-				cosmos.logger.Error("Error unmarshalling Validator for the delegation. Err: ", errDValidatorsForDelegator)
-				return nil, status.Errorf(codes.Internal, errDValidatorsForDelegator.Error(), "json unmarshalling error")
-			}
-		}
+// 		if errDValidatorsForDelegator != nil {
+// 			if strings.Contains(errDValidatorsForDelegator.Error(), "429") || strings.Contains(errDValidatorsForDelegator.Error(), "No servers available") {
+// 				endpoint := cosmos.env.Cosmos.Cfg.BackUpUrls[request.Chain]
+// 				if endpoint != "" {
+// 					reqUrlValidatorsForDelegator = fmt.Sprintf(endpoint+"/cosmos/staking/v1beta1/delegators/%v/validators?pagination.offset=%v&pagination.limit=%v&pagination.count_total=true", request.Address, pageOffSet, pageSize)
+// 					bodyValidatorsForDelegator, errDValidatorsForDelegator = cosmos.httpRequest.GetRequest(reqUrlValidatorsForDelegator)
+// 					if errDValidatorsForDelegator != nil {
+// 						cosmos.logger.Error("Error fetching Validator for the delegation. Err: ", errDValidatorsForDelegator)
+// 					}
+// 					errDValidatorsForDelegator = json.Unmarshal(bodyValidatorsForDelegator, &cosmosValidatorsForDelegator)
+// 					if errDValidatorsForDelegator != nil {
+// 						cosmos.logger.Error("Error unmarshalling Validator for the delegation. Err: ", errDValidatorsForDelegator)
+// 						return nil, status.Errorf(codes.Internal, errDValidatorsForDelegator.Error(), "json unmarshalling error")
+// 					}
+// 					errDValidatorsForDelegator = nil
+// 				}
+// 			}
+// 			if errDValidatorsForDelegator != nil {
+// 				cosmos.logger.Error("Error fetching Validator for the delegation. Err: ", errDValidatorsForDelegator)
+// 			}
+// 		} else {
+// 			errDValidatorsForDelegator = json.Unmarshal(bodyValidatorsForDelegator, &cosmosValidatorsForDelegator)
+// 			if errDValidatorsForDelegator != nil {
+// 				cosmos.logger.Error("Error unmarshalling Validator for the delegation. Err: ", errDValidatorsForDelegator)
+// 				return nil, status.Errorf(codes.Internal, errDValidatorsForDelegator.Error(), "json unmarshalling error")
+// 			}
+// 		}
 
-		if errInflation != nil {
-			if strings.Contains(errInflation.Error(), "429") || strings.Contains(errInflation.Error(), "No servers available") {
-				endpoint := cosmos.env.Cosmos.Cfg.BackUpUrls[request.Chain]
-				if endpoint != "" {
-					reqUrlInflation = fmt.Sprintf(endpoint + "/cosmos/mint/v1beta1/inflation")
-					bodyInflation, errInflation = cosmos.httpRequest.GetRequest(reqUrlInflation)
-					if errInflation != nil {
-						cosmos.logger.Error("Error fetching Inflation. Err: ", errInflation)
-						cosmosInflation.Inflation = "0"
-					}
-					errInflation = json.Unmarshal(bodyInflation, &cosmosInflation)
-					if cosmosInflation.Inflation == "" {
-						cosmosInflation.Inflation = "0"
-					}
-					if errInflation != nil {
-						cosmos.logger.Error("Error unmarshalling Inflation data. Err: ", errInflation)
-						return nil, status.Errorf(codes.Internal, errInflation.Error(), "json unmarshalling error")
-					}
-					errInflation = nil
-				}
-			}
-			if errInflation != nil {
-				cosmos.logger.Error("Error fetching Inflation. Err: ", errInflation)
-				cosmosInflation.Inflation = "0"
-			}
-		} else {
-			errInflation = json.Unmarshal(bodyInflation, &cosmosInflation)
-			if cosmosInflation.Inflation == "" {
-				cosmosInflation.Inflation = "0"
-			}
-			if errInflation != nil {
-				cosmos.logger.Error("Error unmarshalling Inflation data. Err: ", errInflation)
-				return nil, status.Errorf(codes.Internal, errInflation.Error(), "json unmarshalling error")
-			}
-		}
+// 		if errInflation != nil {
+// 			if strings.Contains(errInflation.Error(), "429") || strings.Contains(errInflation.Error(), "No servers available") {
+// 				endpoint := cosmos.env.Cosmos.Cfg.BackUpUrls[request.Chain]
+// 				if endpoint != "" {
+// 					reqUrlInflation = fmt.Sprintf(endpoint + "/cosmos/mint/v1beta1/inflation")
+// 					bodyInflation, errInflation = cosmos.httpRequest.GetRequest(reqUrlInflation)
+// 					if errInflation != nil {
+// 						cosmos.logger.Error("Error fetching Inflation. Err: ", errInflation)
+// 						cosmosInflation.Inflation = "0"
+// 					}
+// 					errInflation = json.Unmarshal(bodyInflation, &cosmosInflation)
+// 					if cosmosInflation.Inflation == "" {
+// 						cosmosInflation.Inflation = "0"
+// 					}
+// 					if errInflation != nil {
+// 						cosmos.logger.Error("Error unmarshalling Inflation data. Err: ", errInflation)
+// 						return nil, status.Errorf(codes.Internal, errInflation.Error(), "json unmarshalling error")
+// 					}
+// 					errInflation = nil
+// 				}
+// 			}
+// 			if errInflation != nil {
+// 				cosmos.logger.Error("Error fetching Inflation. Err: ", errInflation)
+// 				cosmosInflation.Inflation = "0"
+// 			}
+// 		} else {
+// 			errInflation = json.Unmarshal(bodyInflation, &cosmosInflation)
+// 			if cosmosInflation.Inflation == "" {
+// 				cosmosInflation.Inflation = "0"
+// 			}
+// 			if errInflation != nil {
+// 				cosmos.logger.Error("Error unmarshalling Inflation data. Err: ", errInflation)
+// 				return nil, status.Errorf(codes.Internal, errInflation.Error(), "json unmarshalling error")
+// 			}
+// 		}
 
-		if errPools != nil {
-			if strings.Contains(errPools.Error(), "429") || strings.Contains(errPools.Error(), "No servers available") {
-				endpoint := cosmos.env.Cosmos.Cfg.BackUpUrls[request.Chain]
-				if endpoint != "" {
-					reqUrlPools = fmt.Sprintf(endpoint + "/cosmos/staking/v1beta1/pool")
-					bodyPools, errPools = cosmos.httpRequest.GetRequest(reqUrlPools)
-					if errPools != nil {
-						cosmos.logger.Error("Error fetching Pool data. Err: ", errPools)
-					}
-					errPools = json.Unmarshal(bodyPools, &cosmosPool)
-					if errPools != nil {
-						cosmos.logger.Error("Error unmarshalling Pool data. Err: ", errInflation)
-						return nil, status.Errorf(codes.Internal, errInflation.Error(), "json unmarshalling error")
-					}
-					errPools = nil
-				}
-			}
-			if errPools != nil {
-				cosmos.logger.Error("Error fetching Pool data. Err: ", errPools)
-			}
-		} else {
-			errPools = json.Unmarshal(bodyPools, &cosmosPool)
-			if errPools != nil {
-				cosmos.logger.Error("Error unmarshalling Pool data. Err: ", errPools)
-				return nil, status.Errorf(codes.Internal, errPools.Error(), "json unmarshalling error")
-			}
-		}
+// 		if errPools != nil {
+// 			if strings.Contains(errPools.Error(), "429") || strings.Contains(errPools.Error(), "No servers available") {
+// 				endpoint := cosmos.env.Cosmos.Cfg.BackUpUrls[request.Chain]
+// 				if endpoint != "" {
+// 					reqUrlPools = fmt.Sprintf(endpoint + "/cosmos/staking/v1beta1/pool")
+// 					bodyPools, errPools = cosmos.httpRequest.GetRequest(reqUrlPools)
+// 					if errPools != nil {
+// 						cosmos.logger.Error("Error fetching Pool data. Err: ", errPools)
+// 					}
+// 					errPools = json.Unmarshal(bodyPools, &cosmosPool)
+// 					if errPools != nil {
+// 						cosmos.logger.Error("Error unmarshalling Pool data. Err: ", errInflation)
+// 						return nil, status.Errorf(codes.Internal, errInflation.Error(), "json unmarshalling error")
+// 					}
+// 					errPools = nil
+// 				}
+// 			}
+// 			if errPools != nil {
+// 				cosmos.logger.Error("Error fetching Pool data. Err: ", errPools)
+// 			}
+// 		} else {
+// 			errPools = json.Unmarshal(bodyPools, &cosmosPool)
+// 			if errPools != nil {
+// 				cosmos.logger.Error("Error unmarshalling Pool data. Err: ", errPools)
+// 				return nil, status.Errorf(codes.Internal, errPools.Error(), "json unmarshalling error")
+// 			}
+// 		}
 
-		if errAnnualProv != nil {
-			cosmos.logger.Error("Error fetching Annual Provision data. Err: ", errAnnualProv)
-		} else {
-			errAnnualProv = json.Unmarshal(bodyAnnualProv, &cosmosAnnualProvision)
-			if errAnnualProv != nil {
-				cosmos.logger.Error("Error unmarshalling Annual Provision data. Err: ", errAnnualProv)
-				return nil, status.Errorf(codes.Internal, errAnnualProv.Error(), "json unmarshalling error")
-			}
-		}
+// 		if errAnnualProv != nil {
+// 			cosmos.logger.Error("Error fetching Annual Provision data. Err: ", errAnnualProv)
+// 		} else {
+// 			errAnnualProv = json.Unmarshal(bodyAnnualProv, &cosmosAnnualProvision)
+// 			if errAnnualProv != nil {
+// 				cosmos.logger.Error("Error unmarshalling Annual Provision data. Err: ", errAnnualProv)
+// 				return nil, status.Errorf(codes.Internal, errAnnualProv.Error(), "json unmarshalling error")
+// 			}
+// 		}
 
-		if errDistrParams != nil {
-			cosmos.logger.Error("Error fetching Distribution Params data. Err: ", errDistrParams)
-		} else {
-			errDistrParams = json.Unmarshal(bodyDistrParams, &cosmosDistributionParams)
-			if errDistrParams != nil {
-				cosmos.logger.Error("Error unmarshalling Distribution Params data. Err: ", errDistrParams)
-				return nil, status.Errorf(codes.Internal, errDistrParams.Error(), "json unmarshalling error")
-			}
-		}
+// 		if errDistrParams != nil {
+// 			cosmos.logger.Error("Error fetching Distribution Params data. Err: ", errDistrParams)
+// 		} else {
+// 			errDistrParams = json.Unmarshal(bodyDistrParams, &cosmosDistributionParams)
+// 			if errDistrParams != nil {
+// 				cosmos.logger.Error("Error unmarshalling Distribution Params data. Err: ", errDistrParams)
+// 				return nil, status.Errorf(codes.Internal, errDistrParams.Error(), "json unmarshalling error")
+// 			}
+// 		}
 
-		var totalStakedValue = 0.0
-		var totalRewardsValue = 0.0
-		var totalUnStakedValue = 0.0
-		var totalStakedQuote = 0.0
-		var totalRewardsQuote = 0.0
-		var totalUnStakedQuote = 0.0
-		respo.Delegations = make([]*pb.DelegationsInfo, 0)
-		respo.UnboundDelegations = make([]*pb.UnDelegationsInfo, 0)
+// 		var totalStakedValue = 0.0
+// 		var totalRewardsValue = 0.0
+// 		var totalUnStakedValue = 0.0
+// 		var totalStakedQuote = 0.0
+// 		var totalRewardsQuote = 0.0
+// 		var totalUnStakedQuote = 0.0
+// 		respo.Delegations = make([]*pb.DelegationsInfo, 0)
+// 		respo.UnboundDelegations = make([]*pb.UnDelegationsInfo, 0)
 
-		var bondedToken = cosmosPool.Pool.BondedTokens
-		var quoteRate string
-		var denomWiseData = make(map[string]pb.DenomsWiseValues)
-		for _, delegation := range cosmosDelegations.DelegationResponses {
-			if delegation.Balance.Amount == "0" {
-				continue
-			}
-			var delegationInfo pb.DelegationsInfo
-			var rewardsInfo pb.RewardsInfo
-			var delegatorInfo pb.DelegationDetail
-			var balancerInfo pb.BalanceDetail
-			delegatorInfo.DelegatorAddress = delegation.Delegation.DelegatorAddress
-			delegatorInfo.ValidatorAddress = delegation.Delegation.ValidatorAddress
-			delegatorInfo.Shares = delegation.Delegation.Shares
-			delegationInfo.Delegation = &delegatorInfo
+// 		var bondedToken = cosmosPool.Pool.BondedTokens
+// 		var quoteRate string
+// 		var denomWiseData = make(map[string]pb.DenomsWiseValues)
+// 		for _, delegation := range cosmosDelegations.DelegationResponses {
+// 			if delegation.Balance.Amount == "0" {
+// 				continue
+// 			}
+// 			var delegationInfo pb.DelegationsInfo
+// 			var rewardsInfo pb.RewardsInfo
+// 			var delegatorInfo pb.DelegationDetail
+// 			var balancerInfo pb.BalanceDetail
+// 			delegatorInfo.DelegatorAddress = delegation.Delegation.DelegatorAddress
+// 			delegatorInfo.ValidatorAddress = delegation.Delegation.ValidatorAddress
+// 			delegatorInfo.Shares = delegation.Delegation.Shares
+// 			delegationInfo.Delegation = &delegatorInfo
 
-			balancerInfo.Denom = delegation.Balance.Denom
-			var balanceDenom = ""
-			var assetKey string
-			if request.Chain == "cryptoorg" && delegation.Balance.Denom == "basecro" { //basecro and uluna present in two chain networks, basecro handled,uluna need to check
-				balanceDenom = delegation.Balance.Denom + "__cryptoorgchain"
-			} else {
-				var chainName string
-				if delegation.Balance.Denom != "uluna" && request.Chain == "terra2" {
-					chainName = "terra"
-				} else {
-					chainName = request.Chain
-				}
-				balanceDenom = delegation.Balance.Denom + "__" + chainName //To match it with key name of ibc data
-			}
-			if strings.Contains(delegation.Balance.Denom, "ibc") {
-				ibcInfo := cosmos.ibcTokenInfo[balanceDenom]
-				if ibcInfo.Origin.Chain != nil && ibcInfo.Origin.Denom != nil {
-					assetKey = ibcInfo.Origin.Denom.(string) + "__" + ibcInfo.Origin.Chain.(string)
-				}
-			} else {
-				var chainName string
-				if delegation.Balance.Denom != "uluna" && request.Chain == "terra2" {
-					chainName = "terra"
-				} else {
-					chainName = request.Chain
+// 			balancerInfo.Denom = delegation.Balance.Denom
+// 			var balanceDenom = ""
+// 			var assetKey string
+// 			if request.Chain == "cryptoorg" && delegation.Balance.Denom == "basecro" { //basecro and uluna present in two chain networks, basecro handled,uluna need to check
+// 				balanceDenom = delegation.Balance.Denom + "__cryptoorgchain"
+// 			} else {
+// 				var chainName string
+// 				if delegation.Balance.Denom != "uluna" && request.Chain == "terra2" {
+// 					chainName = "terra"
+// 				} else {
+// 					chainName = request.Chain
+// 				}
+// 				balanceDenom = delegation.Balance.Denom + "__" + chainName //To match it with key name of ibc data
+// 			}
+// 			if strings.Contains(delegation.Balance.Denom, "ibc") {
+// 				ibcInfo := cosmos.ibcTokenInfo[balanceDenom]
+// 				if ibcInfo.Origin.Chain != nil && ibcInfo.Origin.Denom != nil {
+// 					assetKey = ibcInfo.Origin.Denom.(string) + "__" + ibcInfo.Origin.Chain.(string)
+// 				}
+// 			} else {
+// 				var chainName string
+// 				if delegation.Balance.Denom != "uluna" && request.Chain == "terra2" {
+// 					chainName = "terra"
+// 				} else {
+// 					chainName = request.Chain
 
-				}
-				assetKey = delegation.Balance.Denom + "__" + chainName //To match it with key name of ibc data
-			}
-			var tokenPrice float64
-			var tokenDecimals int
-			if denomValue, ok := cosmos.denomInfo[assetKey]; ok {
-				if denomValue.CoingeckoID != "" {
-					tokenPrice, _ = cosmos.coingecko.GetTokenExchangeByCoingeckoId("usd", denomValue.CoingeckoID)
-				}
-				quoteRate = strconv.FormatFloat(tokenPrice, 'f', -1, 64)
-				balancerInfo.TickerSymbol = denomValue.Symbol
-				balancerInfo.LogoUrl = denomValue.Logos.Png
-				if denomValue.CoingeckoID != "" {
-					balancerInfo.Decimals = int64(denomValue.Decimals)
-					tokenDecimals = denomValue.Decimals
-				} else {
-					balancerInfo.Decimals = walletInfo.Decimals
-					tokenDecimals = int(walletInfo.Decimals)
-				}
-			} else {
-				tokenPrice = cosmos.getTokenQuoteRateAsFloatVal(request.Chain)
-				quoteRate = strconv.FormatFloat(tokenPrice, 'f', -1, 64)
-				balancerInfo.Decimals = walletInfo.Decimals
-				tokenDecimals = int(walletInfo.Decimals)
-			}
-			totalStakedValue = totalStakedValue + cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)
-			totalStakedQuote = totalStakedQuote + (cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate)
-			balancerInfo.Amount = delegation.Balance.Amount
-			balancerInfo.QuoteRate = quoteRate
-			balancerInfo.Quote = strconv.FormatFloat((cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64)
-			delegationInfo.Balance = &balancerInfo
-			if denomWiseDataExists, ok := denomWiseData[delegation.Balance.Denom]; ok {
-				denomWiseData[delegation.Balance.Denom] = pb.DenomsWiseValues{
-					StakeBalance:       strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(denomWiseDataExists.StakeBalance)+(cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)/math.Pow10(tokenDecimals)), 'f', -1, 64),
-					TotalStakedQuote:   strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(denomWiseDataExists.TotalStakedQuote)+(cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64),
-					UnstakeBalance:     denomWiseDataExists.UnstakeBalance,
-					TotalUnstakedQuote: denomWiseDataExists.TotalUnstakedQuote,
-					RewardsBalance:     denomWiseDataExists.RewardsBalance,
-					TotalRewardsQuote:  denomWiseDataExists.TotalRewardsQuote,
-					Denom:              delegation.Balance.Denom,
-				}
-			} else {
-				denomWiseData[delegation.Balance.Denom] = pb.DenomsWiseValues{
-					StakeBalance:     strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)/math.Pow10(tokenDecimals), 'f', -1, 64),
-					TotalStakedQuote: strconv.FormatFloat((cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64),
-					Denom:            delegation.Balance.Denom,
-				}
-			}
+// 				}
+// 				assetKey = delegation.Balance.Denom + "__" + chainName //To match it with key name of ibc data
+// 			}
+// 			var tokenPrice float64
+// 			var tokenDecimals int
+// 			if denomValue, ok := cosmos.denomInfo[assetKey]; ok {
+// 				if denomValue.CoingeckoID != "" {
+// 					tokenPrice, _ = cosmos.coingecko.GetTokenExchangeByCoingeckoId("usd", denomValue.CoingeckoID)
+// 				}
+// 				quoteRate = strconv.FormatFloat(tokenPrice, 'f', -1, 64)
+// 				balancerInfo.TickerSymbol = denomValue.Symbol
+// 				balancerInfo.LogoUrl = denomValue.Logos.Png
+// 				if denomValue.CoingeckoID != "" {
+// 					balancerInfo.Decimals = int64(denomValue.Decimals)
+// 					tokenDecimals = denomValue.Decimals
+// 				} else {
+// 					balancerInfo.Decimals = walletInfo.Decimals
+// 					tokenDecimals = int(walletInfo.Decimals)
+// 				}
+// 			} else {
+// 				tokenPrice = cosmos.getTokenQuoteRateAsFloatVal(request.Chain)
+// 				quoteRate = strconv.FormatFloat(tokenPrice, 'f', -1, 64)
+// 				balancerInfo.Decimals = walletInfo.Decimals
+// 				tokenDecimals = int(walletInfo.Decimals)
+// 			}
+// 			totalStakedValue = totalStakedValue + cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)
+// 			totalStakedQuote = totalStakedQuote + (cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate)
+// 			balancerInfo.Amount = delegation.Balance.Amount
+// 			balancerInfo.QuoteRate = quoteRate
+// 			balancerInfo.Quote = strconv.FormatFloat((cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64)
+// 			delegationInfo.Balance = &balancerInfo
+// 			if denomWiseDataExists, ok := denomWiseData[delegation.Balance.Denom]; ok {
+// 				denomWiseData[delegation.Balance.Denom] = pb.DenomsWiseValues{
+// 					StakeBalance:       strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(denomWiseDataExists.StakeBalance)+(cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)/math.Pow10(tokenDecimals)), 'f', -1, 64),
+// 					TotalStakedQuote:   strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(denomWiseDataExists.TotalStakedQuote)+(cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64),
+// 					UnstakeBalance:     denomWiseDataExists.UnstakeBalance,
+// 					TotalUnstakedQuote: denomWiseDataExists.TotalUnstakedQuote,
+// 					RewardsBalance:     denomWiseDataExists.RewardsBalance,
+// 					TotalRewardsQuote:  denomWiseDataExists.TotalRewardsQuote,
+// 					Denom:              delegation.Balance.Denom,
+// 				}
+// 			} else {
+// 				denomWiseData[delegation.Balance.Denom] = pb.DenomsWiseValues{
+// 					StakeBalance:     strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)/math.Pow10(tokenDecimals), 'f', -1, 64),
+// 					TotalStakedQuote: strconv.FormatFloat((cosmos.helper.ConvertStringToFloat64(delegation.Balance.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64),
+// 					Denom:            delegation.Balance.Denom,
+// 				}
+// 			}
 
-			for _, validator := range cosmosValidators.Validators {
-				if delegation.Delegation.ValidatorAddress == validator.OperatorAddress {
-					var info pb.ValidatorForDelegatorInfo
-					var description pb.ValidatorDescription
-					var validatorCommission pb.ValidatorCommission
-					var validatorCommissionRates pb.ValidatorCommissionRates
+// 			for _, validator := range cosmosValidators.Validators {
+// 				if delegation.Delegation.ValidatorAddress == validator.OperatorAddress {
+// 					var info pb.ValidatorForDelegatorInfo
+// 					var description pb.ValidatorDescription
+// 					var validatorCommission pb.ValidatorCommission
+// 					var validatorCommissionRates pb.ValidatorCommissionRates
 
-					info.OperatorAddress = validator.OperatorAddress
-					if len(validator.ConsensusPubkey.Key) == 0 {
-						info.ConsensusPubkey = ""
-					} else {
-						info.ConsensusPubkey = validator.ConsensusPubkey.Key
-					}
-					info.Jailed = validator.Jailed
-					info.Status = validator.Status
-					info.Tokens = validator.Tokens
+// 					info.OperatorAddress = validator.OperatorAddress
+// 					if len(validator.ConsensusPubkey.Key) == 0 {
+// 						info.ConsensusPubkey = ""
+// 					} else {
+// 						info.ConsensusPubkey = validator.ConsensusPubkey.Key
+// 					}
+// 					info.Jailed = validator.Jailed
+// 					info.Status = validator.Status
+// 					info.Tokens = validator.Tokens
 
-					var bignumTokens, errParseTokens = new(big.Float).SetString(validator.Tokens)
-					if !errParseTokens {
-						cosmos.logger.Error("Error converting Validator Tokens. Err: ", errInflation)
-					}
-					var bignumBondedToken, errParseBondedToken = new(big.Float).SetString(bondedToken)
-					if !errParseBondedToken {
-						cosmos.logger.Error("Error converting Bonded Token. Err: ", errInflation)
-					}
-					divResult := new(big.Float).Quo(bignumTokens, bignumBondedToken)
-					divResult = divResult.Mul(divResult, big.NewFloat(100))
-					info.DelegatorShares = strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(validator.DelegatorShares)/math.Pow10(int(walletInfo.Decimals)), 'f', -1, 64)
-					s := fmt.Sprintf("%.2f", divResult)
-					info.VotingPower = s
-					// Description Details
-					description.Moniker = validator.Description.Moniker
-					description.Identity = validator.Description.Identity
-					description.Website = validator.Description.Website
-					description.SecurityContact = validator.Description.SecurityContact
-					description.Details = validator.Description.Details
-					info.Description = &description
+// 					var bignumTokens, errParseTokens = new(big.Float).SetString(validator.Tokens)
+// 					if !errParseTokens {
+// 						cosmos.logger.Error("Error converting Validator Tokens. Err: ", errInflation)
+// 					}
+// 					var bignumBondedToken, errParseBondedToken = new(big.Float).SetString(bondedToken)
+// 					if !errParseBondedToken {
+// 						cosmos.logger.Error("Error converting Bonded Token. Err: ", errInflation)
+// 					}
+// 					divResult := new(big.Float).Quo(bignumTokens, bignumBondedToken)
+// 					divResult = divResult.Mul(divResult, big.NewFloat(100))
+// 					info.DelegatorShares = strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(validator.DelegatorShares)/math.Pow10(int(walletInfo.Decimals)), 'f', -1, 64)
+// 					s := fmt.Sprintf("%.2f", divResult)
+// 					info.VotingPower = s
+// 					// Description Details
+// 					description.Moniker = validator.Description.Moniker
+// 					description.Identity = validator.Description.Identity
+// 					description.Website = validator.Description.Website
+// 					description.SecurityContact = validator.Description.SecurityContact
+// 					description.Details = validator.Description.Details
+// 					info.Description = &description
 
-					info.UnbondingHeight = validator.UnbondingHeight
-					info.UnbondingTime = validator.UnbondingTime
-					// Commission Details
-					var commRate, _ = strconv.ParseFloat(validator.Commission.CommissionRates.Rate, 64)
-					var commMaxRate, _ = strconv.ParseFloat(validator.Commission.CommissionRates.MaxRate, 64)
-					var maxChangeRate, _ = strconv.ParseFloat(validator.Commission.CommissionRates.MaxChangeRate, 64)
-					validatorCommissionRates.Rate = fmt.Sprintf("%.2f", commRate*100)
-					validatorCommissionRates.MaxRate = fmt.Sprintf("%.2f", commMaxRate*100)
-					validatorCommissionRates.MaxChangeRate = fmt.Sprintf("%.2f", maxChangeRate*100)
-					validatorCommission.CommissionRates = &validatorCommissionRates
-					info.Commission = &validatorCommission
-					info.Commission.UpdateTime = validator.Commission.UpdateTime
+// 					info.UnbondingHeight = validator.UnbondingHeight
+// 					info.UnbondingTime = validator.UnbondingTime
+// 					// Commission Details
+// 					var commRate, _ = strconv.ParseFloat(validator.Commission.CommissionRates.Rate, 64)
+// 					var commMaxRate, _ = strconv.ParseFloat(validator.Commission.CommissionRates.MaxRate, 64)
+// 					var maxChangeRate, _ = strconv.ParseFloat(validator.Commission.CommissionRates.MaxChangeRate, 64)
+// 					validatorCommissionRates.Rate = fmt.Sprintf("%.2f", commRate*100)
+// 					validatorCommissionRates.MaxRate = fmt.Sprintf("%.2f", commMaxRate*100)
+// 					validatorCommissionRates.MaxChangeRate = fmt.Sprintf("%.2f", maxChangeRate*100)
+// 					validatorCommission.CommissionRates = &validatorCommissionRates
+// 					info.Commission = &validatorCommission
+// 					info.Commission.UpdateTime = validator.Commission.UpdateTime
 
-					info.MinSelfDelegation = validator.MinSelfDelegation
-					info.ImageUrl = cosmos.getImageURL(validator.Description.Identity)
-					if request.Chain == "bluzelle" {
-						info.Apr = 20
-					} else if request.Chain == "terra" {
-						commissionRate := cosmos.helper.ConvertStringToFloat64(validator.Commission.CommissionRates.Rate)
-						if commissionRate == 0 {
-							info.Apr = 12.9
-						} else {
-							commissionRate := cosmos.helper.ConvertStringToFloat64(validator.Commission.CommissionRates.Rate)
-							commissionConsume := commissionRate * 12.9
-							validatorApr := strconv.FormatFloat(12.9-commissionConsume, 'f', -1, 64)
-							info.Apr = math.Round(cosmos.helper.ConvertStringToFloat64(validatorApr)*100) / 100
-						}
-					} else {
-						if validator.Status == "BOND_STATUS_BONDED" {
-							if len(cosmosAnnualProvision.AnnualProvisions) != 0 {
+// 					info.MinSelfDelegation = validator.MinSelfDelegation
+// 					info.ImageUrl = cosmos.getImageURL(validator.Description.Identity)
+// 					if request.Chain == "bluzelle" {
+// 						info.Apr = 20
+// 					} else if request.Chain == "terra" {
+// 						commissionRate := cosmos.helper.ConvertStringToFloat64(validator.Commission.CommissionRates.Rate)
+// 						if commissionRate == 0 {
+// 							info.Apr = 12.9
+// 						} else {
+// 							commissionRate := cosmos.helper.ConvertStringToFloat64(validator.Commission.CommissionRates.Rate)
+// 							commissionConsume := commissionRate * 12.9
+// 							validatorApr := strconv.FormatFloat(12.9-commissionConsume, 'f', -1, 64)
+// 							info.Apr = math.Round(cosmos.helper.ConvertStringToFloat64(validatorApr)*100) / 100
+// 						}
+// 					} else {
+// 						if validator.Status == "BOND_STATUS_BONDED" {
+// 							if len(cosmosAnnualProvision.AnnualProvisions) != 0 {
 
-								var apr = cosmos.calculateRealAPR(cosmosAnnualProvision.AnnualProvisions, cosmosDistributionParams.Params.CommunityTax, cosmosPool.Pool.BondedTokens, validator.Commission.CommissionRates.Rate)
-								if apr < 0 {
-									info.Apr = 0
-								} else {
-									info.Apr = Clean(apr * 100).(float64)
-								}
-							} else {
-								info.Apr = 0
-							}
-						} else {
-							info.Apr = 0
-						}
-					}
-					info.Apr = math.Round(info.Apr*100) / 100
-					delegationInfo.ValidatorDetails = &info
-					break
-				}
-			}
-			for _, reward := range cosmosRewards.Rewards {
-				if reward.ValidatorAddress == delegation.Delegation.ValidatorAddress {
-					rewardsInfo.ValidatorAddress = reward.ValidatorAddress
-					for _, rewardEnt := range reward.Reward {
-						var rewardLocal pb.RewardsListInfo
-						var tokenPrice float64
-						var assetKey, quoteRate string
-						var balanceDenom = ""
-						var tokenDecimals int
-						if request.Chain == "cryptoorg" && rewardEnt.Denom == "basecro" { //basecro and uluna present in two chain networks, basecro handled,uluna need to check
-							balanceDenom = rewardEnt.Denom + "__cryptoorgchain"
-						} else {
-							var chainName string
-							if rewardEnt.Denom != "uluna" && request.Chain == "terra2" {
-								chainName = "terra"
-							} else {
-								chainName = request.Chain
+// 								var apr = cosmos.calculateRealAPR(cosmosAnnualProvision.AnnualProvisions, cosmosDistributionParams.Params.CommunityTax, cosmosPool.Pool.BondedTokens, validator.Commission.CommissionRates.Rate)
+// 								if apr < 0 {
+// 									info.Apr = 0
+// 								} else {
+// 									info.Apr = Clean(apr * 100).(float64)
+// 								}
+// 							} else {
+// 								info.Apr = 0
+// 							}
+// 						} else {
+// 							info.Apr = 0
+// 						}
+// 					}
+// 					info.Apr = math.Round(info.Apr*100) / 100
+// 					delegationInfo.ValidatorDetails = &info
+// 					break
+// 				}
+// 			}
+// 			for _, reward := range cosmosRewards.Rewards {
+// 				if reward.ValidatorAddress == delegation.Delegation.ValidatorAddress {
+// 					rewardsInfo.ValidatorAddress = reward.ValidatorAddress
+// 					for _, rewardEnt := range reward.Reward {
+// 						var rewardLocal pb.RewardsListInfo
+// 						var tokenPrice float64
+// 						var assetKey, quoteRate string
+// 						var balanceDenom = ""
+// 						var tokenDecimals int
+// 						if request.Chain == "cryptoorg" && rewardEnt.Denom == "basecro" { //basecro and uluna present in two chain networks, basecro handled,uluna need to check
+// 							balanceDenom = rewardEnt.Denom + "__cryptoorgchain"
+// 						} else {
+// 							var chainName string
+// 							if rewardEnt.Denom != "uluna" && request.Chain == "terra2" {
+// 								chainName = "terra"
+// 							} else {
+// 								chainName = request.Chain
 
-							}
-							balanceDenom = rewardEnt.Denom + "__" + chainName //To match it with key name of ibc data
-						}
-						if strings.Contains(rewardEnt.Denom, "ibc") {
-							ibcInfo := cosmos.ibcTokenInfo[balanceDenom]
-							if ibcInfo.Origin.Chain != nil && ibcInfo.Origin.Denom != nil {
-								assetKey = ibcInfo.Origin.Denom.(string) + "__" + ibcInfo.Origin.Chain.(string)
-							}
-						} else {
-							var chainName string
-							if rewardEnt.Denom != "uluna" && request.Chain == "terra2" {
-								chainName = "terra"
-							} else {
-								chainName = request.Chain
+// 							}
+// 							balanceDenom = rewardEnt.Denom + "__" + chainName //To match it with key name of ibc data
+// 						}
+// 						if strings.Contains(rewardEnt.Denom, "ibc") {
+// 							ibcInfo := cosmos.ibcTokenInfo[balanceDenom]
+// 							if ibcInfo.Origin.Chain != nil && ibcInfo.Origin.Denom != nil {
+// 								assetKey = ibcInfo.Origin.Denom.(string) + "__" + ibcInfo.Origin.Chain.(string)
+// 							}
+// 						} else {
+// 							var chainName string
+// 							if rewardEnt.Denom != "uluna" && request.Chain == "terra2" {
+// 								chainName = "terra"
+// 							} else {
+// 								chainName = request.Chain
 
-							}
-							assetKey = rewardEnt.Denom + "__" + chainName //To match it with key name of ibc data
-						}
-						if denomValue, ok := cosmos.denomInfo[assetKey]; ok {
-							if denomValue.CoingeckoID != "" {
-								tokenPrice, _ = cosmos.coingecko.GetTokenExchangeByCoingeckoId("usd", denomValue.CoingeckoID)
-							}
-							quoteRate = strconv.FormatFloat(tokenPrice, 'f', -1, 64)
-							rewardLocal.TickerSymbol = denomValue.Symbol
-							rewardLocal.LogoUrl = denomValue.Logos.Png
-							if denomValue.CoingeckoID != "" {
-								rewardLocal.Decimals = int64(denomValue.Decimals)
-								tokenDecimals = denomValue.Decimals
-							} else {
-								rewardLocal.Decimals = walletInfo.Decimals
-								tokenDecimals = int(walletInfo.Decimals)
-							}
-						} else {
-							tokenPrice = cosmos.getTokenQuoteRateAsFloatVal(request.Chain)
-							quoteRate = strconv.FormatFloat(tokenPrice, 'f', -1, 64)
-							rewardLocal.Decimals = walletInfo.Decimals
-							tokenDecimals = int(walletInfo.Decimals)
-						}
-						totalRewardsValue = totalRewardsValue + cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)
-						totalRewardsQuote = totalRewardsQuote + (cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate)
-						rewardLocal.Denom = rewardEnt.Denom
-						rewardLocal.Amount = rewardEnt.Amount
-						rewardLocal.Quote = strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)/math.Pow10(tokenDecimals)*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64)
-						rewardLocal.QuoteRate = quoteRate
-						rewardsInfo.Reward = append(rewardsInfo.Reward, &rewardLocal)
-						if denomWiseDataExists, ok := denomWiseData[rewardEnt.Denom]; ok {
-							denomWiseData[rewardEnt.Denom] = pb.DenomsWiseValues{
-								UnstakeBalance:     denomWiseDataExists.UnstakeBalance,
-								TotalUnstakedQuote: denomWiseDataExists.TotalUnstakedQuote,
-								StakeBalance:       denomWiseDataExists.StakeBalance,
-								TotalStakedQuote:   denomWiseDataExists.TotalStakedQuote,
-								RewardsBalance:     strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(denomWiseDataExists.RewardsBalance)+(cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)/math.Pow10(tokenDecimals)), 'f', -1, 64),
-								TotalRewardsQuote:  strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(denomWiseDataExists.TotalRewardsQuote)+(cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64),
-								Denom:              rewardEnt.Denom,
-							}
-						} else {
+// 							}
+// 							assetKey = rewardEnt.Denom + "__" + chainName //To match it with key name of ibc data
+// 						}
+// 						if denomValue, ok := cosmos.denomInfo[assetKey]; ok {
+// 							if denomValue.CoingeckoID != "" {
+// 								tokenPrice, _ = cosmos.coingecko.GetTokenExchangeByCoingeckoId("usd", denomValue.CoingeckoID)
+// 							}
+// 							quoteRate = strconv.FormatFloat(tokenPrice, 'f', -1, 64)
+// 							rewardLocal.TickerSymbol = denomValue.Symbol
+// 							rewardLocal.LogoUrl = denomValue.Logos.Png
+// 							if denomValue.CoingeckoID != "" {
+// 								rewardLocal.Decimals = int64(denomValue.Decimals)
+// 								tokenDecimals = denomValue.Decimals
+// 							} else {
+// 								rewardLocal.Decimals = walletInfo.Decimals
+// 								tokenDecimals = int(walletInfo.Decimals)
+// 							}
+// 						} else {
+// 							tokenPrice = cosmos.getTokenQuoteRateAsFloatVal(request.Chain)
+// 							quoteRate = strconv.FormatFloat(tokenPrice, 'f', -1, 64)
+// 							rewardLocal.Decimals = walletInfo.Decimals
+// 							tokenDecimals = int(walletInfo.Decimals)
+// 						}
+// 						totalRewardsValue = totalRewardsValue + cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)
+// 						totalRewardsQuote = totalRewardsQuote + (cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate)
+// 						rewardLocal.Denom = rewardEnt.Denom
+// 						rewardLocal.Amount = rewardEnt.Amount
+// 						rewardLocal.Quote = strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)/math.Pow10(tokenDecimals)*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64)
+// 						rewardLocal.QuoteRate = quoteRate
+// 						rewardsInfo.Reward = append(rewardsInfo.Reward, &rewardLocal)
+// 						if denomWiseDataExists, ok := denomWiseData[rewardEnt.Denom]; ok {
+// 							denomWiseData[rewardEnt.Denom] = pb.DenomsWiseValues{
+// 								UnstakeBalance:     denomWiseDataExists.UnstakeBalance,
+// 								TotalUnstakedQuote: denomWiseDataExists.TotalUnstakedQuote,
+// 								StakeBalance:       denomWiseDataExists.StakeBalance,
+// 								TotalStakedQuote:   denomWiseDataExists.TotalStakedQuote,
+// 								RewardsBalance:     strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(denomWiseDataExists.RewardsBalance)+(cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)/math.Pow10(tokenDecimals)), 'f', -1, 64),
+// 								TotalRewardsQuote:  strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(denomWiseDataExists.TotalRewardsQuote)+(cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64),
+// 								Denom:              rewardEnt.Denom,
+// 							}
+// 						} else {
 
-							denomWiseData[rewardEnt.Denom] = pb.DenomsWiseValues{
-								RewardsBalance:    strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)/math.Pow10(tokenDecimals), 'f', -1, 64),
-								TotalRewardsQuote: strconv.FormatFloat((cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64),
-								Denom:             rewardEnt.Denom,
-							}
-						}
-					}
-					break
-				}
-			}
-			delegationInfo.RewardsDetails = &rewardsInfo
-			respo.Delegations = append(respo.Delegations, &delegationInfo)
-		}
-		for _, unbondDelegation := range cosmosUnboundDelegations.UnbondingResponses {
-			var totalBalance = 0.0
-			var delegatorInfo pb.DelegationDetail
-			delegatorInfo.DelegatorAddress = unbondDelegation.DelegatorAddress
-			delegatorInfo.ValidatorAddress = unbondDelegation.ValidatorAddress
-			delegatorInfo.Shares = ""
-			var unbondDelegationInfo pb.UnDelegationsInfo
-			unbondDelegationInfo.DelegatorAddress = unbondDelegation.DelegatorAddress
-			unbondDelegationInfo.ValidatorAddress = unbondDelegation.ValidatorAddress
-			unbondDelegationInfo.Delegation = &delegatorInfo
-			var quoteRate string
-			for _, entry := range unbondDelegation.Entries {
-				var entries pb.Entries
-				totalBalance = totalBalance + cosmos.helper.ConvertStringToFloat64(entry.Balance)
-				entries.CreationHeight = entry.CreationHeight
-				entries.CompletionTime = entry.CompletionTime
-				entries.InitialBalance = entry.InitialBalance
-				entries.Balance = entry.Balance
-				unbondDelegationInfo.Entries = append(unbondDelegationInfo.Entries, &entries)
-			}
-			var balancerInfo pb.BalanceDetail
-			balancerInfo.Denom = walletInfo.Denom
-			balancerInfo.Amount = strconv.FormatFloat(totalBalance, 'f', -1, 64)
-			balancerInfo.Decimals = walletInfo.Decimals
-			var tokenPrice float64
-			var assetKey string
-			var balanceDenom = ""
-			var tokenDecimals int
-			// Currently we are using the denom as the native token denom in unbonded delegations, once cosmos undelegate api response provides denom similer to delegations
-			// we can replace the below walletInfo.Denom to the one recieved in the response. with that the non native token support can also be added. (from line 1101 to 1112)
-			if request.Chain == "cryptoorg" && walletInfo.Denom == "basecro" { //basecro and uluna present in two chain networks, basecro handled,uluna need to check
-				balanceDenom = walletInfo.Denom + "__cryptoorgchain"
-			} else {
-				var chainName string
-				if walletInfo.Denom != "uluna" && request.Chain == "terra2" {
-					chainName = "terra"
-				} else {
-					chainName = request.Chain
+// 							denomWiseData[rewardEnt.Denom] = pb.DenomsWiseValues{
+// 								RewardsBalance:    strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)/math.Pow10(tokenDecimals), 'f', -1, 64),
+// 								TotalRewardsQuote: strconv.FormatFloat((cosmos.helper.ConvertStringToFloat64(rewardEnt.Amount)/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64),
+// 								Denom:             rewardEnt.Denom,
+// 							}
+// 						}
+// 					}
+// 					break
+// 				}
+// 			}
+// 			delegationInfo.RewardsDetails = &rewardsInfo
+// 			respo.Delegations = append(respo.Delegations, &delegationInfo)
+// 		}
+// 		for _, unbondDelegation := range cosmosUnboundDelegations.UnbondingResponses {
+// 			var totalBalance = 0.0
+// 			var delegatorInfo pb.DelegationDetail
+// 			delegatorInfo.DelegatorAddress = unbondDelegation.DelegatorAddress
+// 			delegatorInfo.ValidatorAddress = unbondDelegation.ValidatorAddress
+// 			delegatorInfo.Shares = ""
+// 			var unbondDelegationInfo pb.UnDelegationsInfo
+// 			unbondDelegationInfo.DelegatorAddress = unbondDelegation.DelegatorAddress
+// 			unbondDelegationInfo.ValidatorAddress = unbondDelegation.ValidatorAddress
+// 			unbondDelegationInfo.Delegation = &delegatorInfo
+// 			var quoteRate string
+// 			for _, entry := range unbondDelegation.Entries {
+// 				var entries pb.Entries
+// 				totalBalance = totalBalance + cosmos.helper.ConvertStringToFloat64(entry.Balance)
+// 				entries.CreationHeight = entry.CreationHeight
+// 				entries.CompletionTime = entry.CompletionTime
+// 				entries.InitialBalance = entry.InitialBalance
+// 				entries.Balance = entry.Balance
+// 				unbondDelegationInfo.Entries = append(unbondDelegationInfo.Entries, &entries)
+// 			}
+// 			var balancerInfo pb.BalanceDetail
+// 			balancerInfo.Denom = walletInfo.Denom
+// 			balancerInfo.Amount = strconv.FormatFloat(totalBalance, 'f', -1, 64)
+// 			balancerInfo.Decimals = walletInfo.Decimals
+// 			var tokenPrice float64
+// 			var assetKey string
+// 			var balanceDenom = ""
+// 			var tokenDecimals int
+// 			// Currently we are using the denom as the native token denom in unbonded delegations, once cosmos undelegate api response provides denom similer to delegations
+// 			// we can replace the below walletInfo.Denom to the one recieved in the response. with that the non native token support can also be added. (from line 1101 to 1112)
+// 			if request.Chain == "cryptoorg" && walletInfo.Denom == "basecro" { //basecro and uluna present in two chain networks, basecro handled,uluna need to check
+// 				balanceDenom = walletInfo.Denom + "__cryptoorgchain"
+// 			} else {
+// 				var chainName string
+// 				if walletInfo.Denom != "uluna" && request.Chain == "terra2" {
+// 					chainName = "terra"
+// 				} else {
+// 					chainName = request.Chain
 
-				}
-				balanceDenom = walletInfo.Denom + "__" + chainName //To match it with key name of ibc data
-			}
-			if strings.Contains(walletInfo.Denom, "ibc") {
-				ibcInfo := cosmos.ibcTokenInfo[balanceDenom]
-				if ibcInfo.Origin.Chain != nil && ibcInfo.Origin.Denom != nil {
-					assetKey = ibcInfo.Origin.Denom.(string) + "__" + ibcInfo.Origin.Chain.(string)
-				}
-			} else {
-				var chainName string
-				if walletInfo.Denom != "uluna" && request.Chain == "terra2" {
-					chainName = "terra"
-				} else {
-					chainName = request.Chain
+// 				}
+// 				balanceDenom = walletInfo.Denom + "__" + chainName //To match it with key name of ibc data
+// 			}
+// 			if strings.Contains(walletInfo.Denom, "ibc") {
+// 				ibcInfo := cosmos.ibcTokenInfo[balanceDenom]
+// 				if ibcInfo.Origin.Chain != nil && ibcInfo.Origin.Denom != nil {
+// 					assetKey = ibcInfo.Origin.Denom.(string) + "__" + ibcInfo.Origin.Chain.(string)
+// 				}
+// 			} else {
+// 				var chainName string
+// 				if walletInfo.Denom != "uluna" && request.Chain == "terra2" {
+// 					chainName = "terra"
+// 				} else {
+// 					chainName = request.Chain
 
-				}
-				assetKey = walletInfo.Denom + "__" + chainName //To match it with key name of ibc data
-			}
-			if denomValue, ok := cosmos.denomInfo[assetKey]; ok {
-				if denomValue.CoingeckoID != "" {
-					tokenPrice, _ = cosmos.coingecko.GetTokenExchangeByCoingeckoId("usd", denomValue.CoingeckoID)
-				}
-				quoteRate = strconv.FormatFloat(tokenPrice, 'f', -1, 64)
-				balancerInfo.TickerSymbol = denomValue.Symbol
-				balancerInfo.LogoUrl = denomValue.Logos.Png
-				if denomValue.CoingeckoID != "" {
-					balancerInfo.Decimals = int64(denomValue.Decimals)
-					tokenDecimals = denomValue.Decimals
-				} else {
-					balancerInfo.Decimals = walletInfo.Decimals
-					tokenDecimals = int(walletInfo.Decimals)
-				}
-			} else {
-				tokenPrice = cosmos.getTokenQuoteRateAsFloatVal(request.Chain)
-				quoteRate = strconv.FormatFloat(tokenPrice, 'f', -1, 64)
-				balancerInfo.Decimals = walletInfo.Decimals
-				tokenDecimals = int(walletInfo.Decimals)
-			}
-			totalUnStakedValue = totalUnStakedValue + totalBalance
-			totalUnStakedQuote = totalUnStakedQuote + (totalBalance/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate)
-			balancerInfo.QuoteRate = quoteRate
-			balancerInfo.Quote = strconv.FormatFloat((totalBalance/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64)
-			if denomWiseDataExists, ok := denomWiseData[walletInfo.Denom]; ok {
-				denomWiseData[walletInfo.Denom] = pb.DenomsWiseValues{
-					RewardsBalance:     denomWiseDataExists.RewardsBalance,
-					TotalRewardsQuote:  denomWiseDataExists.TotalRewardsQuote,
-					StakeBalance:       denomWiseDataExists.StakeBalance,
-					TotalStakedQuote:   denomWiseDataExists.TotalStakedQuote,
-					UnstakeBalance:     strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(denomWiseDataExists.UnstakeBalance)+(totalBalance/math.Pow10(tokenDecimals)), 'f', -1, 64),
-					TotalUnstakedQuote: strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(denomWiseDataExists.TotalUnstakedQuote)+(totalBalance/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64),
-					Denom:              walletInfo.Denom,
-				}
-			} else {
-				denomWiseData[walletInfo.Denom] = pb.DenomsWiseValues{
-					UnstakeBalance:     strconv.FormatFloat(totalBalance/math.Pow10(tokenDecimals), 'f', -1, 64),
-					TotalUnstakedQuote: strconv.FormatFloat((totalBalance/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64),
-					Denom:              walletInfo.Denom,
-				}
-			}
-			unbondDelegationInfo.Balance = &balancerInfo
-			// unbondDelegationInfo.QuoteRate = cosmos.getTokenQuoteRate(request.Chain)
-			for _, validator := range cosmosValidators.Validators {
-				if unbondDelegation.ValidatorAddress == validator.OperatorAddress {
-					var info pb.ValidatorForDelegatorInfo
-					var description pb.ValidatorDescription
-					var validatorCommission pb.ValidatorCommission
-					var validatorCommissionRates pb.ValidatorCommissionRates
+// 				}
+// 				assetKey = walletInfo.Denom + "__" + chainName //To match it with key name of ibc data
+// 			}
+// 			if denomValue, ok := cosmos.denomInfo[assetKey]; ok {
+// 				if denomValue.CoingeckoID != "" {
+// 					tokenPrice, _ = cosmos.coingecko.GetTokenExchangeByCoingeckoId("usd", denomValue.CoingeckoID)
+// 				}
+// 				quoteRate = strconv.FormatFloat(tokenPrice, 'f', -1, 64)
+// 				balancerInfo.TickerSymbol = denomValue.Symbol
+// 				balancerInfo.LogoUrl = denomValue.Logos.Png
+// 				if denomValue.CoingeckoID != "" {
+// 					balancerInfo.Decimals = int64(denomValue.Decimals)
+// 					tokenDecimals = denomValue.Decimals
+// 				} else {
+// 					balancerInfo.Decimals = walletInfo.Decimals
+// 					tokenDecimals = int(walletInfo.Decimals)
+// 				}
+// 			} else {
+// 				tokenPrice = cosmos.getTokenQuoteRateAsFloatVal(request.Chain)
+// 				quoteRate = strconv.FormatFloat(tokenPrice, 'f', -1, 64)
+// 				balancerInfo.Decimals = walletInfo.Decimals
+// 				tokenDecimals = int(walletInfo.Decimals)
+// 			}
+// 			totalUnStakedValue = totalUnStakedValue + totalBalance
+// 			totalUnStakedQuote = totalUnStakedQuote + (totalBalance/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate)
+// 			balancerInfo.QuoteRate = quoteRate
+// 			balancerInfo.Quote = strconv.FormatFloat((totalBalance/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64)
+// 			if denomWiseDataExists, ok := denomWiseData[walletInfo.Denom]; ok {
+// 				denomWiseData[walletInfo.Denom] = pb.DenomsWiseValues{
+// 					RewardsBalance:     denomWiseDataExists.RewardsBalance,
+// 					TotalRewardsQuote:  denomWiseDataExists.TotalRewardsQuote,
+// 					StakeBalance:       denomWiseDataExists.StakeBalance,
+// 					TotalStakedQuote:   denomWiseDataExists.TotalStakedQuote,
+// 					UnstakeBalance:     strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(denomWiseDataExists.UnstakeBalance)+(totalBalance/math.Pow10(tokenDecimals)), 'f', -1, 64),
+// 					TotalUnstakedQuote: strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(denomWiseDataExists.TotalUnstakedQuote)+(totalBalance/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64),
+// 					Denom:              walletInfo.Denom,
+// 				}
+// 			} else {
+// 				denomWiseData[walletInfo.Denom] = pb.DenomsWiseValues{
+// 					UnstakeBalance:     strconv.FormatFloat(totalBalance/math.Pow10(tokenDecimals), 'f', -1, 64),
+// 					TotalUnstakedQuote: strconv.FormatFloat((totalBalance/math.Pow10(tokenDecimals))*cosmos.helper.ConvertStringToFloat64(quoteRate), 'f', -1, 64),
+// 					Denom:              walletInfo.Denom,
+// 				}
+// 			}
+// 			unbondDelegationInfo.Balance = &balancerInfo
+// 			// unbondDelegationInfo.QuoteRate = cosmos.getTokenQuoteRate(request.Chain)
+// 			for _, validator := range cosmosValidators.Validators {
+// 				if unbondDelegation.ValidatorAddress == validator.OperatorAddress {
+// 					var info pb.ValidatorForDelegatorInfo
+// 					var description pb.ValidatorDescription
+// 					var validatorCommission pb.ValidatorCommission
+// 					var validatorCommissionRates pb.ValidatorCommissionRates
 
-					info.OperatorAddress = validator.OperatorAddress
-					if len(validator.ConsensusPubkey.Key) == 0 {
-						info.ConsensusPubkey = ""
-					} else {
-						info.ConsensusPubkey = validator.ConsensusPubkey.Key
-					}
-					info.Jailed = validator.Jailed
-					info.Status = validator.Status
-					info.Tokens = validator.Tokens
+// 					info.OperatorAddress = validator.OperatorAddress
+// 					if len(validator.ConsensusPubkey.Key) == 0 {
+// 						info.ConsensusPubkey = ""
+// 					} else {
+// 						info.ConsensusPubkey = validator.ConsensusPubkey.Key
+// 					}
+// 					info.Jailed = validator.Jailed
+// 					info.Status = validator.Status
+// 					info.Tokens = validator.Tokens
 
-					var bignumTokens, errParseTokens = new(big.Float).SetString(validator.Tokens)
-					if !errParseTokens {
-						cosmos.logger.Error("Error converting Validator Tokens. Err: ", errInflation)
-					}
-					var bignumBondedToken, errParseBondedToken = new(big.Float).SetString(bondedToken)
-					if !errParseBondedToken {
-						cosmos.logger.Error("Error converting Bonded Token. Err: ", errInflation)
-					}
-					divResult := new(big.Float).Quo(bignumTokens, bignumBondedToken)
-					divResult = divResult.Mul(divResult, big.NewFloat(100))
-					info.DelegatorShares = strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(validator.DelegatorShares)/math.Pow10(int(walletInfo.Decimals)), 'f', -1, 64)
-					s := fmt.Sprintf("%.2f", divResult)
-					info.VotingPower = s
-					// Description Details
-					description.Moniker = validator.Description.Moniker
-					description.Identity = validator.Description.Identity
-					description.Website = validator.Description.Website
-					description.SecurityContact = validator.Description.SecurityContact
-					description.Details = validator.Description.Details
-					info.Description = &description
+// 					var bignumTokens, errParseTokens = new(big.Float).SetString(validator.Tokens)
+// 					if !errParseTokens {
+// 						cosmos.logger.Error("Error converting Validator Tokens. Err: ", errInflation)
+// 					}
+// 					var bignumBondedToken, errParseBondedToken = new(big.Float).SetString(bondedToken)
+// 					if !errParseBondedToken {
+// 						cosmos.logger.Error("Error converting Bonded Token. Err: ", errInflation)
+// 					}
+// 					divResult := new(big.Float).Quo(bignumTokens, bignumBondedToken)
+// 					divResult = divResult.Mul(divResult, big.NewFloat(100))
+// 					info.DelegatorShares = strconv.FormatFloat(cosmos.helper.ConvertStringToFloat64(validator.DelegatorShares)/math.Pow10(int(walletInfo.Decimals)), 'f', -1, 64)
+// 					s := fmt.Sprintf("%.2f", divResult)
+// 					info.VotingPower = s
+// 					// Description Details
+// 					description.Moniker = validator.Description.Moniker
+// 					description.Identity = validator.Description.Identity
+// 					description.Website = validator.Description.Website
+// 					description.SecurityContact = validator.Description.SecurityContact
+// 					description.Details = validator.Description.Details
+// 					info.Description = &description
 
-					info.UnbondingHeight = validator.UnbondingHeight
-					info.UnbondingTime = validator.UnbondingTime
-					// Commission Details
-					var commRate, _ = strconv.ParseFloat(validator.Commission.CommissionRates.Rate, 64)
-					var commMaxRate, _ = strconv.ParseFloat(validator.Commission.CommissionRates.MaxRate, 64)
-					var maxChangeRate, _ = strconv.ParseFloat(validator.Commission.CommissionRates.MaxChangeRate, 64)
-					validatorCommissionRates.Rate = fmt.Sprintf("%.2f", commRate*100)
-					validatorCommissionRates.MaxRate = fmt.Sprintf("%.2f", commMaxRate*100)
-					validatorCommissionRates.MaxChangeRate = fmt.Sprintf("%.2f", maxChangeRate*100)
-					validatorCommission.CommissionRates = &validatorCommissionRates
-					info.Commission = &validatorCommission
-					info.Commission.UpdateTime = validator.Commission.UpdateTime
-					info.MinSelfDelegation = validator.MinSelfDelegation
-					info.ImageUrl = cosmos.getImageURL(validator.Description.Identity)
-					if request.Chain == "bluzelle" {
-						info.Apr = 20
-					} else if request.Chain == "terra" {
-						commissionRate := cosmos.helper.ConvertStringToFloat64(validator.Commission.CommissionRates.Rate)
-						if commissionRate == 0 {
-							info.Apr = 12.9
-						} else {
-							commissionRate := cosmos.helper.ConvertStringToFloat64(validator.Commission.CommissionRates.Rate)
-							commissionConsume := commissionRate * 12.9
-							validatorApr := strconv.FormatFloat(12.9-commissionConsume, 'f', -1, 64)
-							info.Apr = math.Round(cosmos.helper.ConvertStringToFloat64(validatorApr)*100) / 100
-						}
-					} else {
-						if validator.Status == "BOND_STATUS_BONDED" {
-							if len(cosmosAnnualProvision.AnnualProvisions) != 0 {
-								var apr = cosmos.calculateRealAPR(cosmosAnnualProvision.AnnualProvisions, cosmosDistributionParams.Params.CommunityTax, cosmosPool.Pool.BondedTokens, validator.Commission.CommissionRates.Rate)
-								if apr < 0 {
-									info.Apr = 0
-								} else {
-									info.Apr = Clean(apr * 100).(float64)
-								}
-							} else {
-								info.Apr = 0
-							}
-						} else {
-							info.Apr = 0
-						}
-					}
-					info.Apr = math.Round(info.Apr*100) / 100
-					unbondDelegationInfo.ValidatorDetails = &info
-					break
-				}
-			}
-			respo.UnboundDelegations = append(respo.UnboundDelegations, &unbondDelegationInfo)
-		}
-		getCosmosAPRRequest := &pb.CosmosAprRatesRequest{
-			Testnet: false,
-			Chain:   request.Chain,
-		}
-		var cosmosAPRRates, _ = cosmos.GetCosmosAprRates(getCosmosAPRRequest)
-		if cosmosAPRRates != nil {
-			respo.Apr = cosmosAPRRates.Apr
-		}
-		var overallDenomsValuesInfo pb.OverallDenomsValues
-		overallDenomsValuesInfo.TotalStakedQuote = strconv.FormatFloat(totalStakedQuote, 'f', -1, 64)
-		overallDenomsValuesInfo.TotalUnstakedQuote = strconv.FormatFloat(totalUnStakedQuote, 'f', -1, 64)
-		overallDenomsValuesInfo.TotalRewardsQuote = strconv.FormatFloat(totalRewardsQuote, 'f', -1, 64)
-		respo.NetStakeValues = &overallDenomsValuesInfo
+// 					info.UnbondingHeight = validator.UnbondingHeight
+// 					info.UnbondingTime = validator.UnbondingTime
+// 					// Commission Details
+// 					var commRate, _ = strconv.ParseFloat(validator.Commission.CommissionRates.Rate, 64)
+// 					var commMaxRate, _ = strconv.ParseFloat(validator.Commission.CommissionRates.MaxRate, 64)
+// 					var maxChangeRate, _ = strconv.ParseFloat(validator.Commission.CommissionRates.MaxChangeRate, 64)
+// 					validatorCommissionRates.Rate = fmt.Sprintf("%.2f", commRate*100)
+// 					validatorCommissionRates.MaxRate = fmt.Sprintf("%.2f", commMaxRate*100)
+// 					validatorCommissionRates.MaxChangeRate = fmt.Sprintf("%.2f", maxChangeRate*100)
+// 					validatorCommission.CommissionRates = &validatorCommissionRates
+// 					info.Commission = &validatorCommission
+// 					info.Commission.UpdateTime = validator.Commission.UpdateTime
+// 					info.MinSelfDelegation = validator.MinSelfDelegation
+// 					info.ImageUrl = cosmos.getImageURL(validator.Description.Identity)
+// 					if request.Chain == "bluzelle" {
+// 						info.Apr = 20
+// 					} else if request.Chain == "terra" {
+// 						commissionRate := cosmos.helper.ConvertStringToFloat64(validator.Commission.CommissionRates.Rate)
+// 						if commissionRate == 0 {
+// 							info.Apr = 12.9
+// 						} else {
+// 							commissionRate := cosmos.helper.ConvertStringToFloat64(validator.Commission.CommissionRates.Rate)
+// 							commissionConsume := commissionRate * 12.9
+// 							validatorApr := strconv.FormatFloat(12.9-commissionConsume, 'f', -1, 64)
+// 							info.Apr = math.Round(cosmos.helper.ConvertStringToFloat64(validatorApr)*100) / 100
+// 						}
+// 					} else {
+// 						if validator.Status == "BOND_STATUS_BONDED" {
+// 							if len(cosmosAnnualProvision.AnnualProvisions) != 0 {
+// 								var apr = cosmos.calculateRealAPR(cosmosAnnualProvision.AnnualProvisions, cosmosDistributionParams.Params.CommunityTax, cosmosPool.Pool.BondedTokens, validator.Commission.CommissionRates.Rate)
+// 								if apr < 0 {
+// 									info.Apr = 0
+// 								} else {
+// 									info.Apr = Clean(apr * 100).(float64)
+// 								}
+// 							} else {
+// 								info.Apr = 0
+// 							}
+// 						} else {
+// 							info.Apr = 0
+// 						}
+// 					}
+// 					info.Apr = math.Round(info.Apr*100) / 100
+// 					unbondDelegationInfo.ValidatorDetails = &info
+// 					break
+// 				}
+// 			}
+// 			respo.UnboundDelegations = append(respo.UnboundDelegations, &unbondDelegationInfo)
+// 		}
+// 		getCosmosAPRRequest := &pb.CosmosAprRatesRequest{
+// 			Testnet: false,
+// 			Chain:   request.Chain,
+// 		}
+// 		var cosmosAPRRates, _ = cosmos.GetCosmosAprRates(getCosmosAPRRequest)
+// 		if cosmosAPRRates != nil {
+// 			respo.Apr = cosmosAPRRates.Apr
+// 		}
+// 		var overallDenomsValuesInfo pb.OverallDenomsValues
+// 		overallDenomsValuesInfo.TotalStakedQuote = strconv.FormatFloat(totalStakedQuote, 'f', -1, 64)
+// 		overallDenomsValuesInfo.TotalUnstakedQuote = strconv.FormatFloat(totalUnStakedQuote, 'f', -1, 64)
+// 		overallDenomsValuesInfo.TotalRewardsQuote = strconv.FormatFloat(totalRewardsQuote, 'f', -1, 64)
+// 		respo.NetStakeValues = &overallDenomsValuesInfo
 
-		var denomStakeInfo []*pb.DenomsWiseValues
-		for key, value := range denomWiseData {
-			data := pb.DenomsWiseValues{
-				StakeBalance:       value.StakeBalance,
-				UnstakeBalance:     value.UnstakeBalance,
-				RewardsBalance:     value.RewardsBalance,
-				TotalStakedQuote:   value.TotalStakedQuote,
-				TotalUnstakedQuote: value.TotalUnstakedQuote,
-				TotalRewardsQuote:  value.TotalRewardsQuote,
-				Denom:              key,
-			}
-			denomStakeInfo = append(denomStakeInfo, &data)
-		}
-		respo.IndividualStakeValues = denomStakeInfo
-	}
-	return &respo, nil
-}
+// 		var denomStakeInfo []*pb.DenomsWiseValues
+// 		for key, value := range denomWiseData {
+// 			data := pb.DenomsWiseValues{
+// 				StakeBalance:       value.StakeBalance,
+// 				UnstakeBalance:     value.UnstakeBalance,
+// 				RewardsBalance:     value.RewardsBalance,
+// 				TotalStakedQuote:   value.TotalStakedQuote,
+// 				TotalUnstakedQuote: value.TotalUnstakedQuote,
+// 				TotalRewardsQuote:  value.TotalRewardsQuote,
+// 				Denom:              key,
+// 			}
+// 			denomStakeInfo = append(denomStakeInfo, &data)
+// 		}
+// 		respo.IndividualStakeValues = denomStakeInfo
+// 	}
+// 	return &respo, nil
+// }
 
 // GetValidators Lists the Validators
 // TODO: Add support for 3P services
@@ -2616,7 +2616,7 @@ func (cosmos *Handler) GetValidators(request *pb.CosmosValidatorsRequest) (*pb.C
 
 			info.MinSelfDelegation = validator.MinSelfDelegation
 			info.ImageUrl = cosmos.getImageURL(validator.Description.Identity)
-			info.QuoteRate = cosmos.getTokenQuoteRate(request.Chain)
+			// info.QuoteRate = cosmos.getTokenQuoteRate(request.Chain)
 			if request.Chain == "bluzelle" {
 				info.Apr = 20
 			} else if request.Chain == "terra" {
@@ -2862,7 +2862,7 @@ func (cosmos *Handler) GetValidators(request *pb.CosmosValidatorsRequest) (*pb.C
 
 			info.MinSelfDelegation = validator.MinSelfDelegation
 			info.ImageUrl = cosmos.getImageURL(validator.Description.Identity)
-			info.QuoteRate = cosmos.getTokenQuoteRate(request.Chain)
+			// info.QuoteRate = cosmos.getTokenQuoteRate(request.Chain)
 			if request.Chain == "bluzelle" {
 				info.Apr = 20
 			} else if request.Chain == "terra" {
@@ -3303,17 +3303,17 @@ func (h *Handler) getImageURL(identity string) string {
 	}
 }
 
-func (h *Handler) getTokenQuoteRate(chain string) string {
-	var quotePrice string
-	quoteRate, err := h.coingecko.GetTokenExchange("usd", chain)
-	if err != nil {
-		h.logger.Errorf("Error for Exchange Quote Price for token  request  is : %v", err.Error())
-		quotePrice = "0"
-	} else {
-		quotePrice = strconv.FormatFloat(quoteRate.Price, 'f', -1, 64)
-	}
-	return quotePrice
-}
+// func (h *Handler) getTokenQuoteRate(chain string) string {
+// 	var quotePrice string
+// 	quoteRate, err := h.coingecko.GetTokenExchange("usd", chain)
+// 	if err != nil {
+// 		h.logger.Errorf("Error for Exchange Quote Price for token  request  is : %v", err.Error())
+// 		quotePrice = "0"
+// 	} else {
+// 		quotePrice = strconv.FormatFloat(quoteRate.Price, 'f', -1, 64)
+// 	}
+// 	return quotePrice
+// }
 
 /*
 	 func (h *Handler) calculateAPR(inflation string, commision string, bondedTokenRatio string) float64 {
@@ -3335,187 +3335,187 @@ func (h *Handler) getCDPTokenAmountDetails(inflation string, commision string, b
 	return aprRate
 }
 
-func (h *Handler) getTokenQuoteRateAsFloatVal(chain string) float64 {
-	var quotePrice float64
-	quoteRate, err := h.coingecko.GetTokenExchange("usd", chain)
-	if err != nil {
-		h.logger.Errorf("Error for Exchange Quote Price for token  request  is : %v", err.Error())
-		quotePrice = 0.0
-	} else {
-		quotePrice = quoteRate.Price
-	}
-	return quotePrice
-}
+// func (h *Handler) getTokenQuoteRateAsFloatVal(chain string) float64 {
+// 	var quotePrice float64
+// 	quoteRate, err := h.coingecko.GetTokenExchange("usd", chain)
+// 	if err != nil {
+// 		h.logger.Errorf("Error for Exchange Quote Price for token  request  is : %v", err.Error())
+// 		quotePrice = 0.0
+// 	} else {
+// 		quotePrice = quoteRate.Price
+// 	}
+// 	return quotePrice
+// }
 
-func (h *Handler) CosmosSimulateTx(request *pb.CosmosSimulateTxRequest) (*pb.CosmosSimulateTxResponse, error) {
-	walletInfo := h.utils.GetCosmosWalletInfo(request.Chain)
-	var baseFee float32
-	if request.Chain == "bluzelle" {
-		baseFee = 0.001
-		return &pb.CosmosSimulateTxResponse{
-			SimulationResult: true,
-			GasLimit:         750000, //static
-			GasPrice: &pb.CosmosSimulateGasPrice{
-				Fast:        1.3 * baseFee,
-				SafeLow:     1 * baseFee,
-				Fastest:     1.6 * baseFee,
-				Average:     1.3 * baseFee,
-				SafeLowWait: 5,
-				AvgWait:     2,
-				FastWait:    1,
-				FastestWait: 0.5,
-			},
-			Fee:     1500, //static
-			Message: "Simulation executed successfully",
-		}, nil
-	}
-	reqUrl := fmt.Sprintf(walletInfo.REST + "/cosmos/tx/v1beta1/simulate")
-	var txBody SimulateTxBody
-	var simulationStatus bool
-	var message string
-	txBody.TxBytes = request.TxBytes
-	jsonReq, _ := json.Marshal(txBody)
-	reqBody := bytes.NewBuffer(jsonReq)
-	res, err := h.httpRequest.PostRequest(reqUrl, reqBody)
-	if err != nil {
-		var fee int64
-		switch request.Chain {
-		case "emoney":
-			fee = 75000
-		case "irisnet":
-			fee = 150000
-		case "osmosis":
-			fee = 20000
-		case "kava":
-			fee = 2000
-		case "akash":
-			fee = 20000
-		case "cryptoorgchain":
-			fee = 18750
-		default:
-			fee = 1000
-		}
-		if strings.Contains(err.Error(), "429") || strings.Contains(err.Error(), "No servers available") {
-			endpoint := h.env.Cosmos.Cfg.BackUpUrls[request.Chain]
-			if endpoint != "" {
-				reqUrl = endpoint + "cosmos/tx/v1beta1/simulate"
-				res, err = h.httpRequest.PostRequest(reqUrl, reqBody)
-				if err != nil {
-					h.logger.Error(err)
-					baseFee = walletInfo.BaseFee
-					quoteRate, _ := h.coingecko.GetTokenExchange("usd", request.Chain)
-					return &pb.CosmosSimulateTxResponse{
-						SimulationResult: false,
-						GasLimit:         750000, //static
-						GasPrice: &pb.CosmosSimulateGasPrice{
-							Fast:        1.3 * baseFee,
-							SafeLow:     1 * baseFee,
-							Fastest:     1.6 * baseFee,
-							Average:     1.3 * baseFee,
-							SafeLowWait: 5,
-							AvgWait:     2,
-							FastWait:    1,
-							FastestWait: 0.5,
-						},
-						Fee:       int64(fee),
-						QuoteRate: strconv.FormatFloat(quoteRate.Price, 'f', -1, 64),
-						Message:   err.Error(),
-					}, nil
-				}
-				err = nil
-			}
-		}
-		h.logger.Error(err)
-		baseFee = walletInfo.BaseFee
-		quoteRate, _ := h.coingecko.GetTokenExchange("usd", request.Chain)
-		return &pb.CosmosSimulateTxResponse{
-			SimulationResult: false,
-			GasLimit:         750000, //static
-			GasPrice: &pb.CosmosSimulateGasPrice{
-				Fast:        1.3 * baseFee,
-				SafeLow:     1 * baseFee,
-				Fastest:     1.6 * baseFee,
-				Average:     1.3 * baseFee,
-				SafeLowWait: 5,
-				AvgWait:     2,
-				FastWait:    1,
-				FastestWait: 0.5,
-			},
-			Fee:       fee,
-			QuoteRate: strconv.FormatFloat(quoteRate.Price, 'f', -1, 64),
-			Message:   err.Error(),
-		}, nil
-	}
-	var simulateTxResponse SimulateTxResponse
-	err = json.Unmarshal(res, &simulateTxResponse)
-	if err != nil {
-		var fee int64
-		switch request.Chain {
-		case "emoney":
-			fee = 75000
-		case "irisnet":
-			fee = 150000
-		case "osmosis":
-			fee = 20000
-		case "kava":
-			fee = 2000
-		case "akash":
-			fee = 20000
-		case "cryptoorgchain":
-			fee = 18750
-		default:
-			fee = 1000
-		}
-		quoteRate, _ := h.coingecko.GetTokenExchange("usd", request.Chain)
-		return &pb.CosmosSimulateTxResponse{
-			SimulationResult: false,
-			GasLimit:         750000, //static
-			GasPrice: &pb.CosmosSimulateGasPrice{
-				Fast:        1.3 * baseFee,
-				SafeLow:     1 * baseFee,
-				Fastest:     1.6 * baseFee,
-				Average:     1.3 * baseFee,
-				SafeLowWait: 5,
-				AvgWait:     2,
-				FastWait:    1,
-				FastestWait: 0.5,
-			},
-			Fee:       fee,
-			QuoteRate: strconv.FormatFloat(quoteRate.Price, 'f', -1, 64),
-			Message:   err.Error(),
-		}, nil
-	}
-	gasUsed, _ := strconv.ParseFloat(simulateTxResponse.GasInfo.GasUsed, 64)
-	if gasUsed > 0 {
-		simulationStatus = true
-		message = "Simulation executed successfully"
-	}
-	baseFee = walletInfo.BaseFee
-	gasUsed = math.Round(1.5 * gasUsed)
-	gasPrice := 1.6 * baseFee //used the fastest gas_price factor
-	fee := float64(gasPrice) * gasUsed
-	quoteRate, err := h.coingecko.GetTokenExchange("usd", request.Chain)
-	if err != nil {
-		message = "Simulation executed successfully but quote rate failed due to" + err.Error()
-	}
-	return &pb.CosmosSimulateTxResponse{
-		SimulationResult: simulationStatus,
-		GasLimit:         int64(gasUsed),
-		GasPrice: &pb.CosmosSimulateGasPrice{
-			Fast:        1.3 * baseFee, // base value 0.025  multiplied by frequency factor
-			SafeLow:     1 * baseFee,
-			Fastest:     1.6 * baseFee,
-			Average:     1.3 * baseFee,
-			SafeLowWait: 5,
-			AvgWait:     2,
-			FastWait:    1,
-			FastestWait: 0.5,
-		},
-		Fee:       int64(fee),
-		QuoteRate: strconv.FormatFloat(quoteRate.Price, 'f', -1, 64),
-		Message:   message,
-	}, nil
-}
+// func (h *Handler) CosmosSimulateTx(request *pb.CosmosSimulateTxRequest) (*pb.CosmosSimulateTxResponse, error) {
+// 	walletInfo := h.utils.GetCosmosWalletInfo(request.Chain)
+// 	var baseFee float32
+// 	if request.Chain == "bluzelle" {
+// 		baseFee = 0.001
+// 		return &pb.CosmosSimulateTxResponse{
+// 			SimulationResult: true,
+// 			GasLimit:         750000, //static
+// 			GasPrice: &pb.CosmosSimulateGasPrice{
+// 				Fast:        1.3 * baseFee,
+// 				SafeLow:     1 * baseFee,
+// 				Fastest:     1.6 * baseFee,
+// 				Average:     1.3 * baseFee,
+// 				SafeLowWait: 5,
+// 				AvgWait:     2,
+// 				FastWait:    1,
+// 				FastestWait: 0.5,
+// 			},
+// 			Fee:     1500, //static
+// 			Message: "Simulation executed successfully",
+// 		}, nil
+// 	}
+// 	reqUrl := fmt.Sprintf(walletInfo.REST + "/cosmos/tx/v1beta1/simulate")
+// 	var txBody SimulateTxBody
+// 	var simulationStatus bool
+// 	var message string
+// 	txBody.TxBytes = request.TxBytes
+// 	jsonReq, _ := json.Marshal(txBody)
+// 	reqBody := bytes.NewBuffer(jsonReq)
+// 	res, err := h.httpRequest.PostRequest(reqUrl, reqBody)
+// 	if err != nil {
+// 		var fee int64
+// 		switch request.Chain {
+// 		case "emoney":
+// 			fee = 75000
+// 		case "irisnet":
+// 			fee = 150000
+// 		case "osmosis":
+// 			fee = 20000
+// 		case "kava":
+// 			fee = 2000
+// 		case "akash":
+// 			fee = 20000
+// 		case "cryptoorgchain":
+// 			fee = 18750
+// 		default:
+// 			fee = 1000
+// 		}
+// 		if strings.Contains(err.Error(), "429") || strings.Contains(err.Error(), "No servers available") {
+// 			endpoint := h.env.Cosmos.Cfg.BackUpUrls[request.Chain]
+// 			if endpoint != "" {
+// 				reqUrl = endpoint + "cosmos/tx/v1beta1/simulate"
+// 				res, err = h.httpRequest.PostRequest(reqUrl, reqBody)
+// 				if err != nil {
+// 					h.logger.Error(err)
+// 					baseFee = walletInfo.BaseFee
+// 					quoteRate, _ := h.coingecko.GetTokenExchange("usd", request.Chain)
+// 					return &pb.CosmosSimulateTxResponse{
+// 						SimulationResult: false,
+// 						GasLimit:         750000, //static
+// 						GasPrice: &pb.CosmosSimulateGasPrice{
+// 							Fast:        1.3 * baseFee,
+// 							SafeLow:     1 * baseFee,
+// 							Fastest:     1.6 * baseFee,
+// 							Average:     1.3 * baseFee,
+// 							SafeLowWait: 5,
+// 							AvgWait:     2,
+// 							FastWait:    1,
+// 							FastestWait: 0.5,
+// 						},
+// 						Fee:       int64(fee),
+// 						QuoteRate: strconv.FormatFloat(quoteRate.Price, 'f', -1, 64),
+// 						Message:   err.Error(),
+// 					}, nil
+// 				}
+// 				err = nil
+// 			}
+// 		}
+// 		h.logger.Error(err)
+// 		baseFee = walletInfo.BaseFee
+// 		quoteRate, _ := h.coingecko.GetTokenExchange("usd", request.Chain)
+// 		return &pb.CosmosSimulateTxResponse{
+// 			SimulationResult: false,
+// 			GasLimit:         750000, //static
+// 			GasPrice: &pb.CosmosSimulateGasPrice{
+// 				Fast:        1.3 * baseFee,
+// 				SafeLow:     1 * baseFee,
+// 				Fastest:     1.6 * baseFee,
+// 				Average:     1.3 * baseFee,
+// 				SafeLowWait: 5,
+// 				AvgWait:     2,
+// 				FastWait:    1,
+// 				FastestWait: 0.5,
+// 			},
+// 			Fee:       fee,
+// 			QuoteRate: strconv.FormatFloat(quoteRate.Price, 'f', -1, 64),
+// 			Message:   err.Error(),
+// 		}, nil
+// 	}
+// 	var simulateTxResponse SimulateTxResponse
+// 	err = json.Unmarshal(res, &simulateTxResponse)
+// 	if err != nil {
+// 		var fee int64
+// 		switch request.Chain {
+// 		case "emoney":
+// 			fee = 75000
+// 		case "irisnet":
+// 			fee = 150000
+// 		case "osmosis":
+// 			fee = 20000
+// 		case "kava":
+// 			fee = 2000
+// 		case "akash":
+// 			fee = 20000
+// 		case "cryptoorgchain":
+// 			fee = 18750
+// 		default:
+// 			fee = 1000
+// 		}
+// 		quoteRate, _ := h.coingecko.GetTokenExchange("usd", request.Chain)
+// 		return &pb.CosmosSimulateTxResponse{
+// 			SimulationResult: false,
+// 			GasLimit:         750000, //static
+// 			GasPrice: &pb.CosmosSimulateGasPrice{
+// 				Fast:        1.3 * baseFee,
+// 				SafeLow:     1 * baseFee,
+// 				Fastest:     1.6 * baseFee,
+// 				Average:     1.3 * baseFee,
+// 				SafeLowWait: 5,
+// 				AvgWait:     2,
+// 				FastWait:    1,
+// 				FastestWait: 0.5,
+// 			},
+// 			Fee:       fee,
+// 			QuoteRate: strconv.FormatFloat(quoteRate.Price, 'f', -1, 64),
+// 			Message:   err.Error(),
+// 		}, nil
+// 	}
+// 	gasUsed, _ := strconv.ParseFloat(simulateTxResponse.GasInfo.GasUsed, 64)
+// 	if gasUsed > 0 {
+// 		simulationStatus = true
+// 		message = "Simulation executed successfully"
+// 	}
+// 	baseFee = walletInfo.BaseFee
+// 	gasUsed = math.Round(1.5 * gasUsed)
+// 	gasPrice := 1.6 * baseFee //used the fastest gas_price factor
+// 	fee := float64(gasPrice) * gasUsed
+// 	quoteRate, err := h.coingecko.GetTokenExchange("usd", request.Chain)
+// 	if err != nil {
+// 		message = "Simulation executed successfully but quote rate failed due to" + err.Error()
+// 	}
+// 	return &pb.CosmosSimulateTxResponse{
+// 		SimulationResult: simulationStatus,
+// 		GasLimit:         int64(gasUsed),
+// 		GasPrice: &pb.CosmosSimulateGasPrice{
+// 			Fast:        1.3 * baseFee, // base value 0.025  multiplied by frequency factor
+// 			SafeLow:     1 * baseFee,
+// 			Fastest:     1.6 * baseFee,
+// 			Average:     1.3 * baseFee,
+// 			SafeLowWait: 5,
+// 			AvgWait:     2,
+// 			FastWait:    1,
+// 			FastestWait: 0.5,
+// 		},
+// 		Fee:       int64(fee),
+// 		QuoteRate: strconv.FormatFloat(quoteRate.Price, 'f', -1, 64),
+// 		Message:   message,
+// 	}, nil
+// }
 
 func (h *Handler) GetLatestBlockHeight(request *pb.GetCosmosBlockHeightRequest) (*pb.GetCosmosBlockHeightResponse, error) {
 	walletInfo := h.utils.GetCosmosWalletInfo(request.Chain)
@@ -3551,78 +3551,78 @@ func (h *Handler) GetLatestBlockHeight(request *pb.GetCosmosBlockHeightRequest) 
 	}, nil
 }
 
-type OpportunityChannelResponse struct {
-	Opportunity models.OpportunityData
-	Err         error
-}
+// type OpportunityChannelResponse struct {
+// 	Opportunity models.OpportunityData
+// 	Err         error
+// }
 
-func (h *Handler) GetCosmosOpportunities(request *pb.GetOpportunitiesRequest) (*pb.GetOpportunitesResponse, error) {
-	var res models.Opportunities
-	channelOut := make(chan OpportunityChannelResponse)
-	for _, chainInfo := range h.env.Cosmos.Cfg.Wallets {
-		denomKey := chainInfo.Denom + "__" + chainInfo.ChainName
-		chainInfo := chainInfo
-		go func() {
-			channelOut <- h.fetchOpportunities(denomKey, chainInfo)
-		}()
-	}
-	for {
-		select {
-		case channelInfo := <-channelOut:
-			if channelInfo.Err != nil {
-				return nil, status.Errorf(codes.Internal, channelInfo.Err.Error(), "Error in Fetching Cosmos Opportunities")
-			}
-			if channelInfo.Opportunity.Chain == request.Chain {
-				res.Current = append(res.Current, channelInfo.Opportunity)
-			} else {
-				res.Others = append(res.Others, channelInfo.Opportunity)
-			}
-			if len(h.env.Cosmos.Cfg.Wallets) == len(res.Others)+len(res.Current) {
-				marshal, err := json.Marshal(res)
-				if err != nil {
-					return nil, err
-				}
-				return &pb.GetOpportunitesResponse{
-					Opportunities: marshal,
-				}, nil
-			}
-		}
-	}
-}
+// func (h *Handler) GetCosmosOpportunities(request *pb.GetOpportunitiesRequest) (*pb.GetOpportunitesResponse, error) {
+// 	var res models.Opportunities
+// 	channelOut := make(chan OpportunityChannelResponse)
+// 	for _, chainInfo := range h.env.Cosmos.Cfg.Wallets {
+// 		denomKey := chainInfo.Denom + "__" + chainInfo.ChainName
+// 		chainInfo := chainInfo
+// 		go func() {
+// 			channelOut <- h.fetchOpportunities(denomKey, chainInfo)
+// 		}()
+// 	}
+// 	for {
+// 		select {
+// 		case channelInfo := <-channelOut:
+// 			if channelInfo.Err != nil {
+// 				return nil, status.Errorf(codes.Internal, channelInfo.Err.Error(), "Error in Fetching Cosmos Opportunities")
+// 			}
+// 			if channelInfo.Opportunity.Chain == request.Chain {
+// 				res.Current = append(res.Current, channelInfo.Opportunity)
+// 			} else {
+// 				res.Others = append(res.Others, channelInfo.Opportunity)
+// 			}
+// 			if len(h.env.Cosmos.Cfg.Wallets) == len(res.Others)+len(res.Current) {
+// 				marshal, err := json.Marshal(res)
+// 				if err != nil {
+// 					return nil, err
+// 				}
+// 				return &pb.GetOpportunitesResponse{
+// 					Opportunities: marshal,
+// 				}, nil
+// 			}
+// 		}
+// 	}
+// }
 
-func (h *Handler) fetchOpportunities(denomKey string, chainInfo config.CosmosWallets) OpportunityChannelResponse {
-	var res OpportunityChannelResponse
-	maxAprRequestInfo := &pb.CosmosAprRatesRequest{
-		Chain: chainInfo.ChainName,
-	}
-	maxAprRate, err := h.GetCosmosAprRates(maxAprRequestInfo)
-	if err != nil {
-		res.Err = err
-		return res
-	}
-	if chainInfo.ChainName == "bluzelle" {
-		res.Opportunity.Apr = fmt.Sprintf("%.2f", maxAprRate.Apr)
-		res.Opportunity.Apr = fmt.Sprintf("%.2f", maxAprRate.Apr)
-		res.Opportunity.Chain = chainInfo.ChainName
-		res.Opportunity.Logo = "https://api.frontierwallet.com/images/chain/bluzelle.svg"
-		res.Opportunity.StakingType = "Network"
-		res.Opportunity.TokenName = "BLZ"
-		res.Opportunity.ProtocolName = "Bluzelle"
-		res.Opportunity.CoolDownPeriod = "0"
-		res.Opportunity.MinLockup = "0"
-		res.Opportunity.RewardSchedule = "1x"
-	} else {
-		denomInfo := h.denomInfo[denomKey]
-		res.Opportunity.Apr = fmt.Sprintf("%.2f", maxAprRate.Apr)
-		res.Opportunity.Apr = fmt.Sprintf("%.2f", maxAprRate.Apr)
-		res.Opportunity.Chain = denomInfo.Chain
-		res.Opportunity.Logo = denomInfo.Logos.Png
-		res.Opportunity.StakingType = "Network"
-		res.Opportunity.TokenName = denomInfo.Symbol
-		res.Opportunity.ProtocolName = denomInfo.Name
-		res.Opportunity.CoolDownPeriod = "0"
-		res.Opportunity.MinLockup = "0"
-		res.Opportunity.RewardSchedule = "1x"
-	}
-	return res
-}
+// func (h *Handler) fetchOpportunities(denomKey string, chainInfo config.CosmosWallets) OpportunityChannelResponse {
+// 	var res OpportunityChannelResponse
+// 	maxAprRequestInfo := &pb.CosmosAprRatesRequest{
+// 		Chain: chainInfo.ChainName,
+// 	}
+// 	maxAprRate, err := h.GetCosmosAprRates(maxAprRequestInfo)
+// 	if err != nil {
+// 		res.Err = err
+// 		return res
+// 	}
+// 	if chainInfo.ChainName == "bluzelle" {
+// 		res.Opportunity.Apr = fmt.Sprintf("%.2f", maxAprRate.Apr)
+// 		res.Opportunity.Apr = fmt.Sprintf("%.2f", maxAprRate.Apr)
+// 		res.Opportunity.Chain = chainInfo.ChainName
+// 		res.Opportunity.Logo = "https://api.frontierwallet.com/images/chain/bluzelle.svg"
+// 		res.Opportunity.StakingType = "Network"
+// 		res.Opportunity.TokenName = "BLZ"
+// 		res.Opportunity.ProtocolName = "Bluzelle"
+// 		res.Opportunity.CoolDownPeriod = "0"
+// 		res.Opportunity.MinLockup = "0"
+// 		res.Opportunity.RewardSchedule = "1x"
+// 	} else {
+// 		denomInfo := h.denomInfo[denomKey]
+// 		res.Opportunity.Apr = fmt.Sprintf("%.2f", maxAprRate.Apr)
+// 		res.Opportunity.Apr = fmt.Sprintf("%.2f", maxAprRate.Apr)
+// 		res.Opportunity.Chain = denomInfo.Chain
+// 		res.Opportunity.Logo = denomInfo.Logos.Png
+// 		res.Opportunity.StakingType = "Network"
+// 		res.Opportunity.TokenName = denomInfo.Symbol
+// 		res.Opportunity.ProtocolName = denomInfo.Name
+// 		res.Opportunity.CoolDownPeriod = "0"
+// 		res.Opportunity.MinLockup = "0"
+// 		res.Opportunity.RewardSchedule = "1x"
+// 	}
+// 	return res
+// }

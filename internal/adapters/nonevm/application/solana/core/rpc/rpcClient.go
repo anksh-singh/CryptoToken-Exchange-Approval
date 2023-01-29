@@ -3,7 +3,7 @@ package rpc
 import (
 	"bridge-allowance/config"
 	"bridge-allowance/pkg/coingecko"
-	"bridge-allowance/pkg/jupiter"
+	// "bridge-allowance/pkg/jupiter"
 	"bridge-allowance/utils"
 	"github.com/gagliardetto/solana-go/rpc"
 	"go.uber.org/zap"
@@ -14,14 +14,14 @@ type SolanaManager struct {
 	env         *config.Config
 	logger      *zap.SugaredLogger
 	coingecko   *coingecko.CoinGecko
-	solSwap     *jupiter.JupiterSwap
+	// solSwap     *jupiter.JupiterSwap
 	helper      *utils.Helpers
 	util        *utils.UtilConf
 	httpRequest utils.IHttpRequest
 }
 
 func NewSolanaManager(config *config.Config, logger *zap.SugaredLogger, coingecko *coingecko.CoinGecko,
-	solSwap *jupiter.JupiterSwap) *SolanaManager {
+	) *SolanaManager {
 	endpoint := config.NONEVM_GRPC_ENDPOINT
 	var solanaClusEndpoint string
 	if endpoint == "dev" {
@@ -42,7 +42,7 @@ func NewSolanaManager(config *config.Config, logger *zap.SugaredLogger, coingeck
 		env:         config,
 		logger:      logger,
 		coingecko:   coingecko,
-		solSwap:     solSwap,
+		// solSwap:     solSwap,
 		helper:      utilsHelper,
 		httpRequest: httpRequest,
 		util:        utilsManager,

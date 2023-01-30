@@ -179,14 +179,6 @@ type CosmosConf struct {
 	Wallets              []CosmosWallets `yaml:"wallets"`
 }
 
-type CosmosCurrencyConfig struct {
-	Denom       string `yaml:"denom"`
-	DisplayName string `yaml:"displayName"`
-	Decimal     int    `yaml:"decimal"`
-	LogoUrl     string `yaml:"logoUrl"`
-	Symbol      string `yaml:"symbol"`
-}
-
 type CosmosWallets struct {
 	ChainName              string  `yaml:"chainName"`
 	ChainID                string  `yaml:"chainId"`
@@ -214,30 +206,6 @@ type ChainInfo struct {
 	WrappedTokenID string `yaml:"wrappedTokenID"`
 }
 
-type ChainData struct {
-	ChainName          string             `yaml:"chainName"`
-	ChainId            int                `yaml:"chainId"`
-	DZapSwapConfig     DZapSwapConfig     `yaml:"DZapSwapConfig"`
-}
-
-type DZapSwapConfig struct {
-	ApproveAddress string `yaml:"approveAddress"`
-	IsSupported    bool   `yaml:"isSupported"`
-}
-
-type CosmosDirectory struct {
-	Name      string `json:"name"`
-	Height    int    `json:"height"`
-	Available bool   `json:"available"`
-	Rest      struct {
-		Available bool `json:"available"`
-		Height    int  `json:"height"`
-		Best      []struct {
-			Address  string `json:"address"`
-			Provider string `json:"provider"`
-		} `json:"best"`
-	} `json:"rest"`
-}
 
 func LoadConfig(filename, path string) *Config {
 	var configuration Config

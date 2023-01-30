@@ -5,11 +5,7 @@ import (
 	app "bridge-allowance/internal/adapters/bridge/application"
 	"bridge-allowance/internal/adapters/bridge/application/core/bridge"
 	"bridge-allowance/internal/common"
-	// "bridge-allowance/pkg/coingecko"
-	// "bridge-allowance/pkg/debridge"
 	"bridge-allowance/pkg/grpc/proto/pb"
-	// lifi2 "bridge-allowance/pkg/lifi"
-	// "bridge-allowance/pkg/socket"
 	"bridge-allowance/utils"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
@@ -65,20 +61,10 @@ var BridgeCmd = &cobra.Command{
 		logger.Info(conf)
 		logger.Info(":::::::::::::::::::::::::::::::: Configuration ::::::::::::::::::::::::::::::::")
 		httRequest := utils.NewHttpRequest(logger)
-		// coinGecko := coingecko.NewCoinGecko(conf, logger, httRequest)
 		helper := utils.Helpers{}
-		// socket := socket.NewSocket(conf, logger, httRequest, &helper, coinGecko)
-
-		// utils := utils.NewUtils(logger, conf)
-		// lifi := lifi2.NewLiFiService(conf, logger, httRequest, &helper, utils.GetEVMBridgeData("lifi"), utils)
-		// deBridge := debridge.NewDeBridgeService(conf, logger, httRequest, &helper, coinGecko)
 		services := common.Services{
 			Http:      httRequest,
-			// CoinGecko: coinGecko,
 			Helper:    &helper,
-			// LiFi:      lifi,
-			// Socket:    socket,
-			// DeBridge:  deBridge,
 		}
 		bridgeServer := NewServer(conf, logger, services)
 		bridgeServer.Start()

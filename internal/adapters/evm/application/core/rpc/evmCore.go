@@ -875,76 +875,76 @@ func (evm *evmCore) SendTransaction(request *pb.SendTransactionRequest) (*pb.Sen
 }
 
 // GasLimit RPC call to estimate the required gas to complete a given transaction
-func (evm *evmCore) GasLimit(request *pb.GasLimitRequest) (*pb.GasLimitResponse, error) {
-	//Pre-checks and customization/hacks
-	switch request.Chain {
-	case "avalanche":
-		if "0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" == request.To {
-			request.To = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
-		}
-	case "xinfin":
-		request.From = evm.util.ConvertXdcAddressTo0x(request.From)
-		request.To = evm.util.ConvertXdcAddressTo0x(request.To)
-	}
-	if len(request.Data) == 0 {
-		data, _ := evm.createContractABI(request)
-		request.Data = string(data)
-	}
-	transaction := ethrpc.T{
-		From:  request.From,
-		To:    request.To,
-		Gas:   int(request.Gas),
-		Value: big.NewInt(request.Value),
-		Data:  request.Data,
-		Nonce: 0, //Nonce is omitted for gas estimation
-	}
-	gasLimit, err := evm.rpc[request.Chain].EthEstimateGas(transaction)
-	if err != nil {
-		evm.logger.Error("Error fetching gas estimate")
-		gasLimit = 50000 //TODO:To be refactored
-		evm.logger.Error(err)
-	}
-	//TODO: Move gas limit calculation to ethogo library
-	//toAddr := ethgo.HexToAddress(request.To)
-	//msg := ethgo.CallMsg{
-	//	From:     ethgo.HexToAddress(request.From),
-	//	To:       &toAddr,
-	//	Data:     []byte(request.Data),
-	//	GasPrice: 21000,
-	//	Gas:      big.NewInt(request.Gas),
-	//	Value:    big.NewInt(request.Value),
-	//}
-	//gasLimitEthGoRPC, err := evm.ethgoRpc[request.Chain].Eth().EstimateGas(&msg)
-	//if err != nil {
-	//	evm.logger.Info("Error occurred while fetching gas estimate from ethgo rpc")
-	//	evm.logger.Error(err.Error())
-	//} else {
-	//	evm.logger.Info("No error occured while fetching gas estimate from ethgo rpc")
-	//}
-	//evm.logger.Info("Gaslimit from ethgo rpc", gasLimitEthGoRPC)
-	//evm.logger.Error("Gas limit before, old rpc: ", gasLimit)
-	//TODO:Move gas delta calculation to config
-	//Customized gas limit calculation
-	switch request.Chain {
-	case "polygon":
-		gasLimit = int(math.Ceil(float64(gasLimit * 3)))
-	//Keep both polygon & matic naming convention for backward compatibility
-	case "matic":
-		gasLimit = int(math.Ceil(float64(gasLimit * 3)))
-	case "optimism":
-		gasLimit = int(math.Ceil(float64(gasLimit * 2)))
-	case "klaytn":
-		gasLimit = int(math.Ceil(float64(gasLimit * 5)))
-	default:
-		gasLimit = int(math.Ceil(float64(gasLimit) * 1.5))
-	}
-	gasLimitResponse := pb.GasLimitResponse{
-		GasLimit:  int64(gasLimit),
-		InputData: request.Data,
-	}
-	evm.logger.Info("GasLimit = ", gasLimit)
-	return &gasLimitResponse, nil
-}
+// func (evm *evmCore) GasLimit(request *pb.GasLimitRequest) (*pb.GasLimitResponse, error) {
+// 	//Pre-checks and customization/hacks
+// 	switch request.Chain {
+// 	case "avalanche":
+// 		if "0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" == request.To {
+// 			request.To = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+// 		}
+// 	case "xinfin":
+// 		request.From = evm.util.ConvertXdcAddressTo0x(request.From)
+// 		request.To = evm.util.ConvertXdcAddressTo0x(request.To)
+// 	}
+// 	if len(request.Data) == 0 {
+// 		data, _ := evm.createContractABI(request)
+// 		request.Data = string(data)
+// 	}
+// 	transaction := ethrpc.T{
+// 		From:  request.From,
+// 		To:    request.To,
+// 		Gas:   int(request.Gas),
+// 		Value: big.NewInt(request.Value),
+// 		Data:  request.Data,
+// 		Nonce: 0, //Nonce is omitted for gas estimation
+// 	}
+// 	gasLimit, err := evm.rpc[request.Chain].EthEstimateGas(transaction)
+// 	if err != nil {
+// 		evm.logger.Error("Error fetching gas estimate")
+// 		gasLimit = 50000 //TODO:To be refactored
+// 		evm.logger.Error(err)
+// 	}
+// 	//TODO: Move gas limit calculation to ethogo library
+// 	//toAddr := ethgo.HexToAddress(request.To)
+// 	//msg := ethgo.CallMsg{
+// 	//	From:     ethgo.HexToAddress(request.From),
+// 	//	To:       &toAddr,
+// 	//	Data:     []byte(request.Data),
+// 	//	GasPrice: 21000,
+// 	//	Gas:      big.NewInt(request.Gas),
+// 	//	Value:    big.NewInt(request.Value),
+// 	//}
+// 	//gasLimitEthGoRPC, err := evm.ethgoRpc[request.Chain].Eth().EstimateGas(&msg)
+// 	//if err != nil {
+// 	//	evm.logger.Info("Error occurred while fetching gas estimate from ethgo rpc")
+// 	//	evm.logger.Error(err.Error())
+// 	//} else {
+// 	//	evm.logger.Info("No error occured while fetching gas estimate from ethgo rpc")
+// 	//}
+// 	//evm.logger.Info("Gaslimit from ethgo rpc", gasLimitEthGoRPC)
+// 	//evm.logger.Error("Gas limit before, old rpc: ", gasLimit)
+// 	//TODO:Move gas delta calculation to config
+// 	//Customized gas limit calculation
+// 	switch request.Chain {
+// 	case "polygon":
+// 		gasLimit = int(math.Ceil(float64(gasLimit * 3)))
+// 	//Keep both polygon & matic naming convention for backward compatibility
+// 	case "matic":
+// 		gasLimit = int(math.Ceil(float64(gasLimit * 3)))
+// 	case "optimism":
+// 		gasLimit = int(math.Ceil(float64(gasLimit * 2)))
+// 	case "klaytn":
+// 		gasLimit = int(math.Ceil(float64(gasLimit * 5)))
+// 	default:
+// 		gasLimit = int(math.Ceil(float64(gasLimit) * 1.5))
+// 	}
+// 	gasLimitResponse := pb.GasLimitResponse{
+// 		GasLimit:  int64(gasLimit),
+// 		InputData: request.Data,
+// 	}
+// 	evm.logger.Info("GasLimit = ", gasLimit)
+// 	return &gasLimitResponse, nil
+// }
 
 // getEthTokenDecimals retrieve token decimals from a contract address
 func (evm *evmCore) getEthTokenDecimals(contractAddr string, chain string) (int, error) {

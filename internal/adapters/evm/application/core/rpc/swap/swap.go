@@ -1060,14 +1060,14 @@ func (s *Swap) GetDecimalMapperSwap(requestObj *pb.ExchangeMultiSwapRequest, exc
 	return decimalMapperSrc, decimalMapperDst
 }
 
-func (s *Swap) GetSwapSource(chain string) config.ChainData {
-	for _, c := range s.config.Swap.ChainData {
-		if c.ChainName == chain {
-			return c
-		}
-	}
-	return config.ChainData{}
-}
+// func (s *Swap) GetSwapSource(chain string) config.ChainData {
+// 	for _, c := range s.config.Swap.ChainData {
+// 		if c.ChainName == chain {
+// 			return c
+// 		}
+// 	}
+// 	return config.ChainData{}
+// }
 
 // func (s *Swap) GetMultipleSwapData(request *pb.ExchangeMultiSwapRequest, spender string) (pb.ExchangeMultipleSwapResponse, error) {
 // 	var multipleSwapResponse pb.ExchangeMultipleSwapResponse

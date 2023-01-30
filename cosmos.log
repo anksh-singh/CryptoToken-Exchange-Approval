@@ -5,3 +5,6 @@
 2023-01-29T18:14:36.544+0530	INFO	cosmos/api.go:46	Cosmos gRPC Server Started at 8082
 2023-01-30T15:27:08.639+0530	INFO	cosmos/api.go:46	Cosmos gRPC Server Started at 8082
 2023-01-30T15:29:33.276+0530	INFO	cosmos/api.go:46	Cosmos gRPC Server Started at 8082
+2023-01-30T16:04:39.561+0530	INFO	cosmos/api.go:46	Cosmos gRPC Server Started at 8082
+2023-01-30T16:05:10.360+0530	ERROR	cosmos/api.go:40	failed to listen:listen tcp :8082: bind: address already in use
+2023-01-30T16:05:10.361+0530	INFO	cosmos/api.go:46	Cosmos gRPC Server Started at 8082

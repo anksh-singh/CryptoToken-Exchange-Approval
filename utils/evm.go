@@ -8,7 +8,7 @@ import (
 	hrp "github.com/harmony-one/go-sdk/pkg/address"
 	ioTex "github.com/iotexproject/iotex-core/pkg/util/addrutil"
 	"github.com/shopspring/decimal"
-	"github.com/unstoppabledomains/resolution-go/v2"
+	// "github.com/unstoppabledomains/resolution-go/v2"
 	"github.com/wealdtech/go-ens/v3"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -102,36 +102,6 @@ func (u *UtilConf) IsEVM(str string) bool {
 	return false
 }
 
-// ConvertXdcAddressTo0x replace xdc prefix with 0x
-func (u *UtilConf) ConvertXdcAddressTo0x(address string) string {
-	if len(address) > 3 && "xdc" == address[:3] {
-		return fmt.Sprint("0x", address[3:])
-	}
-	return address
-}
-
-func (u *UtilConf) ResolveUNSAddress(domain string) (string, error) {
-	var ethereumUrl = "https://eth-mainnet.nodereal.io/v1/3d7d386210214c108b957709d81f719c"
-	var ethereumL2Url = "https://polygon-mainnet.nodereal.io/v1/a39e2d8506fb47b194895e8275d7aa67"
-
-	var unsBuilder = resolution.NewUnsBuilder()
-	var backend, _ = ethclient.Dial(ethereumUrl)
-	var backendL2, _ = ethclient.Dial(ethereumL2Url)
-
-	unsBuilder.SetContractBackend(backend)
-	unsBuilder.SetL2ContractBackend(backendL2)
-
-	var unsResolution, _ = unsBuilder.Build()
-	//uns, _ := resolution.NewUnsBuilder().Build()
-	ethAddress, err := unsResolution.Addr(domain, "ETH")
-	return ethAddress, err
-}
-
-func (u *UtilConf) ResolveZNSAddress(domain string) (string, error) {
-	var znsResolution, _ = resolution.NewZnsBuilder().Build()
-	zilAddress, err := znsResolution.Addr(domain, "ZIL")
-	return zilAddress, err
-}
 
 // ResolveENSAddress resolve an ENS(Ethereum Naming Service) address into a 0x address
 func (u *UtilConf) ResolveENSAddress(domain string) (string, error) {
@@ -186,13 +156,6 @@ func (u *UtilConf) ResolveXDCAddress(address string) string {
 	return address
 }
 
-// Is0xAddress checks whether an address starts with 0x prefix
-func (u *UtilConf) Is0xAddress(address string) bool {
-	if strings.HasPrefix(address, ZeroXAddrPrefix) {
-		return true
-	}
-	return false
-}
 
 // ToDecimal wei to decimals
 func (u *UtilConf) ToDecimal(ivalue interface{}, decimals int) decimal.Decimal {
@@ -209,24 +172,5 @@ func (u *UtilConf) ToDecimal(ivalue interface{}, decimals int) decimal.Decimal {
 	return result
 }
 
-// GetProtocolsInfo list for particular chain
-func (u *UtilConf) GetProtocolsInfo(chain string) config.Wallets {
-	for _, v := range u.conf.EVM.Cfg.Wallets {
-		// checking request chain in the list of configured chains
-		if v.ChainName == chain {
-			return v
-		}
-	}
-	return config.Wallets{}
-}
 
-// SliceContains Function is used for checking whether the current value is present in the existed slice or not, which returns boolean value
-func (u *UtilConf) SliceContains(elements []string, value string) bool {
-	for _, str := range elements {
-		if value == str {
-			return true
-		}
-	}
-	return false
-}
 

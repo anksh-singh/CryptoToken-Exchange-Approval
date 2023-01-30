@@ -2,10 +2,8 @@ package utils
 
 import (
 	"bridge-allowance/config"
-	"encoding/hex"
 	"github.com/onrik/ethrpc"
 	"github.com/shopspring/decimal"
-	"golang.org/x/crypto/sha3"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"math"
@@ -19,95 +17,6 @@ type Helpers struct {
 	//ConvertHexToFloat64 float64
 }
 
-// ConvertStringValueToBigFloat
-// function to get string value of Token Value(Big Int) the given decimal value
-func (h *Helpers) ConvertStringValueToBigFloat(value string, decimal string) (float64, error) {
-	parsedValue, _ := new(big.Float).SetString(value)
-	baseVal, err := strconv.ParseFloat(decimal, 64)
-	if err != nil {
-		return -1, status.Errorf(codes.Internal, err.Error())
-	}
-	wei := math.Pow(10, baseVal)
-	weiBigint := new(big.Int).SetInt64(int64(wei))
-	valueNativeToken, _ := new(big.Float).Quo(parsedValue, new(big.Float).SetInt(weiBigint)).Float64()
-	return valueNativeToken, err
-}
-
-func (h *Helpers) ConvertStringValueToFloatWei(value string, decimal string) (float64, error) {
-	parsedValue, _ := new(big.Float).SetString(value)
-	baseVal, err := strconv.ParseFloat(decimal, 64)
-	if err != nil {
-		return -1, status.Errorf(codes.Internal, err.Error())
-	}
-	wei := math.Pow(10, baseVal)
-	weiBigint := new(big.Int).SetInt64(int64(wei))
-	valueNativeToken, _ := new(big.Float).Mul(parsedValue, new(big.Float).SetInt(weiBigint)).Float64()
-	return valueNativeToken, err
-}
-func (h *Helpers) ConvertStringValueToIntWei(value string, decimal string) (int64, error) {
-	parsedValue, _ := new(big.Float).SetString(value)
-	baseVal, err := strconv.ParseFloat(decimal, 64)
-	if err != nil {
-		return -1, status.Errorf(codes.Internal, err.Error())
-	}
-	wei := math.Pow(10, baseVal)
-	weiBigint := new(big.Int).SetInt64(int64(wei))
-	valueNativeToken, _ := new(big.Float).Mul(parsedValue, new(big.Float).SetInt(weiBigint)).Int64()
-	return valueNativeToken, err
-}
-
-// CalculateRateWithDecimal
-// function to calculate Rate of token in base 10 with decimal value
-func (h *Helpers) CalculateRateWithDecimal(value string, decimal int64) float64 {
-	parsedValue, ok := new(big.Float).SetString(value)
-	if !ok {
-		return 0
-	}
-	baseVal := float64(decimal)
-	wei := math.Pow(10, baseVal)
-	weiBigint := new(big.Int).SetInt64(int64(wei))
-	valueNativeToken, _ := new(big.Float).Quo(parsedValue, new(big.Float).SetInt(weiBigint)).Float64()
-	return valueNativeToken
-}
-
-// ConvertHexToFloat64WithDecimals function to get float64 value of Token Value in base 16 with 18 decimals
-func (h *Helpers) ConvertHexToFloat64WithDecimals(value string) float64 {
-	valueBigint := new(big.Int)
-	valueBigint.SetString(value, 16)
-	wei := math.Pow(10, 18)
-	weiBigint := new(big.Int).SetInt64(int64(wei))
-	valueNativeToken, _ := new(big.Float).Quo(new(big.Float).SetInt(valueBigint), new(big.Float).SetInt(weiBigint)).Float64()
-	return valueNativeToken
-}
-
-// ConvertHexToFloat64
-// function to get float64 value of Token Value in base 16
-func (h *Helpers) ConvertHexToFloat64(value string) float64 {
-	valueBigint := new(big.Float)
-	valueBigint.SetString(value)
-	res, _ := valueBigint.Float64()
-	return res
-}
-
-// ConvertHexToInt64
-// function to get int64 value of Token Value in base 16
-func (h *Helpers) ConvertHexToInt64(value string) int64 {
-	valueBigint := new(big.Int)
-	valueBigint.SetString(value[2:], 16)
-	res := valueBigint.Int64()
-	return res
-}
-
-// ConvertHexFloatString
-// function to convert hex string
-func (h *Helpers) ConvertHexFloatString(value string) string {
-	valueBigint1 := new(big.Float)
-	valueBigint1.SetString(value)
-	res, _ := valueBigint1.Float64()
-	resString := strconv.FormatFloat(res, 'f', -1, 64)
-	return resString
-}
-
 // ConvertStringToFloat64 function that converts string to float64
 func (h *Helpers) ConvertStringToFloat64(stringValue string) float64 {
 	value, err := strconv.ParseFloat(stringValue, 64)
@@ -117,19 +26,6 @@ func (h *Helpers) ConvertStringToFloat64(stringValue string) float64 {
 	return value
 }
 
-// ConvertStringIntToStringFloat64WithDecimals
-// function to get float64 value of Token Value in base 10 with decimals
-func (h *Helpers) ConvertStringIntToStringFloat64WithDecimals(value string, decimals int64) (string, error) {
-	valueInt, err := strconv.ParseUint(value, 10, 64)
-	if err != nil {
-		return "", err
-	}
-	evalVal := float64(valueInt) / math.Pow(10, float64(decimals))
-	returnVal := strconv.FormatFloat(evalVal, 'f', -1, 64)
-	return returnVal, err
-}
-
-// ConvertStringFloatToIntWithDecimals
 // function to get Int64 value of  Value in base 10 with decimals
 func (h *Helpers) ConvertStringFloatToIntWithDecimals(value string, base string) (int, error) {
 	floatVal, err := strconv.ParseFloat(value, 64)
@@ -174,43 +70,6 @@ func (h *Helpers) CheckTokenListData(itemTobeFound string, valuefromkey string, 
 		}
 	}
 	return returnval, strvalue
-}
-
-func (h *Helpers) CheckSumAddress(address string) string {
-	address = strings.Replace(strings.ToLower(address), "0x", "", 1)
-	hash := sha3.NewLegacyKeccak256()
-	_, _ = hash.Write([]byte(address))
-	sum := hash.Sum(nil)
-	digest := hex.EncodeToString(sum)
-
-	b := strings.Builder{}
-	b.WriteString("0x")
-
-	for i := 0; i < len(address); i++ {
-		a := address[i]
-		if a > '9' {
-			d, _ := strconv.ParseInt(digest[i:i+1], 16, 8)
-
-			if d >= 8 {
-				// Upper case it
-				a -= 'a' - 'A'
-				b.WriteByte(a)
-			} else {
-				// Keep it lower
-				b.WriteByte(a)
-			}
-		} else {
-			// Keep it lower
-			b.WriteByte(a)
-		}
-	}
-	return b.String()
-}
-
-// ConvertInterfaceToString function that converts interface to string
-func (h *Helpers) ConvertInterfaceToString(value interface{}) string {
-	valueString, _ := value.(string)
-	return valueString
 }
 
 // WeiToGwei function that calculates reward per block

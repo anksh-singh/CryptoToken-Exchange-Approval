@@ -6,6 +6,6 @@ import (
 
 // TODO: Move services to a common model
 type Services struct {
-	Http                     *utils.HttpRequest
-	Helper                   *utils.Helpers
+	Http   *utils.HttpRequest
+	Helper *utils.Helpers
 }

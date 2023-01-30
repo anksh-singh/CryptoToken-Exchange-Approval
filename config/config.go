@@ -14,7 +14,6 @@ type Config struct {
 	Bridge                 BridgeConfig
 	Cosmos                 CosmosConfig
 	Datadog                Datadog
-	SignAssist             SignAssistConfig
 	ClientCodes            map[string]string
 	WEB_DATADOG_SERVICE    string
 	DATADOG_SERVICE        string
@@ -31,15 +30,6 @@ type Config struct {
 	LOG_ENCODING_FORMAT    string
 }
 
-// type BlowFishConfig struct {
-// 	AccessKey string
-// 	EndPoint  string
-// }
-
-type SignAssistConfig struct {
-	AccessKey string
-	Endpoint  string
-}
 
 type NonEVMConfig struct {
 	NonEVMWallet []*NonEVMChainInfo `yaml:"nonEVMWallet"`

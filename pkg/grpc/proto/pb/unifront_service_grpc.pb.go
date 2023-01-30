@@ -30,15 +30,15 @@ type UnifrontClient interface {
 	SendTransaction(ctx context.Context, in *SendTransactionRequest, opts ...grpc.CallOption) (*SendTransactionResponse, error)
 	ListTransaction(ctx context.Context, in *ListTransactionRequest, opts ...grpc.CallOption) (*ListTransactionResponse, error)
 	UserData(ctx context.Context, in *UserDataRequest, opts ...grpc.CallOption) (*UserDataResponse, error)
-	ExchangeTokens(ctx context.Context, in *ExchangeTokenRequest, opts ...grpc.CallOption) (*ExchangeTokenResponse, error)
-	ExchangeQuote(ctx context.Context, in *ExchangeQuoteRequest, opts ...grpc.CallOption) (*ExchangeQuoteResponse, error)
-	ExchangeMultiQuote(ctx context.Context, in *ExchangeMultiQuoteRequest, opts ...grpc.CallOption) (*ExchangeMultiQuoteResponse, error)
-	ExchangeSwap(ctx context.Context, in *ExchangeSwapRequest, opts ...grpc.CallOption) (*ExchangeSwapResponse, error)
-	ExchangeMultiSwap(ctx context.Context, in *ExchangeMultiSwapRequest, opts ...grpc.CallOption) (*ExchangeMultipleSwapResponse, error)
-	ExchangeSwapExecute(ctx context.Context, in *ExchangeSwapExecuteRequest, opts ...grpc.CallOption) (*ExchangeSwapExecuteResponse, error)
-	FreeTradeCount(ctx context.Context, in *FreeTradeCountRequest, opts ...grpc.CallOption) (*FreeTradeCountResponse, error)
-	ExchangeTokenApprove(ctx context.Context, in *TokenApprovalRequest, opts ...grpc.CallOption) (*TokenApprovalResponse, error)
-	ExchangeSwapSignature(ctx context.Context, in *ExchangeSignatureRequest, opts ...grpc.CallOption) (*ExchangeSignatureResponse, error)
+	// ExchangeTokens(ctx context.Context, in *ExchangeTokenRequest, opts ...grpc.CallOption) (*ExchangeTokenResponse, error)
+	// ExchangeQuote(ctx context.Context, in *ExchangeQuoteRequest, opts ...grpc.CallOption) (*ExchangeQuoteResponse, error)
+	// ExchangeMultiQuote(ctx context.Context, in *ExchangeMultiQuoteRequest, opts ...grpc.CallOption) (*ExchangeMultiQuoteResponse, error)
+	// ExchangeSwap(ctx context.Context, in *ExchangeSwapRequest, opts ...grpc.CallOption) (*ExchangeSwapResponse, error)
+	// ExchangeMultiSwap(ctx context.Context, in *ExchangeMultiSwapRequest, opts ...grpc.CallOption) (*ExchangeMultipleSwapResponse, error)
+	// ExchangeSwapExecute(ctx context.Context, in *ExchangeSwapExecuteRequest, opts ...grpc.CallOption) (*ExchangeSwapExecuteResponse, error)
+	// FreeTradeCount(ctx context.Context, in *FreeTradeCountRequest, opts ...grpc.CallOption) (*FreeTradeCountResponse, error)
+	// ExchangeTokenApprove(ctx context.Context, in *TokenApprovalRequest, opts ...grpc.CallOption) (*TokenApprovalResponse, error)
+	// ExchangeSwapSignature(ctx context.Context, in *ExchangeSignatureRequest, opts ...grpc.CallOption) (*ExchangeSignatureResponse, error)
 	TxStatus(ctx context.Context, in *TxStatusRequest, opts ...grpc.CallOption) (*TxStatusResponse, error)
 	GasLimit(ctx context.Context, in *GasLimitRequest, opts ...grpc.CallOption) (*GasLimitResponse, error)
 	TokenInfo(ctx context.Context, in *TokenInfoRequest, opts ...grpc.CallOption) (*TokenInfoResponse, error)
@@ -154,86 +154,86 @@ func (c *unifrontClient) UserData(ctx context.Context, in *UserDataRequest, opts
 	return out, nil
 }
 
-func (c *unifrontClient) ExchangeTokens(ctx context.Context, in *ExchangeTokenRequest, opts ...grpc.CallOption) (*ExchangeTokenResponse, error) {
-	out := new(ExchangeTokenResponse)
-	err := c.cc.Invoke(ctx, "/proto.Unifront/exchangeTokens", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
+// func (c *unifrontClient) ExchangeTokens(ctx context.Context, in *ExchangeTokenRequest, opts ...grpc.CallOption) (*ExchangeTokenResponse, error) {
+// 	out := new(ExchangeTokenResponse)
+// 	err := c.cc.Invoke(ctx, "/proto.Unifront/exchangeTokens", in, out, opts...)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return out, nil
+// }
 
-func (c *unifrontClient) ExchangeQuote(ctx context.Context, in *ExchangeQuoteRequest, opts ...grpc.CallOption) (*ExchangeQuoteResponse, error) {
-	out := new(ExchangeQuoteResponse)
-	err := c.cc.Invoke(ctx, "/proto.Unifront/exchangeQuote", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
+// func (c *unifrontClient) ExchangeQuote(ctx context.Context, in *ExchangeQuoteRequest, opts ...grpc.CallOption) (*ExchangeQuoteResponse, error) {
+// 	out := new(ExchangeQuoteResponse)
+// 	err := c.cc.Invoke(ctx, "/proto.Unifront/exchangeQuote", in, out, opts...)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return out, nil
+// }
 
-func (c *unifrontClient) ExchangeMultiQuote(ctx context.Context, in *ExchangeMultiQuoteRequest, opts ...grpc.CallOption) (*ExchangeMultiQuoteResponse, error) {
-	out := new(ExchangeMultiQuoteResponse)
-	err := c.cc.Invoke(ctx, "/proto.Unifront/exchangeMultiQuote", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
+// func (c *unifrontClient) ExchangeMultiQuote(ctx context.Context, in *ExchangeMultiQuoteRequest, opts ...grpc.CallOption) (*ExchangeMultiQuoteResponse, error) {
+// 	out := new(ExchangeMultiQuoteResponse)
+// 	err := c.cc.Invoke(ctx, "/proto.Unifront/exchangeMultiQuote", in, out, opts...)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return out, nil
+// }
 
-func (c *unifrontClient) ExchangeSwap(ctx context.Context, in *ExchangeSwapRequest, opts ...grpc.CallOption) (*ExchangeSwapResponse, error) {
-	out := new(ExchangeSwapResponse)
-	err := c.cc.Invoke(ctx, "/proto.Unifront/exchangeSwap", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
+// func (c *unifrontClient) ExchangeSwap(ctx context.Context, in *ExchangeSwapRequest, opts ...grpc.CallOption) (*ExchangeSwapResponse, error) {
+// 	out := new(ExchangeSwapResponse)
+// 	err := c.cc.Invoke(ctx, "/proto.Unifront/exchangeSwap", in, out, opts...)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return out, nil
+// }
 
-func (c *unifrontClient) ExchangeMultiSwap(ctx context.Context, in *ExchangeMultiSwapRequest, opts ...grpc.CallOption) (*ExchangeMultipleSwapResponse, error) {
-	out := new(ExchangeMultipleSwapResponse)
-	err := c.cc.Invoke(ctx, "/proto.Unifront/exchangeMultiSwap", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
+// func (c *unifrontClient) ExchangeMultiSwap(ctx context.Context, in *ExchangeMultiSwapRequest, opts ...grpc.CallOption) (*ExchangeMultipleSwapResponse, error) {
+// 	out := new(ExchangeMultipleSwapResponse)
+// 	err := c.cc.Invoke(ctx, "/proto.Unifront/exchangeMultiSwap", in, out, opts...)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return out, nil
+// }
 
-func (c *unifrontClient) ExchangeSwapExecute(ctx context.Context, in *ExchangeSwapExecuteRequest, opts ...grpc.CallOption) (*ExchangeSwapExecuteResponse, error) {
-	out := new(ExchangeSwapExecuteResponse)
-	err := c.cc.Invoke(ctx, "/proto.Unifront/exchangeSwapExecute", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
+// func (c *unifrontClient) ExchangeSwapExecute(ctx context.Context, in *ExchangeSwapExecuteRequest, opts ...grpc.CallOption) (*ExchangeSwapExecuteResponse, error) {
+// 	out := new(ExchangeSwapExecuteResponse)
+// 	err := c.cc.Invoke(ctx, "/proto.Unifront/exchangeSwapExecute", in, out, opts...)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return out, nil
+// }
 
-func (c *unifrontClient) FreeTradeCount(ctx context.Context, in *FreeTradeCountRequest, opts ...grpc.CallOption) (*FreeTradeCountResponse, error) {
-	out := new(FreeTradeCountResponse)
-	err := c.cc.Invoke(ctx, "/proto.Unifront/FreeTradeCount", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
+// func (c *unifrontClient) FreeTradeCount(ctx context.Context, in *FreeTradeCountRequest, opts ...grpc.CallOption) (*FreeTradeCountResponse, error) {
+// 	out := new(FreeTradeCountResponse)
+// 	err := c.cc.Invoke(ctx, "/proto.Unifront/FreeTradeCount", in, out, opts...)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return out, nil
+// }
 
-func (c *unifrontClient) ExchangeTokenApprove(ctx context.Context, in *TokenApprovalRequest, opts ...grpc.CallOption) (*TokenApprovalResponse, error) {
-	out := new(TokenApprovalResponse)
-	err := c.cc.Invoke(ctx, "/proto.Unifront/ExchangeTokenApprove", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
+// func (c *unifrontClient) ExchangeTokenApprove(ctx context.Context, in *TokenApprovalRequest, opts ...grpc.CallOption) (*TokenApprovalResponse, error) {
+// 	out := new(TokenApprovalResponse)
+// 	err := c.cc.Invoke(ctx, "/proto.Unifront/ExchangeTokenApprove", in, out, opts...)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return out, nil
+// }
 
-func (c *unifrontClient) ExchangeSwapSignature(ctx context.Context, in *ExchangeSignatureRequest, opts ...grpc.CallOption) (*ExchangeSignatureResponse, error) {
-	out := new(ExchangeSignatureResponse)
-	err := c.cc.Invoke(ctx, "/proto.Unifront/exchangeSwapSignature", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
+// func (c *unifrontClient) ExchangeSwapSignature(ctx context.Context, in *ExchangeSignatureRequest, opts ...grpc.CallOption) (*ExchangeSignatureResponse, error) {
+// 	out := new(ExchangeSignatureResponse)
+// 	err := c.cc.Invoke(ctx, "/proto.Unifront/exchangeSwapSignature", in, out, opts...)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return out, nil
+// }
 
 func (c *unifrontClient) TxStatus(ctx context.Context, in *TxStatusRequest, opts ...grpc.CallOption) (*TxStatusResponse, error) {
 	out := new(TxStatusResponse)
@@ -463,15 +463,15 @@ type UnifrontServer interface {
 	SendTransaction(context.Context, *SendTransactionRequest) (*SendTransactionResponse, error)
 	ListTransaction(context.Context, *ListTransactionRequest) (*ListTransactionResponse, error)
 	UserData(context.Context, *UserDataRequest) (*UserDataResponse, error)
-	ExchangeTokens(context.Context, *ExchangeTokenRequest) (*ExchangeTokenResponse, error)
-	ExchangeQuote(context.Context, *ExchangeQuoteRequest) (*ExchangeQuoteResponse, error)
-	ExchangeMultiQuote(context.Context, *ExchangeMultiQuoteRequest) (*ExchangeMultiQuoteResponse, error)
-	ExchangeSwap(context.Context, *ExchangeSwapRequest) (*ExchangeSwapResponse, error)
-	ExchangeMultiSwap(context.Context, *ExchangeMultiSwapRequest) (*ExchangeMultipleSwapResponse, error)
-	ExchangeSwapExecute(context.Context, *ExchangeSwapExecuteRequest) (*ExchangeSwapExecuteResponse, error)
-	FreeTradeCount(context.Context, *FreeTradeCountRequest) (*FreeTradeCountResponse, error)
-	ExchangeTokenApprove(context.Context, *TokenApprovalRequest) (*TokenApprovalResponse, error)
-	ExchangeSwapSignature(context.Context, *ExchangeSignatureRequest) (*ExchangeSignatureResponse, error)
+	// ExchangeTokens(context.Context, *ExchangeTokenRequest) (*ExchangeTokenResponse, error)
+	// ExchangeQuote(context.Context, *ExchangeQuoteRequest) (*ExchangeQuoteResponse, error)
+	// ExchangeMultiQuote(context.Context, *ExchangeMultiQuoteRequest) (*ExchangeMultiQuoteResponse, error)
+	// ExchangeSwap(context.Context, *ExchangeSwapRequest) (*ExchangeSwapResponse, error)
+	// ExchangeMultiSwap(context.Context, *ExchangeMultiSwapRequest) (*ExchangeMultipleSwapResponse, error)
+	// ExchangeSwapExecute(context.Context, *ExchangeSwapExecuteRequest) (*ExchangeSwapExecuteResponse, error)
+	// FreeTradeCount(context.Context, *FreeTradeCountRequest) (*FreeTradeCountResponse, error)
+	// ExchangeTokenApprove(context.Context, *TokenApprovalRequest) (*TokenApprovalResponse, error)
+	// ExchangeSwapSignature(context.Context, *ExchangeSignatureRequest) (*ExchangeSignatureResponse, error)
 	TxStatus(context.Context, *TxStatusRequest) (*TxStatusResponse, error)
 	GasLimit(context.Context, *GasLimitRequest) (*GasLimitResponse, error)
 	TokenInfo(context.Context, *TokenInfoRequest) (*TokenInfoResponse, error)
@@ -536,33 +536,33 @@ func (UnimplementedUnifrontServer) ListTransaction(context.Context, *ListTransac
 func (UnimplementedUnifrontServer) UserData(context.Context, *UserDataRequest) (*UserDataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserData not implemented")
 }
-func (UnimplementedUnifrontServer) ExchangeTokens(context.Context, *ExchangeTokenRequest) (*ExchangeTokenResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ExchangeTokens not implemented")
-}
-func (UnimplementedUnifrontServer) ExchangeQuote(context.Context, *ExchangeQuoteRequest) (*ExchangeQuoteResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ExchangeQuote not implemented")
-}
-func (UnimplementedUnifrontServer) ExchangeMultiQuote(context.Context, *ExchangeMultiQuoteRequest) (*ExchangeMultiQuoteResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ExchangeMultiQuote not implemented")
-}
-func (UnimplementedUnifrontServer) ExchangeSwap(context.Context, *ExchangeSwapRequest) (*ExchangeSwapResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ExchangeSwap not implemented")
-}
-func (UnimplementedUnifrontServer) ExchangeMultiSwap(context.Context, *ExchangeMultiSwapRequest) (*ExchangeMultipleSwapResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ExchangeMultiSwap not implemented")
-}
-func (UnimplementedUnifrontServer) ExchangeSwapExecute(context.Context, *ExchangeSwapExecuteRequest) (*ExchangeSwapExecuteResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ExchangeSwapExecute not implemented")
-}
-func (UnimplementedUnifrontServer) FreeTradeCount(context.Context, *FreeTradeCountRequest) (*FreeTradeCountResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method FreeTradeCount not implemented")
-}
-func (UnimplementedUnifrontServer) ExchangeTokenApprove(context.Context, *TokenApprovalRequest) (*TokenApprovalResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ExchangeTokenApprove not implemented")
-}
-func (UnimplementedUnifrontServer) ExchangeSwapSignature(context.Context, *ExchangeSignatureRequest) (*ExchangeSignatureResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ExchangeSwapSignature not implemented")
-}
+// func (UnimplementedUnifrontServer) ExchangeTokens(context.Context, *ExchangeTokenRequest) (*ExchangeTokenResponse, error) {
+// 	return nil, status.Errorf(codes.Unimplemented, "method ExchangeTokens not implemented")
+// }
+// func (UnimplementedUnifrontServer) ExchangeQuote(context.Context, *ExchangeQuoteRequest) (*ExchangeQuoteResponse, error) {
+// 	return nil, status.Errorf(codes.Unimplemented, "method ExchangeQuote not implemented")
+// }
+// func (UnimplementedUnifrontServer) ExchangeMultiQuote(context.Context, *ExchangeMultiQuoteRequest) (*ExchangeMultiQuoteResponse, error) {
+// 	return nil, status.Errorf(codes.Unimplemented, "method ExchangeMultiQuote not implemented")
+// }
+// func (UnimplementedUnifrontServer) ExchangeSwap(context.Context, *ExchangeSwapRequest) (*ExchangeSwapResponse, error) {
+// 	return nil, status.Errorf(codes.Unimplemented, "method ExchangeSwap not implemented")
+// }
+// func (UnimplementedUnifrontServer) ExchangeMultiSwap(context.Context, *ExchangeMultiSwapRequest) (*ExchangeMultipleSwapResponse, error) {
+// 	return nil, status.Errorf(codes.Unimplemented, "method ExchangeMultiSwap not implemented")
+// }
+// func (UnimplementedUnifrontServer) ExchangeSwapExecute(context.Context, *ExchangeSwapExecuteRequest) (*ExchangeSwapExecuteResponse, error) {
+// 	return nil, status.Errorf(codes.Unimplemented, "method ExchangeSwapExecute not implemented")
+// }
+// func (UnimplementedUnifrontServer) FreeTradeCount(context.Context, *FreeTradeCountRequest) (*FreeTradeCountResponse, error) {
+// 	return nil, status.Errorf(codes.Unimplemented, "method FreeTradeCount not implemented")
+// }
+// func (UnimplementedUnifrontServer) ExchangeTokenApprove(context.Context, *TokenApprovalRequest) (*TokenApprovalResponse, error) {
+// 	return nil, status.Errorf(codes.Unimplemented, "method ExchangeTokenApprove not implemented")
+// }
+// func (UnimplementedUnifrontServer) ExchangeSwapSignature(context.Context, *ExchangeSignatureRequest) (*ExchangeSignatureResponse, error) {
+// 	return nil, status.Errorf(codes.Unimplemented, "method ExchangeSwapSignature not implemented")
+// }
 func (UnimplementedUnifrontServer) TxStatus(context.Context, *TxStatusRequest) (*TxStatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TxStatus not implemented")
 }
@@ -792,167 +792,167 @@ func _Unifront_UserData_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Unifront_ExchangeTokens_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ExchangeTokenRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UnifrontServer).ExchangeTokens(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.Unifront/exchangeTokens",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UnifrontServer).ExchangeTokens(ctx, req.(*ExchangeTokenRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
+// func _Unifront_ExchangeTokens_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+// 	in := new(ExchangeTokenRequest)
+// 	if err := dec(in); err != nil {
+// 		return nil, err
+// 	}
+// 	if interceptor == nil {
+// 		return srv.(UnifrontServer).ExchangeTokens(ctx, in)
+// 	}
+// 	info := &grpc.UnaryServerInfo{
+// 		Server:     srv,
+// 		FullMethod: "/proto.Unifront/exchangeTokens",
+// 	}
+// 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+// 		return srv.(UnifrontServer).ExchangeTokens(ctx, req.(*ExchangeTokenRequest))
+// 	}
+// 	return interceptor(ctx, in, info, handler)
+// }
 
-func _Unifront_ExchangeQuote_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ExchangeQuoteRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UnifrontServer).ExchangeQuote(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.Unifront/exchangeQuote",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UnifrontServer).ExchangeQuote(ctx, req.(*ExchangeQuoteRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
+// func _Unifront_ExchangeQuote_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+// 	in := new(ExchangeQuoteRequest)
+// 	if err := dec(in); err != nil {
+// 		return nil, err
+// 	}
+// 	if interceptor == nil {
+// 		return srv.(UnifrontServer).ExchangeQuote(ctx, in)
+// 	}
+// 	info := &grpc.UnaryServerInfo{
+// 		Server:     srv,
+// 		FullMethod: "/proto.Unifront/exchangeQuote",
+// 	}
+// 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+// 		return srv.(UnifrontServer).ExchangeQuote(ctx, req.(*ExchangeQuoteRequest))
+// 	}
+// 	return interceptor(ctx, in, info, handler)
+// }
 
-func _Unifront_ExchangeMultiQuote_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ExchangeMultiQuoteRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UnifrontServer).ExchangeMultiQuote(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.Unifront/exchangeMultiQuote",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UnifrontServer).ExchangeMultiQuote(ctx, req.(*ExchangeMultiQuoteRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
+// func _Unifront_ExchangeMultiQuote_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+// 	in := new(ExchangeMultiQuoteRequest)
+// 	if err := dec(in); err != nil {
+// 		return nil, err
+// 	}
+// 	if interceptor == nil {
+// 		return srv.(UnifrontServer).ExchangeMultiQuote(ctx, in)
+// 	}
+// 	info := &grpc.UnaryServerInfo{
+// 		Server:     srv,
+// 		FullMethod: "/proto.Unifront/exchangeMultiQuote",
+// 	}
+// 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+// 		return srv.(UnifrontServer).ExchangeMultiQuote(ctx, req.(*ExchangeMultiQuoteRequest))
+// 	}
+// 	return interceptor(ctx, in, info, handler)
+// }
 
-func _Unifront_ExchangeSwap_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ExchangeSwapRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UnifrontServer).ExchangeSwap(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.Unifront/exchangeSwap",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UnifrontServer).ExchangeSwap(ctx, req.(*ExchangeSwapRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
+// func _Unifront_ExchangeSwap_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+// 	in := new(ExchangeSwapRequest)
+// 	if err := dec(in); err != nil {
+// 		return nil, err
+// 	}
+// 	if interceptor == nil {
+// 		return srv.(UnifrontServer).ExchangeSwap(ctx, in)
+// 	}
+// 	info := &grpc.UnaryServerInfo{
+// 		Server:     srv,
+// 		FullMethod: "/proto.Unifront/exchangeSwap",
+// 	}
+// 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+// 		return srv.(UnifrontServer).ExchangeSwap(ctx, req.(*ExchangeSwapRequest))
+// 	}
+// 	return interceptor(ctx, in, info, handler)
+// }
 
-func _Unifront_ExchangeMultiSwap_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ExchangeMultiSwapRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UnifrontServer).ExchangeMultiSwap(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.Unifront/exchangeMultiSwap",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UnifrontServer).ExchangeMultiSwap(ctx, req.(*ExchangeMultiSwapRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
+// func _Unifront_ExchangeMultiSwap_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+// 	in := new(ExchangeMultiSwapRequest)
+// 	if err := dec(in); err != nil {
+// 		return nil, err
+// 	}
+// 	if interceptor == nil {
+// 		return srv.(UnifrontServer).ExchangeMultiSwap(ctx, in)
+// 	}
+// 	info := &grpc.UnaryServerInfo{
+// 		Server:     srv,
+// 		FullMethod: "/proto.Unifront/exchangeMultiSwap",
+// 	}
+// 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+// 		return srv.(UnifrontServer).ExchangeMultiSwap(ctx, req.(*ExchangeMultiSwapRequest))
+// 	}
+// 	return interceptor(ctx, in, info, handler)
+// }
 
-func _Unifront_ExchangeSwapExecute_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ExchangeSwapExecuteRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UnifrontServer).ExchangeSwapExecute(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.Unifront/exchangeSwapExecute",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UnifrontServer).ExchangeSwapExecute(ctx, req.(*ExchangeSwapExecuteRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
+// func _Unifront_ExchangeSwapExecute_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+// 	in := new(ExchangeSwapExecuteRequest)
+// 	if err := dec(in); err != nil {
+// 		return nil, err
+// 	}
+// 	if interceptor == nil {
+// 		return srv.(UnifrontServer).ExchangeSwapExecute(ctx, in)
+// 	}
+// 	info := &grpc.UnaryServerInfo{
+// 		Server:     srv,
+// 		FullMethod: "/proto.Unifront/exchangeSwapExecute",
+// 	}
+// 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+// 		return srv.(UnifrontServer).ExchangeSwapExecute(ctx, req.(*ExchangeSwapExecuteRequest))
+// 	}
+// 	return interceptor(ctx, in, info, handler)
+// }
 
-func _Unifront_FreeTradeCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FreeTradeCountRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UnifrontServer).FreeTradeCount(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.Unifront/FreeTradeCount",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UnifrontServer).FreeTradeCount(ctx, req.(*FreeTradeCountRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
+// func _Unifront_FreeTradeCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+// 	in := new(FreeTradeCountRequest)
+// 	if err := dec(in); err != nil {
+// 		return nil, err
+// 	}
+// 	if interceptor == nil {
+// 		return srv.(UnifrontServer).FreeTradeCount(ctx, in)
+// 	}
+// 	info := &grpc.UnaryServerInfo{
+// 		Server:     srv,
+// 		FullMethod: "/proto.Unifront/FreeTradeCount",
+// 	}
+// 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+// 		return srv.(UnifrontServer).FreeTradeCount(ctx, req.(*FreeTradeCountRequest))
+// 	}
+// 	return interceptor(ctx, in, info, handler)
+// }
 
-func _Unifront_ExchangeTokenApprove_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TokenApprovalRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UnifrontServer).ExchangeTokenApprove(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.Unifront/ExchangeTokenApprove",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UnifrontServer).ExchangeTokenApprove(ctx, req.(*TokenApprovalRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
+// func _Unifront_ExchangeTokenApprove_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+// 	in := new(TokenApprovalRequest)
+// 	if err := dec(in); err != nil {
+// 		return nil, err
+// 	}
+// 	if interceptor == nil {
+// 		return srv.(UnifrontServer).ExchangeTokenApprove(ctx, in)
+// 	}
+// 	info := &grpc.UnaryServerInfo{
+// 		Server:     srv,
+// 		FullMethod: "/proto.Unifront/ExchangeTokenApprove",
+// 	}
+// 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+// 		return srv.(UnifrontServer).ExchangeTokenApprove(ctx, req.(*TokenApprovalRequest))
+// 	}
+// 	return interceptor(ctx, in, info, handler)
+// }
 
-func _Unifront_ExchangeSwapSignature_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ExchangeSignatureRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UnifrontServer).ExchangeSwapSignature(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.Unifront/exchangeSwapSignature",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UnifrontServer).ExchangeSwapSignature(ctx, req.(*ExchangeSignatureRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
+// func _Unifront_ExchangeSwapSignature_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+// 	in := new(ExchangeSignatureRequest)
+// 	if err := dec(in); err != nil {
+// 		return nil, err
+// 	}
+// 	if interceptor == nil {
+// 		return srv.(UnifrontServer).ExchangeSwapSignature(ctx, in)
+// 	}
+// 	info := &grpc.UnaryServerInfo{
+// 		Server:     srv,
+// 		FullMethod: "/proto.Unifront/exchangeSwapSignature",
+// 	}
+// 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+// 		return srv.(UnifrontServer).ExchangeSwapSignature(ctx, req.(*ExchangeSignatureRequest))
+// 	}
+// 	return interceptor(ctx, in, info, handler)
+// }
 
 func _Unifront_TxStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(TxStatusRequest)
@@ -1425,42 +1425,42 @@ var Unifront_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "userData",
 			Handler:    _Unifront_UserData_Handler,
 		},
-		{
-			MethodName: "exchangeTokens",
-			Handler:    _Unifront_ExchangeTokens_Handler,
-		},
-		{
-			MethodName: "exchangeQuote",
-			Handler:    _Unifront_ExchangeQuote_Handler,
-		},
-		{
-			MethodName: "exchangeMultiQuote",
-			Handler:    _Unifront_ExchangeMultiQuote_Handler,
-		},
-		{
-			MethodName: "exchangeSwap",
-			Handler:    _Unifront_ExchangeSwap_Handler,
-		},
-		{
-			MethodName: "exchangeMultiSwap",
-			Handler:    _Unifront_ExchangeMultiSwap_Handler,
-		},
-		{
-			MethodName: "exchangeSwapExecute",
-			Handler:    _Unifront_ExchangeSwapExecute_Handler,
-		},
-		{
-			MethodName: "FreeTradeCount",
-			Handler:    _Unifront_FreeTradeCount_Handler,
-		},
-		{
-			MethodName: "ExchangeTokenApprove",
-			Handler:    _Unifront_ExchangeTokenApprove_Handler,
-		},
-		{
-			MethodName: "exchangeSwapSignature",
-			Handler:    _Unifront_ExchangeSwapSignature_Handler,
-		},
+		// {
+		// 	MethodName: "exchangeTokens",
+		// 	Handler:    _Unifront_ExchangeTokens_Handler,
+		// },
+		// {
+		// 	MethodName: "exchangeQuote",
+		// 	Handler:    _Unifront_ExchangeQuote_Handler,
+		// },
+		// {
+		// 	MethodName: "exchangeMultiQuote",
+		// 	Handler:    _Unifront_ExchangeMultiQuote_Handler,
+		// },
+		// {
+		// 	MethodName: "exchangeSwap",
+		// 	Handler:    _Unifront_ExchangeSwap_Handler,
+		// },
+		// {
+		// 	MethodName: "exchangeMultiSwap",
+		// 	Handler:    _Unifront_ExchangeMultiSwap_Handler,
+		// },
+		// {
+		// 	MethodName: "exchangeSwapExecute",
+		// 	Handler:    _Unifront_ExchangeSwapExecute_Handler,
+		// },
+		// {
+		// 	MethodName: "FreeTradeCount",
+		// 	Handler:    _Unifront_FreeTradeCount_Handler,
+		// },
+		// {
+		// 	MethodName: "ExchangeTokenApprove",
+		// 	Handler:    _Unifront_ExchangeTokenApprove_Handler,
+		// },
+		// {
+		// 	MethodName: "exchangeSwapSignature",
+		// 	Handler:    _Unifront_ExchangeSwapSignature_Handler,
+		// },
 		{
 			MethodName: "txStatus",
 			Handler:    _Unifront_TxStatus_Handler,

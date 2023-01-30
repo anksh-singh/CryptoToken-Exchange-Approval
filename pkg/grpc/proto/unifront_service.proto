@@ -10,7 +10,7 @@ option go_package = "./pb";
 service Unifront {
   rpc tokenPrice(TokenPriceRequest) returns (TokenPriceResponse);
   rpc tokenPriceV2(TokenPriceRequest) returns (TokenPriceResponseV2);
-  rpc balance(BalanceRequest) returns (BalanceResponse);
+  rpc balance(BalanceRequest) returns (BalanceResponse);d
   rpc processingFee(ProcessingFeeRequest) returns (ProcessingFeeResponse);
   rpc nonce(NonceRequest) returns (NonceResponse);
   rpc sendTransaction(SendTransactionRequest) returns (SendTransactionResponse);
@@ -47,20 +47,11 @@ service Unifront {
   rpc GetCosmosAprRates(CosmosAprRatesRequest) returns (CosmosAprRatesResponse);
   rpc GetDelegations(CosmosDelegationsRequest) returns (CosmosDelegationsResponse);
   rpc GetCosmosCDPParams(CosmosCDPParametersRequest) returns (CosmosCDPParametersResponse);
-  //  rpc getAccountInfo(getAccountInfoRequest) returns (getAccountInfoResponse);
-  //  rpc getFees(GetFeeRequest) returns (GetFeeResponse);
-  //  rpc getTokenAccountBalance(GetTokenAccBalanceRequest) returns (GetTokenAccBalanceResponse);
-  //  rpc getTransaction(GetTransactionRequest) returns(GetTransactionResponse);
   rpc cosmosAssets(BalanceRequest) returns (CosmosAssetResponse);
   rpc cosmosSendTx(CosmosSendTxRequest)  returns (SendTransactionResponse);
   rpc cosmosSimulateTX(CosmosSimulateTxRequest)  returns (CosmosSimulateTxResponse);
   rpc cosmosGetBlockHeight(GetCosmosBlockHeightRequest) returns(GetCosmosBlockHeightResponse);
   rpc getPositions(PositionChainData) returns(GetPositionsResponse);
-  //  rpc getAccountInfo(getAccountInfoRequest) returns
-  //  (getAccountInfoResponse); rpc getFees(GetFeeRequest) returns
-  //  (GetFeeResponse); rpc getTokenAccountBalance(GetTokenAccBalanceRequest)
-  //  returns (GetTokenAccBalanceResponse); rpc
-  //  getTransaction(GetTransactionRequest) returns(GetTransactionResponse);
   rpc BulkApproval(ApprovalRequest) returns (BulkApprovalResponse);
   rpc BulkAllowance(AllowanceRequest) returns (BulkAllowanceResponse);
   rpc GetOpportunites(GetOpportunitiesRequest)  returns (GetOpportunitesResponse);

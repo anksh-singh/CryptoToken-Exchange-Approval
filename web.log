@@ -66,3 +66,33 @@
 2023-01-30T10:24:40.948+0530	INFO	utils/evm.go:58	EVMChainList:= [arbitrum ethereum fantom harmony polygon celo optimism xinfin metis avalanche aurora bsc boba zilliqa heco gnosis cronos moonriver moonbeam klaytn bttc iotex tomochain zksync evmos fuse astar]
 2023-01-30T10:24:40.948+0530	INFO	utils/evm.go:97	IsEVM: true
 2023-01-30T10:36:05.932+0530	INFO	web/web.go:37	Web Server Started at :8088
+2023-01-30T14:46:37.691+0530	INFO	web/web.go:37	Web Server Started at :8088
+2023-01-30T14:46:53.315+0530	INFO	web/routes.go:44	Client: Mobile
+2023-01-30T14:46:53.315+0530	INFO	web/routes.go:45	User-Agent: PostmanRuntime/7.29.2
+2023-01-30T14:46:53.315+0530	INFO	utils/evm.go:58	EVMChainList:= [arbitrum ethereum fantom harmony polygon celo optimism xinfin metis avalanche aurora bsc boba zilliqa heco gnosis cronos moonriver moonbeam klaytn bttc iotex tomochain zksync evmos fuse astar]
+2023-01-30T14:46:53.315+0530	INFO	utils/evm.go:101	IsEVM: false
+2023-01-30T14:46:53.315+0530	INFO	utils/cosmos.go:27	CosmosChainList:= [axelar juno cryptoorgchain kujira secretnetwork sifchain crescent akash umee injective bandchain cosmoshub kava osmosis regen stargaze sentinel persistence irisnet agoric shentu impacthub emoney sommelier bostrom gravitybridge stride assetmantle bluzelle cronos terra evmos terra2]
+2023-01-30T14:46:53.315+0530	INFO	utils/cosmos.go:51	IsCosmos: false
+2023-01-30T14:46:53.315+0530	INFO	utils/evm.go:69	nonEVMChainList:= [solana near aptos]
+2023-01-30T14:46:53.316+0530	INFO	utils/nonevm.go:25	IsNonEVM: false
+2023-01-30T14:46:53.316+0530	INFO	utils/validation.go:69	Unsupported chain: atom
+2023-01-30T14:56:35.411+0530	INFO	web/web.go:37	Web Server Started at :8088
+2023-01-30T14:56:49.336+0530	INFO	web/routes.go:44	Client: Mobile
+2023-01-30T14:56:49.336+0530	INFO	web/routes.go:45	User-Agent: PostmanRuntime/7.29.2
+2023-01-30T14:56:49.336+0530	INFO	utils/evm.go:58	EVMChainList:= [arbitrum ethereum fantom harmony polygon celo optimism xinfin metis avalanche aurora bsc boba zilliqa heco gnosis cronos moonriver moonbeam klaytn bttc iotex tomochain zksync evmos fuse astar]
+2023-01-30T14:56:49.336+0530	INFO	utils/evm.go:101	IsEVM: false
+2023-01-30T14:56:49.337+0530	INFO	utils/cosmos.go:27	CosmosChainList:= [axelar juno cryptoorgchain kujira secretnetwork sifchain crescent akash umee injective bandchain cosmoshub kava osmosis regen stargaze sentinel persistence irisnet agoric shentu impacthub emoney sommelier bostrom gravitybridge stride assetmantle bluzelle cronos terra evmos terra2]
+2023-01-30T14:56:49.337+0530	INFO	utils/cosmos.go:51	IsCosmos: false
+2023-01-30T14:56:49.337+0530	INFO	utils/evm.go:69	nonEVMChainList:= [solana near aptos]
+2023-01-30T14:56:49.337+0530	INFO	utils/nonevm.go:25	IsNonEVM: false
+2023-01-30T14:56:49.337+0530	INFO	utils/validation.go:69	Unsupported chain: atom
+2023-01-30T14:58:08.367+0530	INFO	web/web.go:37	Web Server Started at :8088
+2023-01-30T14:58:17.894+0530	INFO	web/routes.go:44	Client: Mobile
+2023-01-30T14:58:17.895+0530	INFO	web/routes.go:45	User-Agent: PostmanRuntime/7.29.2
+2023-01-30T14:58:17.895+0530	INFO	utils/evm.go:58	EVMChainList:= [arbitrum ethereum fantom harmony polygon celo optimism xinfin metis avalanche aurora bsc boba zilliqa heco gnosis cronos moonriver moonbeam klaytn bttc iotex tomochain zksync evmos fuse astar]
+2023-01-30T14:58:17.895+0530	INFO	utils/evm.go:101	IsEVM: false
+2023-01-30T14:58:17.895+0530	INFO	utils/cosmos.go:27	CosmosChainList:= [axelar juno cryptoorgchain kujira secretnetwork sifchain crescent akash umee injective bandchain cosmoshub kava osmosis regen stargaze sentinel persistence irisnet agoric shentu impacthub emoney sommelier bostrom gravitybridge stride assetmantle bluzelle cronos terra evmos terra2]
+2023-01-30T14:58:17.895+0530	INFO	utils/cosmos.go:51	IsCosmos: false
+2023-01-30T14:58:17.895+0530	INFO	utils/evm.go:69	nonEVMChainList:= [solana near aptos]
+2023-01-30T14:58:17.895+0530	INFO	utils/nonevm.go:25	IsNonEVM: false
+2023-01-30T14:58:17.895+0530	INFO	utils/validation.go:69	Unsupported chain: atom

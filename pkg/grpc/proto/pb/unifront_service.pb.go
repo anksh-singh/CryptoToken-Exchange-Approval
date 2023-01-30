@@ -237,15 +237,15 @@ var file_unifront_service_proto_goTypes = []interface{}{
 	(*SendTransactionRequest)(nil),          // 4: proto.SendTransactionRequest
 	(*ListTransactionRequest)(nil),          // 5: proto.ListTransactionRequest
 	(*UserDataRequest)(nil),                 // 6: proto.UserDataRequest
-	(*ExchangeTokenRequest)(nil),            // 7: proto.ExchangeTokenRequest
-	(*ExchangeQuoteRequest)(nil),            // 8: proto.ExchangeQuoteRequest
-	(*ExchangeMultiQuoteRequest)(nil),       // 9: proto.ExchangeMultiQuoteRequest
-	(*ExchangeSwapRequest)(nil),             // 10: proto.ExchangeSwapRequest
-	(*ExchangeMultiSwapRequest)(nil),        // 11: proto.ExchangeMultiSwapRequest
-	(*ExchangeSwapExecuteRequest)(nil),      // 12: proto.ExchangeSwapExecuteRequest
-	(*FreeTradeCountRequest)(nil),           // 13: proto.FreeTradeCountRequest
-	(*TokenApprovalRequest)(nil),            // 14: proto.TokenApprovalRequest
-	(*ExchangeSignatureRequest)(nil),        // 15: proto.ExchangeSignatureRequest
+	// (*ExchangeTokenRequest)(nil),            // 7: proto.ExchangeTokenRequest
+	// (*ExchangeQuoteRequest)(nil),            // 8: proto.ExchangeQuoteRequest
+	// (*ExchangeMultiQuoteRequest)(nil),       // 9: proto.ExchangeMultiQuoteRequest
+	// (*ExchangeSwapRequest)(nil),             // 10: proto.ExchangeSwapRequest
+	// (*ExchangeMultiSwapRequest)(nil),        // 11: proto.ExchangeMultiSwapRequest
+	// (*ExchangeSwapExecuteRequest)(nil),      // 12: proto.ExchangeSwapExecuteRequest
+	// (*FreeTradeCountRequest)(nil),           // 13: proto.FreeTradeCountRequest
+	// (*TokenApprovalRequest)(nil),            // 14: proto.TokenApprovalRequest
+	// (*ExchangeSignatureRequest)(nil),        // 15: proto.ExchangeSignatureRequest
 	(*TxStatusRequest)(nil),                 // 16: proto.TxStatusRequest
 	(*GasLimitRequest)(nil),                 // 17: proto.GasLimitRequest
 	(*TokenInfoRequest)(nil),                // 18: proto.TokenInfoRequest
@@ -275,15 +275,15 @@ var file_unifront_service_proto_goTypes = []interface{}{
 	(*SendTransactionResponse)(nil),         // 42: proto.SendTransactionResponse
 	(*ListTransactionResponse)(nil),         // 43: proto.ListTransactionResponse
 	(*UserDataResponse)(nil),                // 44: proto.UserDataResponse
-	(*ExchangeTokenResponse)(nil),           // 45: proto.ExchangeTokenResponse
-	(*ExchangeQuoteResponse)(nil),           // 46: proto.ExchangeQuoteResponse
-	(*ExchangeMultiQuoteResponse)(nil),      // 47: proto.ExchangeMultiQuoteResponse
-	(*ExchangeSwapResponse)(nil),            // 48: proto.ExchangeSwapResponse
-	(*ExchangeMultipleSwapResponse)(nil),    // 49: proto.ExchangeMultipleSwapResponse
-	(*ExchangeSwapExecuteResponse)(nil),     // 50: proto.ExchangeSwapExecuteResponse
-	(*FreeTradeCountResponse)(nil),          // 51: proto.FreeTradeCountResponse
-	(*TokenApprovalResponse)(nil),           // 52: proto.TokenApprovalResponse
-	(*ExchangeSignatureResponse)(nil),       // 53: proto.ExchangeSignatureResponse
+	// (*ExchangeTokenResponse)(nil),           // 45: proto.ExchangeTokenResponse
+	// (*ExchangeQuoteResponse)(nil),           // 46: proto.ExchangeQuoteResponse
+	// (*ExchangeMultiQuoteResponse)(nil),      // 47: proto.ExchangeMultiQuoteResponse
+	// (*ExchangeSwapResponse)(nil),            // 48: proto.ExchangeSwapResponse
+	// (*ExchangeMultipleSwapResponse)(nil),    // 49: proto.ExchangeMultipleSwapResponse
+	// (*ExchangeSwapExecuteResponse)(nil),     // 50: proto.ExchangeSwapExecuteResponse
+	// (*FreeTradeCountResponse)(nil),          // 51: proto.FreeTradeCountResponse
+	// (*TokenApprovalResponse)(nil),           // 52: proto.TokenApprovalResponse
+	// (*ExchangeSignatureResponse)(nil),       // 53: proto.ExchangeSignatureResponse
 	(*TxStatusResponse)(nil),                // 54: proto.TxStatusResponse
 	(*GasLimitResponse)(nil),                // 55: proto.GasLimitResponse
 	(*TokenInfoResponse)(nil),               // 56: proto.TokenInfoResponse
@@ -404,7 +404,7 @@ func file_unifront_service_proto_init() {
 		return
 	}
 	file_contract_proto_init()
-	file_swap_proto_init()
+	// file_swap_proto_init()
 	file_bridge_proto_init()
 	file_cosmos_proto_init()
 	type x struct{}

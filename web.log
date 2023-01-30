@@ -65,3 +65,4 @@
 2023-01-30T10:24:40.948+0530	INFO	web/routes.go:48	User-Agent: PostmanRuntime/7.29.2
 2023-01-30T10:24:40.948+0530	INFO	utils/evm.go:58	EVMChainList:= [arbitrum ethereum fantom harmony polygon celo optimism xinfin metis avalanche aurora bsc boba zilliqa heco gnosis cronos moonriver moonbeam klaytn bttc iotex tomochain zksync evmos fuse astar]
 2023-01-30T10:24:40.948+0530	INFO	utils/evm.go:97	IsEVM: true
+2023-01-30T10:36:05.932+0530	INFO	web/web.go:37	Web Server Started at :8088

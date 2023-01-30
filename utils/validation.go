@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"bridge-allowance/pkg/grpc/proto/pb"
+	// "bridge-allowance/pkg/grpc/proto/pb"
 	"encoding/hex"
 	"fmt"
 	"github.com/gagliardetto/solana-go"
@@ -76,38 +76,6 @@ func (u *UtilConf) ValidateCosmosAddress(address string, chainName string) (bool
 		return false, address, status.Errorf(codes.InvalidArgument, fmt.Sprintf("%v is not %v address", address, chainName), fmt.Sprintf("Invalid %v Address", chainName))
 	}
 	return true, address, nil
-}
-
-func (u *UtilConf) ValidateTokenPriceRequest(in *pb.TokenPriceRequest) error {
-	u.log.Infof("starting validation tests")
-	if in.Currency == "" {
-		return status.Errorf(codes.InvalidArgument, "currency cannot be empty", "Empty Field")
-	}
-	return nil
-}
-
-func (u *UtilConf) ValidateListTransactionRequest(in *pb.ListTransactionRequest) error {
-	const MinPage = 1
-	const MinPageSize = 1
-	const MaxPageSize = 25
-	u.log.Infof("starting validation tests")
-	pageInt, err := strconv.Atoi(in.Page)
-	if err != nil {
-		return status.Errorf(codes.InvalidArgument, "page should be an integer", "wrong data type")
-	} else {
-		if pageInt < MinPage {
-			return status.Errorf(codes.InvalidArgument, "Page should be between 1 - 25", "Invalid Data")
-		}
-	}
-	pageSizeInt, err := strconv.Atoi(in.PageSize)
-	if err != nil {
-		return status.Errorf(codes.InvalidArgument, "Page size should be between 1 - 25", "Invalid Data")
-	} else {
-		if pageSizeInt < MinPageSize || pageSizeInt > MaxPageSize {
-			return status.Errorf(codes.InvalidArgument, "Page size should be between 1 - 25", "Invalid Data")
-		}
-	}
-	return nil
 }
 
 

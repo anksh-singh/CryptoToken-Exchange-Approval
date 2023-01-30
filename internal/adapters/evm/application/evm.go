@@ -38,7 +38,6 @@ func NewEVMServerHandler(config config.Config, log *zap.SugaredLogger, core rpc.
 	return handler
 }
 
-
 func (evm *evmServerHandler) Allowance(ctx context.Context, request *pb.AllowanceRequest) (*pb.AllowanceResponse, error) {
 	defer evm.utils.CleanUp(evm.logger)
 	fmt.Println("inside evmshandlerss")

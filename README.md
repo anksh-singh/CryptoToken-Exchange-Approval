@@ -38,6 +38,5 @@ Adapter Command Names:-
 
     Supported COSMOS based chains: axelar, akash, bandchain, cosmoshub, crescent, cryptoorgchain, injective, juno, kujira, kava, osmosis, secretnetwork, sifchain, umee, regen, stargaze, sentinel, persistence, irisnet, agoric, shentu, impacthub, emoney, sommelier, bostrom, gravitybridge, stride, assetmantle
 
-4. For BRIDGE:` bridge`
 
 

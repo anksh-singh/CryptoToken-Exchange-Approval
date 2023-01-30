@@ -53,8 +53,8 @@ func (evm *evmServer) Start() {
 
 var EvmCmd = &cobra.Command{
 	Use:   "evm",
-	Short: "Unifront Framework-evm",
-	Long:  `Unifront Framework:  EVM Server`,
+	Short: "Bridge Allowance-evm",
+	Long:  `Bridge Allowance:  EVM Server`,
 	// @BasePath  /v2
 	Run: func(cmd *cobra.Command, args []string) {
 		conf := config.LoadConfig("", "")

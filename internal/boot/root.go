@@ -2,9 +2,9 @@ package boot
 
 import (
 	// "bridge-allowance/internal/adapters/bridge"
-	"bridge-allowance/internal/adapters/cosmos"
+	// "bridge-allowance/internal/adapters/cosmos"
 	"bridge-allowance/internal/adapters/evm"
-	"bridge-allowance/internal/adapters/nonevm"
+	// "bridge-allowance/internal/adapters/nonevm"
 	"bridge-allowance/web"
 	"log"
 
@@ -28,7 +28,7 @@ func Execute() {
 }
 func initAdapters() {
 	rootCmd.AddCommand(web.WebCmd)
-	rootCmd.AddCommand(nonevm.SolanaCmd)
+	// rootCmd.AddCommand(nonevm.SolanaCmd)
 	rootCmd.AddCommand(evm.EvmCmd)
-	rootCmd.AddCommand(cosmos.CosmosCmd)
+	// rootCmd.AddCommand(cosmos.CosmosCmd)
 }

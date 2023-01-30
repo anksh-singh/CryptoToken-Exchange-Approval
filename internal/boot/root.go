@@ -6,8 +6,9 @@ import (
 	"bridge-allowance/internal/adapters/evm"
 	"bridge-allowance/internal/adapters/nonevm"
 	"bridge-allowance/web"
-	"github.com/spf13/cobra"
 	"log"
+
+	"github.com/spf13/cobra"
 )
 
 func init() {
@@ -16,8 +17,8 @@ func init() {
 
 var rootCmd = &cobra.Command{
 	Use:   "gateway",
-	Short: "unifront framework",
-	Long:  ` unifront framework: Routes the http requests to multiple adapters`,
+	Short: "bridge allowance",
+	Long:  ` bridge allowance: Routes the http requests to multiple adapters`,
 }
 
 func Execute() {

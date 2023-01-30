@@ -42,26 +42,6 @@ func GetChainId(cfg config.Config, chain string) (int, error) {
 	return 0, errors.New(fmt.Sprintf("Chain: %v not supported", chain))
 }
 
-// GetDebankId Get debank equavalent nomenclature for a chain name
-func GetDebankId(cfg config.Config, chainName string) (string, error) {
-	for _, w := range cfg.EVM.Cfg.Wallets {
-		if w.ChainName == chainName {
-			return w.Nomenclature.Debank, nil
-		}
-	}
-	return "", errors.New(fmt.Sprintf("Chain: %v not supported", chainName))
-}
-
-// GetUnmarshalId Get unmarshal equavalent nomenclature for a chain name
-func GetUnmarshalId(cfg config.Config, chainName string) (string, error) {
-	for _, w := range cfg.EVM.Cfg.Wallets {
-		if w.ChainName == chainName {
-			return w.Nomenclature.Unmarshal, nil
-		}
-	}
-	return "", errors.New(fmt.Sprintf("Chain: %v not supported", chainName))
-}
-
 // GetWalletSource get wallet source for a chain name
 func GetWalletSource(cfg config.Config, chain string) config.Source {
 	for _, w := range cfg.EVM.Cfg.Wallets {

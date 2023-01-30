@@ -1,0 +1,1949 @@
+WEB_DATADOG_SERVICE: ""
+DATADOG_SERVICE: ""
+NONEVM_CLUSTER: ""
+NONEVM_DATADOG_SERVICE: ""
+PROXIES_ENDPOINT: ""
+BRIDGE_DATADOG_SERVICE: ""
+COSMOS_DATADOG_SERVICE: ""
+EVM_DATADOG_SERVICE: ""
+NONEVM_GRPC_ENDPOINT: ""
+COSMOS_GRPC_ENDPOINT: ""
+BRIDGE_GRPC_ENDPOINT: ""
+EVM_GRPC_ENDPOINT: ""
+LOG_ENCODING_FORMAT: "json"
+
+web:
+  port: "8088"
+  logfile: "web.log"
+  datadog:
+    env: "dev"
+    version: "1.0"
+
+datadog:
+  env: "dev"
+  version: "1.0"
+
+alchemy:
+  APIKey: "GVkrt_8cLHv1Yi04m7lqZ2dbteVprcjQ"
+
+#when API validation is enabled in future we need this API key's to be moved to secrets
+clientCodes:
+  YW5kcm9pZDpyZWl0bm9yZg==: "android"
+  aW9zOnJlaXRub3Jm:         "iOS"
+  d2ViYXBwOkZyMG50VzNi:     "webapp"
+  ZXh0ZW5zaW9uOkZyMG50M3h0: "extension"
+
+nonEVMConfig:
+  logFile: "nonevm.log"
+  datadog:
+    env: "dev"
+    version: "1.0"
+  serverPort: "8081"
+  nonEVMWallet:
+    - chainName: "solana"
+      solana:
+        chainName: "solana"
+        solanaTokenListUrl: "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json"
+        jupiterApi: "https://quote-api.jup.ag/v1"
+        jupiterApiTokenListUrl: "https://cache.jup.ag/tokens"
+        solanaLogoUrl: "https://cdn.jsdelivr.net/gh/trustwallet/assets@master/blockchains/solana/info/logo.png"
+    - chainName: "near"
+      near:
+        chainName: "near"
+        nearTokenListUrl: ""
+        #solanaTokenListUrl: "https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json"
+        #  jupiterApi: "https://quote-api.jup.ag/v1"
+        #  jupiterApiTokenListUrl: "https://cache.jup.ag/tokens"
+        rpc: "https://rpc.mainnet.near.org"
+        nearLogoUrl: ""
+    - chainName: "aptos"
+      aptos:
+        chainName: "aptos"
+        rpc: "https://fullnode.mainnet.aptoslabs.com/v1/"
+        aptosLogoUrl: "https://github.com/aptos-labs/aptos-core/blob/main/.assets/aptos.png"
+
+trustWallet:
+  endPoint: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains"
+
+tenderly:
+  accessKey: "M06SrfQfJ0cv9UIIvPOBKyiOYDIPwYNu"
+  project: "tenderly-integration"
+  userName: "frontier"
+
+signAssist:
+  accessKey: "4b7e601e-d859-4b2d-8959-37783225ff07"
+  endPoint: "https://api.signassist.app/simulatetransaction"
+
+blowFish:
+  accessKey: "aec23e6c-a4d0-4ac5-82ea-3832093ca20b"
+  endPoint: "https://api.blowfish.xyz"
+
+coingecko:
+  apikey : "CG-3rZprwbEEjFtakNBS8mghn8H"
+  endpoint : "https://pro-api.coingecko.com/api/v3"
+  tokenDetailLogoUrl: "https://assets.coingecko.com/markets/images/565/large/0x-protocol.png?1596623034"
+
+
+unmarshall:
+  apikey: "vHIKeRAOTU20ctcwyGQSt8WHA4OoBQ4O2EUae8c9"
+  endpoint: "https://api.unmarshal.com/v1"
+  endpointv2: "https://api.unmarshal.com/v2"
+
+covalent:
+  apikey: "ckey_3137dd17b50348029a5db413978"
+  endpoint: "https://api.covalenthq.com/v1"
+  covalentBalancesAPI: "%v/%v/address/%v/balances_v2/?key=%v"
+
+blockNative:
+  AuthHeader: "7964ddbd-bc3e-4eba-8175-67fe1134e341"
+  endpoint: "https://api.blocknative.com"
+
+logger:
+  loglevel: "info"
+  logpath: ""
+
+openapi:
+  endpoint: "https://pro-openapi.debank.com/v1"
+  apikey: "883081dbacfc7664464822b9ffa3c58d19f1cf3b"
+
+
+socket:
+  endPoint: "https://api.socket.tech/v2"
+  APIKey: "1c5a9012-2c41-48b4-bc37-17f68dcbc39f"
+  logoUrl: "https://api.frontierwallet.com/images/logos/socket.png"
+
+debridge:
+  endPoint: "https://deswap.debridge.finance/v1.0"
+  transactionEndpoint: "https://api.debridge.finance/api"
+  logoUrl: "https://app.debridge.finance/assets/images/logo-dark.svg"
+
+debankAPI:
+  endpoint : "https://pro-openapi.debank.com/v1/"
+  accessKey : "883081dbacfc7664464822b9ffa3c58d19f1cf3b"
+
+proxies:
+  exchangeTypes:
+    - "xy"
+    - "pancakeswap"
+    - "sushiswap"
+    - "netswap"
+    - "elk"
+    - "paraswap"
+    - "kyber"
+    - "dodo"
+    - "xswap"
+    - "diffusion"
+    - "luaswap"
+    - "arthswap"
+    - "vvsfinance"
+    - "soyfinance"
+    - "quackswap"
+    - "meshswap"
+    - "klayswap"
+
+
+swap:
+  chainData:
+    - chainName: "arbitrum"
+      chainId: 42161
+      zeroxSwapConfig:
+        endPoint: "https://arbitrum.api.0x.org"
+        exchangeTokenUrl: "https://raw.githubusercontent.com/sushiswap/list/master/lists/token-lists/default-token-list/tokens/arbitrum.json"
+        tokenSource: "cocoswap"
+        isSupported: true
+      dodoSwapConfig:
+        exchangeTokenUrl: "https://raw.githubusercontent.com/sushiswap/list/master/lists/token-lists/default-token-list/tokens/arbitrum.json"
+        tokenSource: "cocoswap"
+        isSupported: true
+        approveAddress: "0xA867241cDC8d3b0C07C85cC06F25a0cD3b5474d8"
+      oneInchSwapConfig:
+        isSupported: true
+        approveAddress: "0x1111111254fb6c44bac0bed2854e76f90643097d"
+      liFiSwapConfig:
+        isSupported: true
+      DZapSwapConfig:
+        isSupported: true
+        approveAddress: "0x3af3cc4930ef88F4afe0b695Ac95C230E1A108Ec"
+    - chainName: "ethereum"
+      chainId: 1
+      zeroxSwapConfig:
+        endPoint: "https://api.0x.org"
+        exchangeTokenUrl: "https://raw.githubusercontent.com/sushiswap/list/master/lists/token-lists/default-token-list/tokens/ethereum.json"
+        tokenSource: "cocoswap"
+        isSupported: true
+      oneInchSwapConfig:
+        isSupported: true
+        approveAddress: "0x1111111254fb6c44bac0bed2854e76f90643097d"
+      DZapSwapConfig:
+        isSupported: true
+        approveAddress: "0x011F709DF9cA9fc5c67EF44d9F56FC2D302793E6"
+      dodoSwapConfig:
+        exchangeTokenUrl: "https://raw.githubusercontent.com/sushiswap/list/master/lists/token-lists/default-token-list/tokens/ethereum.json"
+        tokenSource: "cocoswap"
+        isSupported: true
+        approveAddress: "0xCB859eA579b28e02B87A1FDE08d087ab9dbE5149"
+      liFiSwapConfig:
+        isSupported: true
+      cowSwapConfig:
+        isSupported: true
+        wrappedTokenID: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+        approveAddress: "0xc92e8bdf79f0507f65a392b0ab4667716bfe0110"
+    - chainName: "fantom"
+      chainId: 250
+      zeroxSwapConfig:
+        endPoint: "https://fantom.api.0x.org"
+        exchangeTokenUrl: "https://raw.githubusercontent.com/SpookySwap/spooky-info/master/src/constants/token/spookyswap.json"
+        tokenSource: "ubeswap"
+        isSupported: true
+      oneInchSwapConfig:
+        isSupported: true
+        approveAddress: "0x1111111254fb6c44bac0bed2854e76f90643097d"
+      liFiSwapConfig:
+        isSupported: true
+      zeroswapSwapConfig:
+        IsSupported: true
+        gasLessApproveAddress: "0xa66Fdb442D4cCB41e0f9304cD17F47e66c450aF7"
+        approveAddress: "0xdef189deaef76e379df891899eb5a00a94cbc250"
+    - chainName: "harmony"
+      chainId: 1666600000
+      liFiSwapConfig:
+        isSupported: true
+    - chainName: "polygon"
+      chainId: 137
+      zeroxSwapConfig:
+        endPoint: "https://polygon.api.0x.org"
+        exchangeTokenUrl: "https://unpkg.com/quickswap-default-token-list@1.2.9/build/quickswap-default.tokenlist.json"
+        tokenSource: "ubeswap"
+        isSupported: true
+      oneInchSwapConfig:
+        isSupported: true
+        approveAddress: "0x1111111254fb6c44bac0bed2854e76f90643097d"
+      DZapSwapConfig:
+        isSupported: true
+        approveAddress: "0x011F709DF9cA9fc5c67EF44d9F56FC2D302793E6"
+      zeroswapSwapConfig:
+        IsSupported: true
+        gasLessApproveAddress: "0x2B6Bd6A84F97051805969c12985b739551cbb0AA"
+        approveAddress: "0xdef1c0ded9bec7f1a1670819833240f027b25eff"
+      liFiSwapConfig:
+        isSupported: true
+    - chainName: "celo"
+      chainId: 42220
+      zeroxSwapConfig:
+        endPoint: "https://celo.api.0x.org"
+        exchangeTokenUrl: "https://raw.githubusercontent.com/Ubeswap/default-token-list/master/ubeswap.token-list.json"
+        tokenSource: "ubeswap"
+        isSupported: true
+      zeroswapSwapConfig:
+        IsSupported: true
+        gasLessApproveAddress: "0xB7c1CcA934641dA45F84EdA0Cf06aF73F4a5A523"
+        approveAddress: "0xdef1c0ded9bec7f1a1670819833240f027b25eff"
+      liFiSwapConfig:
+        isSupported: true
+    - chainName: "optimism"
+      chainId: 10
+      zeroxSwapConfig:
+        endPoint: "https://optimism.api.0x.org"
+        exchangeTokenUrl: "https://static.optimism.io/optimism.tokenlist.json"
+        tokenSource: "ubeswap"
+        isSupported: true
+      oneInchSwapConfig:
+        isSupported: true
+        approveAddress: "0x1111111254760f7ab3f16433eea9304126dcd199"
+      zeroswapSwapConfig:
+        IsSupported: true
+        gasLessApproveAddress: "0xB7c1CcA934641dA45F84EdA0Cf06aF73F4a5A523"
+        approveAddress: "0xdef1abe32c034e558cdd535791643c58a13acc10"
+      liFiSwapConfig:
+        isSupported: true
+    - chainName: "xinfin"
+      chainId: 50
+    - chainName: "metis"
+      chainId: 1088
+    - chainName: "avalanche"
+      chainId: 43114
+      zeroxSwapConfig:
+        endPoint: "https://avalanche.api.0x.org"
+        exchangeTokenUrl: "https://raw.githubusercontent.com/pangolindex/tokenlists/main/pangolin.tokenlist.json"
+        tokenSource: "ubeswap"
+        isSupported: true
+      oneInchSwapConfig:
+        isSupported: true
+        approveAddress: "0x1111111254fb6c44bac0bed2854e76f90643097d"
+      zeroswapSwapConfig:
+        IsSupported: true
+        gasLessApproveAddress: "0xB8CCe55d1782aa2d497a99ae59feDfba2d0D616F"
+        approveAddress: "0xdef1c0ded9bec7f1a1670819833240f027b25eff"
+      liFiSwapConfig:
+        isSupported: true
+    - chainName: "aurora"
+      chainId: 1313161554
+      dodoSwapConfig:
+        exchangeTokenUrl: "https://raw.githubusercontent.com/trisolaris-labs/tokens/master/lists/1313161554/list.json"
+        tokenSource: "ubeswap"
+        isSupported: true
+        approveAddress: "0x335aC99bb3E51BDbF22025f092Ebc1Cf2c5cC619"
+      oneInchSwapConfig:
+        isSupported: true
+        approveAddress: "0x1111111254fb6c44bac0bed2854e76f90643097d"
+      liFiSwapConfig:
+        isSupported: true
+    - chainName: "bsc"
+      chainId: 56
+      zeroxSwapConfig:
+        endPoint: "https://bsc.api.0x.org"
+        exchangeTokenUrl: "https://tokens.pancakeswap.finance/pancakeswap-extended.json"
+        tokenSource: "ubeswap"
+        isSupported: true
+      oneInchSwapConfig:
+        isSupported: true
+        approveAddress: "0x1111111254fb6c44bac0bed2854e76f90643097d"
+      DZapSwapConfig:
+        isSupported: true
+        approveAddress: "0x011F709DF9cA9fc5c67EF44d9F56FC2D302793E6"
+      zeroswapSwapConfig:
+        IsSupported: true
+        gasLessApproveAddress: "0xB8CCe55d1782aa2d497a99ae59feDfba2d0D616F"
+        approveAddress: "0xdef1c0ded9bec7f1a1670819833240f027b25eff"
+      liFiSwapConfig:
+        isSupported: true
+    - chainName: "boba"
+      chainId: 288
+      dodoSwapConfig:
+        exchangeTokenUrl: "https://raw.githubusercontent.com/OolongSwap/boba-community-token-list/main/src/tokens/boba.json"
+        tokenSource: "cocoswap"
+        isSupported: true
+        approveAddress: "0x8F8Dd7DB1bDA5eD3da8C9daf3bfa471c12d58486"
+    - chainName: "zilliqa"
+      chainId: 288
+    - chainName: "heco"
+      chainId: 128
+      dodoSwapConfig:
+        exchangeTokenUrl: "https://raw.githubusercontent.com/sushiswap/list/master/lists/token-lists/default-token-list/tokens/heco.json"
+        tokenSource: "cocoswap"
+        isSupported: true
+        approveAddress: "0x68b6c06Ac8Aa359868393724d25D871921E97293"
+    - chainName: "gnosis"
+      chainId: 100
+      oneInchSwapConfig:
+        isSupported: true
+        approveAddress: "0x1111111254fb6c44bac0bed2854e76f90643097d"
+      liFiSwapConfig:
+        isSupported: true
+      cowSwapConfig:
+        isSupported: true
+        wrappedTokenID: "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d"
+        approveAddress: "0xc92e8bdf79f0507f65a392b0ab4667716bfe0110"
+    - chainName: "cronos"
+      chainId: 25
+    - chainName: "moonriver"
+      chainId: 1285
+      dodoSwapConfig:
+        exchangeTokenUrl: "https://raw.githubusercontent.com/sushiswap/list/master/lists/token-lists/default-token-list/tokens/moonriver.json"
+        tokenSource: "cocoswap"
+        isSupported: true
+        approveAddress: "0xE8C9A78725D0451FA19878D5f8A3dC0D55FECF25"
+      liFiSwapConfig:
+        isSupported: true
+    - chainName: "moonbeam"
+      chainId: 1284
+      liFiSwapConfig:
+        isSupported: true
+    - chainName: "klaytn"
+      chainId: 8217
+      oneInchSwapConfig:
+        isSupported: true
+        approveAddress: "0x1111111254fb6c44bac0bed2854e76f90643097d"
+    - chainName: "bttc"
+      chainId: 199
+    - chainName: "iotex"
+      chainId: 4689
+    - chainName: "tomochain"
+      chainId: 88
+    - chainName: "fuse"
+      chainId: 122
+      liFiSwapConfig:
+        isSupported: true
+    - chainName: "evmos"
+      chainId: 9001
+      liFiSwapConfig:
+        isSupported: true
+
+  zeroxLogoUrl: "https://assets.coingecko.com/markets/images/565/large/0x-protocol.png?1596623034"
+  dodoEndpoint: "https://route-api.dodoex.io"
+  dodoLogoUrl: "https://assets.coingecko.com/markets/images/588/small/dodoex.png?1601864278"
+  lIFIEndpoint: "https://li.quest/v1"
+  lifiLogoUrl: "https://raw.githubusercontent.com/lifinance/lifi-web/develop/src/assets/Li.Fi/LiFi.svg"
+  oneInchEndpoint: "https://api.1inch.io/v4.0/"
+  oneInchLogoUrl: "https://assets.coingecko.com/coins/images/13469/large/1inch-token.png?1608803028"
+  zeroSwapLogoUrl: "https://icons.llama.fi/zeroswap.png"
+  zeroSwapEndpoint: "https://dev.zeroswap.io/api/v1/"
+  zeroSwapApiKey: "TQ5opS1NfSTsp3mo9g76Dsfc"
+  cowSwapUrl: "https://api.cow.fi/"
+  cowSwapLogoUrl: "https://assets.coingecko.com/coins/images/24384/large/cow.png?1660960589"
+  DZapUrl: "https://api.dzap.io"
+  DZapLogoUrl: "https://api.frontierwallet.com/images/protocols/dzap_logo.svg"
+
+bridge:
+  bridgeCfg:
+    bridgeExchangeChains: "liFiBridge"
+    bridgeExchangeChainTokens: "liFiBridge"
+    bridgeExchangeQuote: "liFiBridge"
+    bridgeExchangeTransaction: "liFiBridge"
+    serverPort: "8085"
+    LogFile: "bridge.log"
+  datadog:
+    env: "dev"
+    version: "1.0"
+
+
+
+cosmos:
+  cfg:
+    serverPort: "8082"
+    LogFile: "cosmos.log"
+    cosmostationImageUrl: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/images/"
+    denomInfo: "https://raw.githubusercontent.com/PulsarDefi/IBC-Cosmos/main/native_token_data.json"
+    ibcInfo: "https://raw.githubusercontent.com/PulsarDefi/IBC-Token-Data-Cosmos/main/ibc_data.json"
+    minGasFee: 0.025
+    wallets:
+      - chainName: "axelar"
+        chainId: "axelar-dojo-1"
+        decimals: 6
+        denom: uaxl
+        prefix: axelar
+        baseFee: 0.007
+        rpc: "https://axelar-rpc.quickapi.com"
+        rest: "https://rest.cosmos.directory/axelar"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/axelar/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: ""
+          nonceSource: ""
+          gasLimitSource: ""
+      - chainName: "juno"
+        chainId: "juno-1"
+        decimals: 6
+        denom: ujuno
+        prefix: juno
+        baseFee: 0.025
+        rpc: "https://rpc-juno.ecostake.com"
+        rest: "https://rest.cosmos.directory/juno"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/juno/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: ""
+          nonceSource: ""
+          gasLimitSource: ""
+      - chainName: "cryptoorgchain"
+        chainId: "crypto-org-chain-mainnet-1"
+        decimals: 8
+        denom: basecro
+        prefix: cro
+        baseFee: 0.025
+        rpc: "https://rpc-cryptoorgchain.ecostake.com"
+        rest: "https://rest.cosmos.directory/cryptoorgchain"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/cryptoorg/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: ""
+          nonceSource: ""
+          gasLimitSource: ""
+      - chainName: "kujira"
+        chainId: "kaiyo-1"
+        decimals: 6
+        denom: ukuji
+        prefix: kujira
+        baseFee: 0.00119
+        rpc: "https://rpc-kujira.ecostake.com"
+        rest: "https://rest.cosmos.directory/kujira"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/kujira/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: ""
+          nonceSource: ""
+          gasLimitSource: ""
+      - chainName: "secretnetwork"
+        chainId: "secret-4"
+        decimals: 6
+        denom: uscrt
+        prefix: secret
+        baseFee: 0.25
+        rpc: "https://rpc.scrt.network"
+        rest: "https://rest.cosmos.directory/secretnetwork"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/secret/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: ""
+          nonceSource: ""
+          gasLimitSource: ""
+      - chainName: "sifchain"
+        chainId: "sifchain-1"
+        decimals: 6
+        denom: rowan
+        prefix: sif
+        baseFee: 0.025
+        rpc: "https://rpc-sifchain-ia.notional.ventures"
+        rest: "https://rest.cosmos.directory/sifchain"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/sifchain/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: ""
+          nonceSource: ""
+          gasLimitSource: ""
+      - chainName: "crescent"
+        chainId: "crescent-1"
+        decimals: 6
+        denom: ucre
+        prefix: cre
+        baseFee: 0.05
+        rpc: "https://mainnet.crescent.network:26657"
+        rest: "https://rest.cosmos.directory/crescent"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/crescent/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: ""
+          nonceSource: ""
+          gasLimitSource: ""
+      - chainName: "akash"
+        chainId: "akashnet-2"
+        decimals: 6
+        denom: uakt
+        prefix: akash
+        baseFee: 0.025
+        rpc: "https://rpc-akash.ecostake.com:443"
+        rest: "https://rest.cosmos.directory/akash"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/akash/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: ""
+          nonceSource: ""
+          gasLimitSource: ""
+      - chainName: "umee"
+        chainId: "umee-1"
+        decimals: 6
+        denom: uumee
+        prefix: umee
+        baseFee: 0.001
+        rpc: "https://rpc.aphrodite.main.network.umee.cc"
+        rest: "https://rest.cosmos.directory/umee"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/umee/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: ""
+          nonceSource: ""
+          gasLimitSource: ""
+      - chainName: "injective"
+        chainId: "injective-1"
+        decimals: 18
+        denom: inj
+        prefix: inj
+        baseFee: 500000000
+        rpc: "https://injective-rpc.api.chainlayer.network"
+        rest: "https://rest.cosmos.directory/injective"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/injective/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: ""
+          nonceSource: ""
+          gasLimitSource: ""
+      - chainName: "bandchain"
+        chainId: "laozi-mainnet"
+        decimals: 6
+        denom: uband
+        prefix: band
+        baseFee: 0
+        rpc: "http://rpc.laozi1.bandchain.org:80"
+        rest: "https://rest.cosmos.directory/bandchain"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/band/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: "https://api-band.cosmostation.io/v1"
+          nonceSource: ""
+          gasLimitSource: ""
+          sendTxSource: "rpc"
+      - chainName: "cosmoshub"
+        chainId: "cosmoshub-4"
+        decimals: 6
+        denom: uatom
+        prefix: cosmos
+        baseFee: 0.025
+        rpc: "https://rpc-cosmoshub.blockapsis.com"
+        rest: "https://rest.cosmos.directory/cosmoshub"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/cosmos/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: "https://api.cosmostation.io/v1"
+          nonceSource: ""
+          gasLimitSource: ""
+          sendTxSource: "rpc"
+      - chainName: "kava"
+        chainId: "kava_2222-10"
+        decimals: 6
+        denom: ukava
+        prefix: kava
+        baseFee: 0.025
+        rpc: "https://rpc.kava.io"
+        rest: "https://rest.cosmos.directory/kava"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/kava/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: "custom"
+          nonceSource: ""
+          gasLimitSource: ""
+          sendTxSource: "rpc"
+      - chainName: "osmosis"
+        chainId: "osmosis-1"
+        decimals: 6
+        denom: uosmo
+        prefix: osmo
+        baseFee: 0.025
+        rpc: "https://osmosis.validator.network"
+        rest: "https://rest.cosmos.directory/osmosis"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/osmosis/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: "rest"
+          nonceSource: ""
+          gasLimitSource: ""
+          sendTxSource: "rpc"
+      - chainName: "regen"
+        chainId: "regen-1"
+        decimals: 6
+        denom: uregen
+        prefix: regen
+        baseFee: 0.025
+        rpc: "https://rpc-regen.ecostake.com"
+        rest: "https://rest.cosmos.directory/regen"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/regen/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: "rest"
+          nonceSource: ""
+          gasLimitSource: ""
+          sendTxSource: "rpc"
+      - chainName: "stargaze"
+        chainId: "stargaze-1"
+        decimals: 6
+        denom: ustars
+        prefix: stars
+        baseFee: 0.025
+        rpc: "https://rpc.stargaze-apis.com"
+        rest: "https://rest.cosmos.directory/stargaze"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/stargaze/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: "rest"
+          nonceSource: ""
+          gasLimitSource: ""
+          sendTxSource: "rpc"
+      - chainName: "sentinel"
+        chainId: "sentinelhub-2"
+        decimals: 6
+        denom: udvpn
+        prefix: sent
+        baseFee: 0.1
+        rpc: "https://rpc-sentinel-ia.cosmosia.notional.ventures"
+        rest: "https://rest.cosmos.directory/sentinel"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/sentinel/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: "rest"
+          nonceSource: ""
+          gasLimitSource: ""
+          sendTxSource: "rpc"
+      - chainName: "persistence"
+        chainId: "core-1"
+        decimals: 6
+        denom: uxprt
+        prefix: persistence
+        baseFee: 0.025
+        rpc: "https://rpc.core.persistence.one"
+        rest: "https://rest.cosmos.directory/persistence"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/persistence/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: "rest"
+          nonceSource: ""
+          gasLimitSource: ""
+          sendTxSource: "rpc"
+      - chainName: "irisnet"
+        chainId: "irishub-1"
+        decimals: 6
+        denom: uiris
+        prefix: iaa
+        baseFee: 0.2
+        rpc: "https://rpc-iris.keplr.app"
+        rest: "https://rest.cosmos.directory/irisnet"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/iris/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: "rest"
+          nonceSource: ""
+          gasLimitSource: ""
+          sendTxSource: "rpc"
+      - chainName: "agoric"
+        chainId: "agoric-3"
+        decimals: 6
+        denom: ubld
+        prefix: agoric
+        baseFee: 0.025
+        rpc: "https://main.rpc.agoric.net:443"
+        rest: "https://rest.cosmos.directory/agoric"
+        cosmostationAssetsInfo: ""
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: "rest"
+          nonceSource: ""
+          gasLimitSource: ""
+          sendTxSource: "rpc"
+      - chainName: "shentu"
+        chainId: "shentu-2.2"
+        decimals: 6
+        denom: uctk
+        prefix: certik
+        baseFee: 0.05
+        rpc: "https://shenturpc.noopsbycertik.com"
+        rest: "https://rest.cosmos.directory/shentu"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/shentu/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: "rest"
+          nonceSource: ""
+          gasLimitSource: ""
+          sendTxSource: "rpc"
+      - chainName: "impacthub"
+        chainId: "impacthub-3"
+        decimals: 6
+        denom: uixo
+        prefix: ixo
+        baseFee: 0.025
+        rpc: "https://rpc-impacthub.keplr.app"
+        rest: "https://rest.cosmos.directory/impacthub"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/ixo/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: "rest"
+          nonceSource: ""
+          gasLimitSource: ""
+          sendTxSource: "rpc"
+      - chainName: "emoney"
+        chainId: "emoney-3"
+        decimals: 6
+        denom: ungm
+        prefix: emoney
+        baseFee: 0.1
+        rpc: "https://rpc-emoney.keplr.app"
+        rest: "https://rest.cosmos.directory/emoney"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/emoney/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: "rest"
+          nonceSource: ""
+          gasLimitSource: ""
+          sendTxSource: "rpc"
+      - chainName: "sommelier"
+        chainId: "sommelier-3"
+        decimals: 6
+        denom: usomm
+        prefix: somm
+        baseFee: 0.025
+        rpc: "https://rpc-sommelier.keplr.app"
+        rest: "https://rest.cosmos.directory/sommelier"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/sommelier/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: "rest"
+          nonceSource: ""
+          gasLimitSource: ""
+          sendTxSource: "rpc"
+      - chainName: "bostrom"
+        chainId: "bostrom"
+        decimals: 0
+        denom: boot
+        prefix: bostrom
+        baseFee: 0.025
+        rpc: "https://rpc.bostrom.cybernode.ai"
+        rest: "https://rest.cosmos.directory/bostrom"
+        cosmostationAssetsInfo: ""
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: "rest"
+          nonceSource: ""
+          gasLimitSource: ""
+          sendTxSource: "rpc"
+      - chainName: "gravitybridge"
+        chainId: "gravity-bridge-3"
+        decimals: 6
+        denom: ugraviton
+        prefix: gravity
+        baseFee: 0.025
+        rpc: "https://gravitychain.io:26657"
+        rest: "https://rest.cosmos.directory/gravitybridge"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/gravity-bridge/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: "rest"
+          nonceSource: ""
+          gasLimitSource: ""
+          sendTxSource: "rpc"
+      - chainName: "stride"
+        chainId: "stride-1"
+        decimals: 6
+        denom: ustrd
+        prefix: stride
+        baseFee: 0.025
+        rpc: "https://stride-rpc.polkachu.com"
+        rest: "https://rest.cosmos.directory/stride"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/stride/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: "rest"
+          nonceSource: ""
+          gasLimitSource: ""
+          sendTxSource: "rpc"
+      - chainName: "assetmantle"
+        chainId: "mantle-1"
+        decimals: 6
+        denom: umntl
+        prefix: mantle
+        baseFee: 0.025
+        rpc: "https://rpc.assetmantle.one"
+        rest: "https://rest.cosmos.directory/assetmantle"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/asset-mantle/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: "rest"
+          nonceSource: ""
+          gasLimitSource: ""
+          sendTxSource: "rpc"
+      - chainName: "bluzelle"
+        chainId: ""
+        decimals: 6
+        denom: ubnt
+        prefix: bluzelle
+        baseFee: 0.025
+        rpc: "https://client.sentry.bluzellenet.bluzelle.com:1317"
+        rest: "https://client.sentry.bluzellenet.bluzelle.com:1317"
+        cosmostationAssetsInfo: ""
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: "rest"
+          nonceSource: ""
+          gasLimitSource: ""
+          sendTxSource: "rpc"
+      - chainName: "cronos"
+        chainId: "mcronosmainnet_25-1"
+        decimals: 18
+        denom: basecro
+        prefix: cro
+        baseFee: 0.025
+        rpc: "https://rpc.cronos.org"
+        rest: "https://rest.cosmos.directory/cronos"
+        cosmostationAssetsInfo: ""
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: "rest"
+          nonceSource: ""
+          gasLimitSource: ""
+          sendTxSource: "rpc"
+      - chainName: "terra"
+        chainId: "columbus-5"
+        decimals: 6
+        denom: uluna
+        prefix: terra
+        baseFee: 5.665
+        rpc: "http://public-node.terra.dev:26657"
+        rest: "https://rest.cosmos.directory/terra"
+        cosmostationAssetsInfo: ""
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: "rest"
+          nonceSource: ""
+          gasLimitSource: ""
+          sendTxSource: "rpc"
+      - chainName: "evmos"
+        chainId: "evmos_9001-2"
+        decimals: 18
+        denom: aevmos
+        prefix: evmos
+        baseFee: 25000000000
+        rpc: "https://rpc-evmos.ecostake.com"
+        rest: "https://rest.cosmos.directory/evmos"
+        cosmostationAssetsInfo: "https://raw.githubusercontent.com/cosmostation/cosmostation_token_resource/master/assets/v2/evmos/assets.json"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: "rest"
+          nonceSource: ""
+          gasLimitSource: ""
+          sendTxSource: "rpc"
+      - chainName: "terra2"
+        chainId: "phoenix-1"
+        decimals: 6
+        denom: uluna
+        prefix: terra
+        baseFee: 0.0125
+        rpc: "https://rpc.terrav2.ccvalidators.com:443"
+        rest: "https://rest.cosmos.directory/terra2"
+        cosmostationAssetsInfo: ""
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "rest"
+          historySource: "rest"
+          nonceSource: ""
+          gasLimitSource: ""
+          sendTxSource: "rpc"
+  datadog:
+    env: "dev"
+    version: "1.0"
+
+
+evm:
+  cfg:
+    serverPort: "8083"
+    LogFile: "evm.log"
+    zeroxAffilateAddress: "0x75542808465f2dfabf147247d645bddcfe18c623"
+    wallets:
+      - chainName: "arbitrum"
+        chainId: 42161
+        socketSupport: true
+        deBridgeSupport: true
+        rpc: "https://arb-mainnet.g.alchemy.com/v2/GVkrt_8cLHv1Yi04m7lqZ2dbteVprcjQ/"
+        decimal: 18
+        currencySymbol: "ETH"
+        gasLimitFactor:
+          zeroX: 10
+          dodo: 40
+          lifi: 1
+        bridge:
+          service: "lifi"
+          chainKey: "ARB"
+          chainId: "42161"
+        nomenclature:
+          chainNameFull: "arbitrum"
+          chainNameShort: "arb"
+          unmarshal: "arbitrum"
+          debank: "arb"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "debank"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+        nativeTokenInfo:
+          name: "Ether"
+          symbol: "ETH"
+          address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+          decimals: "18"
+          chainId: "42161"
+          logoURI: "https://assets.unmarshal.io/tokens/0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE.png"
+        chainInfo:
+          id: "arb"
+          chainId: 42161
+          name: "Arbitrum"
+          nativeTokenID: "arb"
+          logoUrl: "https://static.debank.com/image/chain/logo_url/arb/f6d1b236259654d531a1459b2bccaf64.png"
+          wrappedTokenID: "0x82af49447d8a07e3bd95bd0d56f35241523fbab1"
+      - chainName: "ethereum"
+        chainId: 1
+        rpc: "https://eth-mainnet.nodereal.io/v1/3d7d386210214c108b957709d81f719c"
+        decimal: 18
+        socketSupport: true
+        deBridgeSupport: true
+        currencySymbol: "ETH"
+        gasLimitFactor:
+          zeroX: 2
+          dodo: 1
+          lifi: 1
+        bridge:
+          service: "lifi"
+          chainKey: "ETH"
+          chainId: "1"
+        nomenclature:
+          chainNameFull: "ethereum"
+          chainNameShort: "eth"
+          unmarshal: "ethereum"
+          debank: "eth"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "debank"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+        nativeTokenInfo:
+          name: "Ether"
+          symbol: "ETH"
+          address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+          decimals: "18"
+          chainId: "1"
+          logoURI: "https://assets.unmarshal.io/tokens/ethereum_0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE.png"
+        chainInfo:
+          id: "eth"
+          chainId: 1
+          name: "Ethereum"
+          nativeTokenID: "eth"
+          logoUrl: "https://static.debank.com/image/chain/logo_url/eth/42ba589cd077e7bdd97db6480b0ff61d.png"
+          wrappedTokenID: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+      - chainName: "fantom"
+        chainId: 250
+        rpc: "https://rpcapi.fantom.network"
+        decimal: 18
+        socketSupport: true
+        currencySymbol: "FTM"
+        gasLimitFactor:
+          zeroX: 3
+          dodo: 1
+          lifi: 1
+        bridge:
+          service: "lifi"
+          chainKey: "FTM"
+          chainId: "250"
+        nomenclature:
+          chainNameFull: "Fantom Opera"
+          chainNameShort: "ftm"
+          unmarshal: "fantom"
+          debank: "ftm"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "debank"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+        nativeTokenInfo:
+          name: "Fantom"
+          symbol: "FTM"
+          address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+          chainId: "250"
+          decimals: "18"
+          logoURI: "https://assets.coingecko.com/coins/images/4001/large/Fantom.png?1558015016"
+        chainInfo:
+          id: "ftm"
+          chainId: 250
+          name: "Fantom"
+          nativeTokenID: "ftm"
+          logoUrl: "https://static.debank.com/image/chain/logo_url/ftm/700fca32e0ee6811686d72b99cc67713.png"
+          wrappedTokenID: "0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83"
+      - chainName: "harmony"
+        chainId: 1666600000
+        rpc: "https://api.s0.t.hmny.io"
+        decimal: 18
+        currencySymbol: "ONE"
+        gasLimitFactor:
+          zeroX: 0
+          dodo: 1
+          lifi: 1
+        bridge:
+          service: "lifi"
+          chainKey: "ONE"
+          chainId: 1666600000
+        nomenclature:
+          chainNameFull: "harmony one"
+          chainNameShort: "one"
+          unmarshal: "harmony"
+          debank: "hmy"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "debank"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+        chainInfo:
+          id: "hmy"
+          chainId: 1666600000
+          name: "Harmony"
+          nativeTokenID: "hmy"
+          logoUrl: "https://static.debank.com/image/chain/logo_url/hmy/734c003023531e31c636ae25d5a73172.png"
+          wrappedTokenID: "0xcf664087a5bb0237a0bad6742852ec6c8d69a27a"
+        nativeTokenInfo:
+          name: "Harmony Token"
+          symbol: "ONE"
+          address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+          chainId: "1666600000"
+          decimals: "18"
+          logoURI: "https://assets.unmarshal.io/tokens/harmony_0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE.png"
+      - chainName: "polygon"
+        chainId: 137
+        rpc: "https://polygon-mainnet.nodereal.io/v1/a39e2d8506fb47b194895e8275d7aa67"
+        decimal: 18
+        socketSupport: true
+        deBridgeSupport: true
+        currencySymbol: "MATIC"
+        gasLimitFactor:
+          zeroX: 3
+          dodo: 1
+          lifi: 1
+        bridge:
+          service: "lifi"
+          chainKey: "POL"
+          chainId: "137"
+        nomenclature:
+          chainNameFull: "polygon"
+          chainNameShort: "matic"
+          unmarshal: "matic"
+          debank: "matic"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "debank"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+        nativeTokenInfo:
+          name: "Matic Token"
+          symbol: "MATIC"
+          address: "0x0000000000000000000000000000000000001010"
+          chainId: "137"
+          decimals: "18"
+          logoURI: "https://assets.coingecko.com/coins/images/4713/large/matic-token-icon.png?1624446912"
+        chainInfo:
+          id: "matic"
+          chainId: 137
+          name: "Polygon"
+          nativeTokenID: "matic"
+          logoUrl: "https://static.debank.com/image/chain/logo_url/matic/d3d807aff1a13e9ba51a14ff153d6807.png"
+          wrappedTokenID: "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270"
+      - chainName: "celo"
+        chainId: 42220
+        rpc: "https://forno.celo.org"
+        decimal: 18
+        currencySymbol: "CELO"
+        gasLimitFactor:
+          zeroX: 3
+          dodo: 1
+          lifi: 1
+        bridge:
+          service: "lifi"
+          chainKey: "CEL"
+          chainId: 42220
+        nomenclature:
+          chainNameFull: "celo"
+          chainNameShort: "CELO"
+          unmarshal: "celo"
+          debank: "celo"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "debank"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+        chainInfo:
+          id: "celo"
+          chainId: 42220
+          name: "Celo"
+          nativeTokenID: "celo"
+          logoUrl: "https://static.debank.com/image/chain/logo_url/celo/41da5c1d3c0945ae822a1f85f02c76cf.png"
+          wrappedTokenID: "0x471ece3750da237f93b8e339c536989b8978a438"
+        nativeTokenInfo:
+          name: "Celo Token"
+          symbol: "CELO"
+          address: "0x471ece3750da237f93b8e339c536989b8978a438"
+          chainId: "42220"
+          decimals: "18"
+          logoURI: "https://assets.unmarshal.io/tokens/celo_0x471EcE3750Da237f93B8E339c536989b8978a438.png"
+      - chainName: "optimism"
+        chainId: 10
+        rpc: "https://opt-mainnet.nodereal.io/v1/21649f3d78a7452588de3671cf6cd46b"
+        decimal: 18
+        socketSupport: true
+        currencySymbol: "ETH"
+        gasLimitFactor:
+          zeroX: 3
+          dodo: 1
+          lifi: 1
+        bridge:
+          service: "lifi"
+          chainKey: "OPT"
+          chainId: "10"
+        nomenclature:
+          chainNameFull: "optimism"
+          chainNameShort: "opt"
+          unmarshal: "optimism"
+          debank: "op"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "debank"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+        nativeTokenInfo:
+          name: "Optimism Token"
+          symbol: "ETH"
+          address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+          chainId: "10"
+          decimals: "18"
+          logoURI: "https://assets.coingecko.com/coins/images/25244/large/Optimism.png?1660904599"
+        chainInfo:
+          id: "op"
+          chainId: 10
+          name: "Optimism"
+          nativeTokenID: "op"
+          logoUrl: "https://static.debank.com/image/chain/logo_url/op/01ae734fe781c9c2ae6a4cc7e9244056.png"
+          wrappedTokenID: "0x4200000000000000000000000000000000000006"
+      - chainName: "xinfin"
+        chainId: 50
+        rpc: "https://rpc.xinfin.network/"
+        decimal: 18
+        currencySymbol: "XDC"
+        gasLimitFactor:
+          zeroX: 0
+          dodo: 1
+          lifi: 1
+        nomenclature:
+          chainNameFull: "xinfin"
+          chainNameShort: "xdc"
+          unmarshal: "xinfin"
+          debank: ""
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "custom"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+        nativeTokenInfo:
+          name: "xinfin"
+          symbol: "XDC"
+          address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+          chainId: "50"
+          decimals: "18"
+          logoURI: "https://raw.githubusercontent.com/pro100skm/xdc-token-list/master/xdc-logo.png"
+      - chainName: "metis"
+        chainId: 1088
+        rpc: "https://andromeda.metis.io/?owner=1088"
+        decimal: 18
+        gasLimitFactor:
+          zeroX: 0
+          dodo: 1
+          lifi: 1
+        currencySymbol: "METIS"
+        nomenclature:
+          chainNameFull: "metis"
+          chainNameShort: "metis"
+          unmarshal: "metis"
+          debank: "metis"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "debank"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+        chainInfo:
+          id: "metis"
+          chainId: 1088
+          name: "Metis"
+          nativeTokenID: "metis"
+          logoUrl: "https://static.debank.com/image/chain/logo_url/metis/b289da32db4d860ebf6fb46a6e41dcfc.png"
+          wrappedTokenID: "0x75cb093e4d61d2a2e65d8e0bbb01de8d89b53481"
+        nativeTokenInfo:
+          name: "Metis Token"
+          symbol: "METIS"
+          address: "0xdeaddeaddeaddeaddeaddeaddeaddeaddead0000"
+          chainId: "1088"
+          decimals: "18"
+          logoURI: "https://assets.unmarshal.io/tokens/metis_0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000.png"
+      - chainName: "avalanche"
+        chainId: 43114
+        rpc: "https://api.avax.network/ext/bc/C/rpc"
+        decimal: 18
+        socketSupport: true
+        deBridgeSupport: true
+        currencySymbol: "AVAX"
+        gasLimitFactor:
+          zeroX: 2
+          dodo: 1
+          lifi: 1
+        bridge:
+          service: "lifi"
+          chainKey: "AVA"
+          chainId: "43114"
+        nomenclature:
+          chainNameFull: "avalanche c-chain"
+          chainNameShort: "avax"
+          unmarshal: "avalanche"
+          debank: "avax"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "debank"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+        nativeTokenInfo:
+          name: "AVAX Token"
+          symbol: "AVAX"
+          address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+          decimals: "18"
+          chainId: "43114"
+          logoURI: "https://assets.coingecko.com/coins/images/12559/large/coin-round-red.png?1604021818"
+        chainInfo:
+          id: "avax"
+          chainId: 43114
+          name: "Avalanche"
+          nativeTokenID: "avax"
+          logoUrl: "https://static.debank.com/image/chain/logo_url/avax/4d1649e8a0c7dec9de3491b81807d402.png"
+          wrappedTokenID: "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7"
+      - chainName: "aurora"
+        chainId: 1313161554
+        rpc: "https://mainnet.aurora.dev"
+        decimal: 18
+        socketSupport: true
+        currencySymbol: "ETH"
+        bridge:
+          service: "lifi"
+          chainKey: "AUR"
+          chainId: "1313161554"
+        gasLimitFactor:
+          zeroX: 0
+          dodo: 30
+          lifi: 1
+        nomenclature:
+          chainNameFull: "aurora"
+          chainNameShort: "aurora"
+          unmarshal: "aurora"
+          debank: "aurora"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "debank"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+        nativeTokenInfo:
+          name: "Ether"
+          symbol: "ETH"
+          address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+          decimals: "18"
+          chainId: "1313161554"
+          logoURI: "https://assets.unmarshal.io/tokens/0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE.png"
+        chainInfo:
+          id: "aurora"
+          chainId: 1313161554
+          name: "Aurora"
+          nativeTokenID: "aurora"
+          logoUrl: "https://static.debank.com/image/chain/logo_url/aurora/c7590fd2defb8e7d7dc071166838c33a.png"
+          wrappedTokenID: ""
+      - chainName: "bsc"
+        chainId: 56
+        rpc: "https://bsc-mainnet.nodereal.io/v1/e6a63a9446bd4b83b91de2d5543943f7"
+        decimal: 18
+        socketSupport: true
+        deBridgeSupport: true
+        currencySymbol: "BNB"
+        gasLimitFactor:
+          zeroX: 3
+          dodo: 1
+          lifi: 1
+        bridge:
+          service: "lifi"
+          chainKey: "BSC"
+          chainId: "56"
+        nomenclature:
+          chainNameFull: "binance smart chain"
+          chainNameShort: "bsc"
+          unmarshal: "bsc"
+          debank: "bsc"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "debank"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+        nativeTokenInfo:
+          name: "BNB Token"
+          symbol: "BNB"
+          address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+          chainId: "56"
+          decimals: "18"
+          logoURI: "https://assets.unmarshal.io/tokens/0xeEEEeeEeEeEeeeeEeeEEeEeEeeeEEEEeeEeEeeef.png"
+        chainInfo:
+          id: "bsc"
+          chainId: 56
+          name: "BSC"
+          nativeTokenID: "bsc"
+          logoUrl: "https://static.debank.com/image/chain/logo_url/bsc/7c87af7b52853145f6aa790d893763f1.png"
+          wrappedTokenID: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c"
+
+      #TODO: Add a way to fetch multiple RPCs
+      - chainName: "boba"
+        chainId: 288
+        rpc: "https://lightning-replica.boba.network/"
+        decimal: 18
+        currencySymbol: "BOBA"
+        gasLimitFactor:
+          zeroX: 0
+          dodo: 20
+          lifi: 1
+        nomenclature:
+          chainNameFull: "Boba Network"
+          chainNameShort: "boba"
+          unmarshal: "boba"
+          debank: "boba"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "debank"
+          gasLimitSource: "rpc"
+          sendTxSource: "" #TODO: Boba Network has a separate RPC for write transaction
+        nativeTokenInfo:
+          name: "Ether"
+          symbol: "ETH"
+          address: "0x4200000000000000000000000000000000000006"
+          decimals: "18"
+          chainId: "288"
+          logoURI: "https://assets.unmarshal.io/tokens/0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE.png"
+        chainInfo:
+          id: "boba"
+          chainId: 288
+          name: "Boba"
+          nativeTokenID: "boba"
+          logoUrl: "https://static.debank.com/image/chain/logo_url/boba/e43d79cd8088ceb3ea3e4a240a75728f.png"
+          wrappedTokenID: "0xdeaddeaddeaddeaddeaddeaddeaddeaddead0000"
+      - chainName: "zilliqa"
+        chainId: 288
+        rpc: "https://api.zilliqa.com"
+        decimal: 18
+        currencySymbol: "ZIL"
+        gasLimitFactor:
+          zeroX: 0
+          dodo: 1
+          lifi: 1
+        nomenclature:
+          chainNameFull: "zilliqa"
+          chainNameShort: "zilliqa"
+          unmarshal: "zilliqa"
+          debank: ""
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "rpc"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+      - chainName: "heco"
+        chainId: 128
+        rpc: "https://http-mainnet.hecochain.com"
+        decimal: 18
+        currencySymbol: "HT"
+        gasLimitFactor:
+          zeroX: 0
+          dodo: 1
+          lifi: 1
+        nomenclature:
+          chainNameFull: "huobi eco chain"
+          chainNameShort: "heco"
+          unmarshal: "heco"
+          debank: "heco"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "debank"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+        chainInfo:
+          id: "heco"
+          chainId: 128
+          name: "HECO"
+          nativeTokenID: "heco"
+          logoUrl: "https://static.debank.com/image/chain/logo_url/heco/db5152613c669e0cc8624d466d6c94ea.png"
+          wrappedTokenID: "0x5545153ccfca01fbd7dd11c0b23ba694d9509a6f"
+        nativeTokenInfo:
+          name: "Heco Token"
+          symbol: "HT"
+          address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+          chainId: "128"
+          decimals: "18"
+          logoURI: "https://assets.unmarshal.io/tokens/heco_0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE.png"
+      # Limited API support
+      - chainName: "gnosis"
+        chainId: 100
+        rpc: "https://rpc.ankr.com/gnosis"
+        decimal: 18
+        socketSupport: true
+        currencySymbol: "xDai"
+        gasLimitFactor:
+          zeroX: 0
+          dodo: 1
+          lifi: 1
+        bridge:
+          service: "lifi"
+          chainKey: "DAI"
+          chainId: "100"
+        nomenclature:
+          chainNameFull: "gnosis"
+          chainNameShort: "gnosis"
+          unmarshal: "gnosis"
+          debank: "xdai"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "debank"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+        nativeTokenInfo:
+          name: "Gnosis Token"
+          symbol: "xDAI"
+          address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+          chainId: "100"
+          decimals: "18"
+          logoURI: "https://assets.coingecko.com/coins/images/662/large/logo_square_simple_300px.png?1609402668"
+        chainInfo:
+          id: "xdai"
+          chainId: 100
+          name: "Gnosis"
+          nativeTokenID: "xdai"
+          logoUrl: "https://static.debank.com/image/chain/logo_url/xdai/8b5320523b30bd57a388d1bcc775acd5.png"
+          wrappedTokenID: "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d"
+      # Limited API support
+      - chainName: "cronos"
+        chainId: 25
+        rpc: "https://evm.cronos.org"
+        decimal: 18
+        currencySymbol: "CRO"
+        gasLimitFactor:
+          zeroX: 0
+          dodo: 1
+          lifi: 1
+        bridge:
+          service: "lifi"
+          chainKey: "CRO"
+          chainId: "25"
+        nomenclature:
+          chainNameFull: "cronos"
+          chainNameShort: "cro"
+          unmarshal: "cronos"
+          debank: "cro"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "debank"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+        chainInfo:
+          id: "cro"
+          chainId: 25
+          name: "Cronos"
+          nativeTokenID: "cro"
+          logoUrl: "https://static.debank.com/image/chain/logo_url/cro/44f784a1f4c0ea7d26d00acabfdf0028.png"
+          wrappedTokenID: "0x5c7f8a570d578ed84e63fdfa7b1ee72deae1ae23"
+        nativeTokenInfo:
+          name: "Cronos Token"
+          symbol: "CRO"
+          address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+          chainId: "25"
+          decimals: "18"
+          logoURI: "https://assets.unmarshal.io/tokens/cronos_0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE.png"
+      - chainName: "moonriver"
+        chainId: 1285
+        rpc: "https://moonriver.public.blastapi.io"
+        decimal: 18
+        currencySymbol: "movr"
+        gasLimitFactor:
+          zeroX: 0
+          dodo: 10
+          lifi: 1
+        bridge:
+          service: "lifi"
+          chainKey: "MOR"
+          chainId: "1285"
+        nomenclature:
+          chainNameFull: "moonriver"
+          chainNameShort: "movr"
+          unmarshal: "moonriver"
+          debank: "movr"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "debank"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+        chainInfo:
+          id: "movr"
+          chainId: 1285
+          name: "Moonriver"
+          nativeTokenID: "movr"
+          logoUrl: "https://static.debank.com/image/chain/logo_url/movr/4b0de5a711b437f187c0d0f15cc0398b.png"
+          wrappedTokenID: "0x98878b06940ae243284ca214f92bb71a2b032b8a"
+        nativeTokenInfo:
+          name: "Moonriver Token"
+          symbol: "MOVR"
+          address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+          chainId: "1285"
+          decimals: "18"
+          logoURI: "https://assets.unmarshal.io/tokens/moonriver_0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE.png"
+      - chainName: "moonbeam"
+        chainId: 1284
+        rpc: "https://rpc.api.moonbeam.network"
+        decimal: 18
+        gasLimitFactor:
+          zeroX: 0
+          dodo: 1
+          lifi: 1
+        currencySymbol: "glmr"
+        bridge:
+          service: "lifi"
+          chainKey: "MOO"
+          chainId: 1284
+        nomenclature:
+          chainNameFull: "moonbeam"
+          chainNameShort: "moonbeam"
+          unmarshal: "moonbeam"
+          debank: "mobm"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "debank"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+        chainInfo:
+          id: "mobm"
+          chainId: 1284
+          name: "Moonbeam"
+          nativeTokenID: "mobm"
+          logoUrl: "https://static.debank.com/image/chain/logo_url/mobm/a8442077d76b258297181c3e6eb8c9cc.png"
+          wrappedTokenID: "0xacc15dc74880c9944775448304b263d191c6077f"
+        nativeTokenInfo:
+          name: "Moonbeam Token"
+          symbol: "GLMR"
+          address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+          chainId: "1284"
+          decimals: "18"
+          logoURI: "https://assets.unmarshal.io/tokens/moonbeam_0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE.png"
+      - chainName: "klaytn"
+        chainId: 8217
+        rpc: "https://public-node-api.klaytnapi.com/v1/cypress"
+        decimal: 18
+        currencySymbol: "klay"
+        gasLimitFactor:
+          zeroX: 0
+          dodo: 1
+          lifi: 1
+        nomenclature:
+          chainNameFull: "klaytn"
+          chainNameShort: "klaytn"
+          unmarshal: "klaytn"
+          debank: "klay"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "custom"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+        nativeTokenInfo:
+          name: "Klaytn Token"
+          symbol: "KLAY"
+          address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+          chainId: "8217"
+          decimals: "18"
+          logoURI: "https://assets.coingecko.com/coins/images/9672/large/klaytn.png?1660288824"
+        chainInfo:
+          id: "klay"
+          chainId: 8217
+          name: "Klaytn"
+          nativeTokenID: "klay"
+          logoUrl: "https://static.debank.com/image/chain/logo_url/klay/1df018b8493cb97c50b7e390ef63cba4.png"
+          wrappedTokenID: "0xe4f05a66ec68b54a58b17c22107b02e0232cc817"
+      - chainName: "bttc"
+        chainId: 199
+        rpc: "https://rpc.bt.io"
+        decimal: 18
+        currencySymbol: "btt"
+        gasLimitFactor:
+          zeroX: 0
+          dodo: 1
+          lifi: 1
+        nomenclature:
+          chainNameFull: "bittorrent"
+          chainNameShort: "bittorrent"
+          unmarshal: "bttc"
+          debank: "btt"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "debank"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+        chainInfo:
+          id: "btt"
+          chainId: 199
+          name: "BitTorrent"
+          nativeTokenID: "btt"
+          logoUrl: "https://static.debank.com/image/chain/logo_url/btt/2130a8d57ff2a0f3d50a4ec9432897c6.png"
+          wrappedTokenID: "0x197a4ed2b1bb607e47a144b9731d7d34f86e9686"
+        nativeTokenInfo:
+          name: "Bttc Token"
+          symbol: "BTT"
+          address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+          chainId: "199"
+          decimals: "18"
+          logoURI: "https://assets.unmarshal.io/tokens/bttc_0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE.png"
+      - chainName: "iotex"
+        chainId: 4689
+        rpc: "https://iotexrpc.com"
+        decimal: 18
+        gasLimitFactor:
+          zeroX: 0
+          dodo: 1
+          lifi: 1
+        currencySymbol: "iotx"
+        nomenclature:
+          chainNameFull: "iotex"
+          chainNameShort: "iotex"
+          unmarshal: "iotex"
+          debank: "iotx"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "debank"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+        chainInfo:
+          id: "iotx"
+          chainId: 4689
+          name: "IoTeX"
+          nativeTokenID: "iotx"
+          logoUrl: "https://static.debank.com/image/chain/logo_url/iotx/d3be2cd8677f86bd9ab7d5f3701afcc9.png"
+          wrappedTokenID: "0xa00744882684c3e4747faefd68d283ea44099d03"
+        nativeTokenInfo:
+          name: "Iotex Token"
+          symbol: "IOTX"
+          address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+          chainId: "4689"
+          decimals: "18"
+          logoURI: "https://assets.unmarshal.io/tokens/iotex_0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE.png"
+      - chainName: "tomochain"
+        chainId: 88
+        rpc: "https://rpc.tomochain.com"
+        decimal: 18
+        gasLimitFactor:
+          zeroX: 0
+          dodo: 1
+          lifi: 1
+        currencySymbol: "tomo"
+        nomenclature:
+          chainNameFull: "tomochain"
+          chainNameShort: "tomo"
+          unmarshal: ""
+          debank: ""
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "custom"
+          historySource: "custom"
+          userDataSource: ""
+          nonceSource: "custom"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+        nativeTokenInfo:
+          name: "Tomochain"
+          symbol: "TOMO"
+          address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+          chainId: "88"
+          decimals: "18"
+          logoURI: "https://raw.githubusercontent.com/tomochain/tokens/master/tokens/0x0000000000000000000000000000000000000001.png"
+      - chainName: "zksync"
+        chainId: 280
+        socketSupport: true
+        deBridgeSupport: true
+        rpc: "https://zksync2-testnet.zksync.dev"
+        decimal: 18
+        currencySymbol: "ETH"
+        restAPI: "https://zksync2-testnet-explorer.zksync.dev"
+        nomenclature:
+          chainNameFull: "zksync"
+          chainNameShort: "zksync"
+          unmarshal: "zksync"
+          debank: "zksync"
+        source:
+          tokenPriceSource: "custom"
+          balanceSource: "custom"
+          historySource: "custom"
+          userDataSource: "custom"
+          nonceSource: "custom"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+      - chainName: "evmos"
+        chainId: 9001
+        rpc: "https://evmos-json-rpc.stakely.io"
+        decimal: 18
+        gasLimitFactor:
+          zeroX: 0
+          dodo: 1
+          lifi: 1
+        currencySymbol: "evmos"
+        bridge:
+          service: "lifi"
+          chainKey: "EVM"
+          chainId: 9001
+        nomenclature:
+          chainNameFull: "evmos"
+          chainNameShort: "evmos"
+          unmarshal: "evmos"
+          debank: "evmos"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "debank"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+        nativeTokenInfo:
+          name: "evmos"
+          symbol: "evmos"
+          address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+          chainId: "9001"
+          decimals: "18"
+          logoURI: "https://static.debank.com/image/evmos_token/logo_url/evmos/26e038b4d5475d5a4b92f7fc08bdabc9.png"
+        chainInfo:
+          id: "evmos"
+          chainId: 9001
+          name: "EvmOS"
+          nativeTokenID: "evmos"
+          logoUrl: "https://static.debank.com/image/chain/logo_url/evmos/26e038b4d5475d5a4b92f7fc08bdabc9.png"
+          wrappedTokenID: "0xd4949664cd82660aae99bedc034a0dea8a0bd517"
+      - chainName: "fuse"
+        chainId: 122
+        rpc: "https://rpc.fuse.io/"
+        decimal: 18
+        bridge:
+          service: "lifi"
+          chainKey: "FUS"
+          chainId: 122
+        gasLimitFactor:
+          zeroX: 0
+          dodo: 1
+          lifi: 1
+        currencySymbol: "fuse"
+        nomenclature:
+          chainNameFull: "fuse"
+          chainNameShort: "fuse"
+          unmarshal: "fuse"
+          debank: "fuse"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "debank"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+        chainInfo:
+          id: "fuse"
+          chainId: 122
+          name: "Fuse"
+          nativeTokenID: "fuse"
+          logoUrl: "https://static.debank.com/image/chain/logo_url/fuse/ea4c9e12e7f646d42aa8fb07ab8dfec8.png"
+          wrappedTokenID: "0x0be9e53fd7edac9f859882afdda116645287c629"
+        nativeTokenInfo:
+          name: "Fuse Token"
+          symbol: "FUSE"
+          address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+          chainId: "122"
+          decimals: "18"
+          logoURI: "https://assets.unmarshal.io/tokens/fuse_0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE.png"
+      - chainName: "astar"
+        chainId: 592
+        rpc: "https://evm.astar.network"
+        decimal: 18
+        currencySymbol: "ASTR"
+        nomenclature:
+          chainNameFull: "astar"
+          chainNameShort: "astar"
+          unmarshal: "astar"
+          debank: "astar"
+        source:
+          tokenPriceSource: "coingecko"
+          balanceSource: "unmarshal"
+          historySource: "unmarshal"
+          userDataSource: "unmarshal"
+          nonceSource: "debank"
+          gasLimitSource: "rpc"
+          sendTxSource: "rpc"
+        chainInfo:
+          id: "astar"
+          chainId: 592
+          name: "Astar"
+          nativeTokenID: "astar"
+          logoUrl: "https://static.debank.com/image/chain/logo_url/astar/398c7e0014bdada3d818367a7273fabe.png"
+          wrappedTokenID: "0xaeaaf0e2c81af264101b9129c00f4440ccf0f720"
+        nativeTokenInfo:
+          name: "Astar"
+          symbol: "ASTR"
+          address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+          chainId: "592"
+          decimals: "18"
+          logoURI: "https://assets.unmarshal.io/tokens/astar_0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE.png"
+
+  datadog:
+    env: "dev"
+    version: "1.0"

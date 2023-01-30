@@ -3,9 +3,7 @@ package web
 import (
 	"strings"
 	"bridge-allowance/config"
-	// coingecko "bridge-allowance/pkg/coingecko"
 	grpcClient "bridge-allowance/pkg/grpc/client"
-	// "bridge-allowance/utils"
 	handler "bridge-allowance/web/handler"
 
 	"github.com/gin-gonic/gin"
@@ -17,7 +15,6 @@ import (
 func InitRoutes(config *config.Config, logger *zap.SugaredLogger, route *gin.Engine) {
 	grpcClientManager := grpcClient.NewGrpcClientManager(config, logger)
 	// http := utils.NewHttpRequest(logger)
-	// coingeckoManager := coingecko.NewCoinGecko(config, logger, http)
 	webHandler := handler.NewHandler(config, logger, grpcClientManager)
 	groupRoute := route.Group("/v2")
 	groupRoute.Use(func(ctx *gin.Context) {

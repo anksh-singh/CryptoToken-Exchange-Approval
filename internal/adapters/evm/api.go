@@ -24,7 +24,6 @@ type evmServer struct {
 
 func NewServer(config *config.Config, logger *zap.SugaredLogger, services common.Services) *evmServer {
 	core := rpc.NewEVMCore(config, logger, services)
-	// newSwap := swap.NewSwap(config, logger, services)
 	serverHandler := app.NewEVMServerHandler(*config, logger, core)
 	return &evmServer{
 		config:        *config,

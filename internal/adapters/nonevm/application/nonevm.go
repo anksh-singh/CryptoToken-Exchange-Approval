@@ -2,9 +2,6 @@ package application
 
 import (
 	"bridge-allowance/config"
-	// "bridge-allowance/pkg/coingecko"
-	// "bridge-allowance/pkg/customchain/aptos"
-	// "bridge-allowance/pkg/customchain/near"
 	"bridge-allowance/pkg/grpc/proto/pb"
 	"bridge-allowance/utils"
 
@@ -14,10 +11,6 @@ import (
 type NonEVMServerHandler struct {
 	config *config.Config
 	logger *zap.SugaredLogger
-	// solanaManager *rpc.SolanaManager
-	// nearManager  near.INear
-	// aptosManager aptos.IAptos
-	// coingecko    *coingecko.CoinGecko
 	utils        *utils.UtilConf
 	pb.UnimplementedUnifrontServer
 }

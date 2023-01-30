@@ -70,12 +70,12 @@ func (u *UtilConf) ValidateAddress(address string, chainGroup string, chain stri
 		return false, "", status.Errorf(codes.InvalidArgument, "Unsupported chain", "Invalid Data")
 	}
 }
-func (u *UtilConf) ValidateCosmosAddress(address string, chainName string) (bool, string, error) {
-	walletInfo := u.GetCosmosWalletInfo(chainName)
-	if !strings.HasPrefix(strings.ToLower(address), strings.ToLower(walletInfo.Prefix)) {
-		return false, address, status.Errorf(codes.InvalidArgument, fmt.Sprintf("%v is not %v address", address, chainName), fmt.Sprintf("Invalid %v Address", chainName))
-	}
-	return true, address, nil
-}
+// func (u *UtilConf) ValidateCosmosAddress(address string, chainName string) (bool, string, error) {
+// 	walletInfo := u.GetCosmosWalletInfo(chainName)
+// 	if !strings.HasPrefix(strings.ToLower(address), strings.ToLower(walletInfo.Prefix)) {
+// 		return false, address, status.Errorf(codes.InvalidArgument, fmt.Sprintf("%v is not %v address", address, chainName), fmt.Sprintf("Invalid %v Address", chainName))
+// 	}
+// 	return true, address, nil
+// }
 
 

@@ -96,3 +96,59 @@
 2023-01-30T14:58:17.895+0530	INFO	utils/evm.go:69	nonEVMChainList:= [solana near aptos]
 2023-01-30T14:58:17.895+0530	INFO	utils/nonevm.go:25	IsNonEVM: false
 2023-01-30T14:58:17.895+0530	INFO	utils/validation.go:69	Unsupported chain: atom
+2023-01-30T15:04:23.849+0530	INFO	web/web.go:37	Web Server Started at :8088
+2023-01-30T15:04:37.593+0530	INFO	web/routes.go:44	Client: Mobile
+2023-01-30T15:04:37.593+0530	INFO	web/routes.go:45	User-Agent: PostmanRuntime/7.29.2
+2023-01-30T15:04:37.594+0530	INFO	utils/evm.go:58	EVMChainList:= [arbitrum ethereum fantom harmony polygon celo optimism xinfin metis avalanche aurora bsc boba zilliqa heco gnosis cronos moonriver moonbeam klaytn bttc iotex tomochain zksync evmos fuse astar]
+2023-01-30T15:04:37.594+0530	INFO	utils/evm.go:101	IsEVM: false
+2023-01-30T15:04:37.594+0530	INFO	utils/cosmos.go:27	CosmosChainList:= [axelar juno cryptoorgchain kujira secretnetwork sifchain crescent akash umee injective bandchain cosmoshub kava osmosis regen stargaze sentinel persistence irisnet agoric shentu impacthub emoney sommelier bostrom gravitybridge stride assetmantle bluzelle cronos terra evmos terra2]
+2023-01-30T15:04:37.594+0530	INFO	utils/cosmos.go:51	IsCosmos: false
+2023-01-30T15:04:37.594+0530	INFO	utils/evm.go:69	nonEVMChainList:= [solana near aptos]
+2023-01-30T15:04:37.594+0530	INFO	utils/nonevm.go:25	IsNonEVM: false
+2023-01-30T15:04:37.594+0530	INFO	utils/validation.go:69	Unsupported chain: atom
+2023-01-30T15:04:52.335+0530	INFO	web/routes.go:44	Client: Mobile
+2023-01-30T15:04:52.335+0530	INFO	web/routes.go:45	User-Agent: PostmanRuntime/7.29.2
+2023-01-30T15:04:52.335+0530	INFO	utils/evm.go:58	EVMChainList:= [arbitrum ethereum fantom harmony polygon celo optimism xinfin metis avalanche aurora bsc boba zilliqa heco gnosis cronos moonriver moonbeam klaytn bttc iotex tomochain zksync evmos fuse astar]
+2023-01-30T15:04:52.335+0530	INFO	utils/evm.go:97	IsEVM: true
+2023-01-30T15:08:48.366+0530	INFO	web/web.go:37	Web Server Started at :8088
+2023-01-30T15:08:56.966+0530	INFO	web/routes.go:44	Client: Mobile
+2023-01-30T15:08:56.966+0530	INFO	web/routes.go:45	User-Agent: PostmanRuntime/7.29.2
+2023-01-30T15:08:56.966+0530	INFO	utils/evm.go:58	EVMChainList:= [arbitrum ethereum fantom harmony polygon celo optimism xinfin metis avalanche aurora bsc boba zilliqa heco gnosis cronos moonriver moonbeam klaytn bttc iotex tomochain zksync evmos fuse astar]
+2023-01-30T15:08:56.967+0530	INFO	utils/evm.go:97	IsEVM: true
+2023-01-30T15:10:47.343+0530	INFO	web/web.go:37	Web Server Started at :8088
+2023-01-30T15:10:59.145+0530	INFO	web/routes.go:44	Client: Mobile
+2023-01-30T15:10:59.145+0530	INFO	web/routes.go:45	User-Agent: PostmanRuntime/7.29.2
+2023-01-30T15:10:59.145+0530	INFO	utils/evm.go:58	EVMChainList:= [arbitrum ethereum fantom harmony polygon celo optimism xinfin metis avalanche aurora bsc boba zilliqa heco gnosis cronos moonriver moonbeam klaytn bttc iotex tomochain zksync evmos fuse astar]
+2023-01-30T15:10:59.145+0530	INFO	utils/evm.go:97	IsEVM: true
+2023-01-30T15:14:24.680+0530	INFO	web/web.go:37	Web Server Started at :8088
+2023-01-30T15:15:23.966+0530	INFO	web/web.go:37	Web Server Started at :8088
+2023-01-30T15:16:03.628+0530	INFO	web/web.go:37	Web Server Started at :8088
+2023-01-30T15:16:24.881+0530	INFO	web/web.go:37	Web Server Started at :8088
+2023-01-30T15:17:21.526+0530	INFO	web/web.go:37	Web Server Started at :8088
+2023-01-30T15:19:25.858+0530	INFO	web/web.go:37	Web Server Started at :8088
+2023-01-30T15:20:56.621+0530	INFO	web/web.go:37	Web Server Started at :8088
+2023-01-30T15:23:38.397+0530	INFO	web/web.go:37	Web Server Started at :8088
+2023-01-30T15:23:51.426+0530	INFO	web/routes.go:44	Client: Mobile
+2023-01-30T15:23:51.426+0530	INFO	web/routes.go:45	User-Agent: PostmanRuntime/7.29.2
+2023-01-30T15:23:51.426+0530	INFO	utils/evm.go:58	EVMChainList:= [arbitrum ethereum fantom harmony polygon celo optimism xinfin metis avalanche aurora bsc boba zilliqa heco gnosis cronos moonriver moonbeam klaytn bttc iotex tomochain zksync evmos fuse astar]
+2023-01-30T15:23:51.426+0530	INFO	utils/evm.go:97	IsEVM: true
+2023-01-30T15:24:51.876+0530	INFO	web/web.go:37	Web Server Started at :8088
+2023-01-30T15:25:01.106+0530	INFO	web/routes.go:44	Client: Mobile
+2023-01-30T15:25:01.106+0530	INFO	web/routes.go:45	User-Agent: PostmanRuntime/7.29.2
+2023-01-30T15:25:01.106+0530	INFO	utils/evm.go:58	EVMChainList:= [arbitrum ethereum fantom harmony polygon celo optimism xinfin metis avalanche aurora bsc boba zilliqa heco gnosis cronos moonriver moonbeam klaytn bttc iotex tomochain zksync evmos fuse astar]
+2023-01-30T15:25:01.106+0530	INFO	utils/evm.go:97	IsEVM: true
+2023-01-30T15:27:03.026+0530	INFO	web/web.go:37	Web Server Started at :8088
+2023-01-30T15:27:15.290+0530	INFO	web/routes.go:44	Client: Mobile
+2023-01-30T15:27:15.291+0530	INFO	web/routes.go:45	User-Agent: PostmanRuntime/7.29.2
+2023-01-30T15:27:15.291+0530	INFO	utils/evm.go:58	EVMChainList:= [arbitrum ethereum fantom harmony polygon celo optimism xinfin metis avalanche aurora bsc boba zilliqa heco gnosis cronos moonriver moonbeam klaytn bttc iotex tomochain zksync evmos fuse astar]
+2023-01-30T15:27:15.291+0530	INFO	utils/evm.go:97	IsEVM: true
+2023-01-30T15:28:31.781+0530	INFO	web/routes.go:44	Client: Mobile
+2023-01-30T15:28:31.781+0530	INFO	web/routes.go:45	User-Agent: PostmanRuntime/7.29.2
+2023-01-30T15:28:31.781+0530	INFO	utils/evm.go:58	EVMChainList:= [arbitrum ethereum fantom harmony polygon celo optimism xinfin metis avalanche aurora bsc boba zilliqa heco gnosis cronos moonriver moonbeam klaytn bttc iotex tomochain zksync evmos fuse astar]
+2023-01-30T15:28:31.781+0530	INFO	utils/evm.go:97	IsEVM: true
+2023-01-30T15:29:21.910+0530	INFO	web/web.go:37	Web Server Started at :8088
+2023-01-30T15:29:33.935+0530	INFO	utils/evm.go:58	EVMChainList:= [arbitrum ethereum fantom harmony polygon celo optimism xinfin metis avalanche aurora bsc boba zilliqa heco gnosis cronos moonriver moonbeam klaytn bttc iotex tomochain zksync evmos fuse astar]
+2023-01-30T15:29:33.936+0530	INFO	utils/evm.go:97	IsEVM: true
+2023-01-30T15:30:28.830+0530	INFO	web/web.go:37	Web Server Started at :8088
+2023-01-30T15:30:43.991+0530	INFO	utils/evm.go:58	EVMChainList:= [arbitrum ethereum fantom harmony polygon celo optimism xinfin metis avalanche aurora bsc boba zilliqa heco gnosis cronos moonriver moonbeam klaytn bttc iotex tomochain zksync evmos fuse astar]
+2023-01-30T15:30:43.992+0530	INFO	utils/evm.go:97	IsEVM: true

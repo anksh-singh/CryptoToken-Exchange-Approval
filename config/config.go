@@ -9,29 +9,12 @@ import (
 type Config struct {
 	Web                    WebConfig
 	NonEVMConfig           NonEVMConfig `yaml:"nonEVMConfig"`
-	Fantom                 FantomConfig
-	Arbitrum               ArbitrumConfig
-	Coingecko              CoingeckoConfig
-	Covalent               CovalentConfig
-	BlockNative            BlockNativeConfig
-	Unmarshall             UnmarshallConfig
-	TrustWallet            TrustWalletConfig
-	Celo                   CeloConfig
-	OpenAPI                OpenAPIConfig
 	Logger                 Log
 	EVM                    EVM
 	Bridge                 BridgeConfig
 	Cosmos                 CosmosConfig
 	Datadog                Datadog
-	Socket                 SocketConfig
-	Debridge               DebridgeConfig
-	Alchemy                AlchemyConfig
-	Proxies                ProxiesConfig
-	Swap                   SwapConfig
-	Tenderly               TenderlyConfig
 	SignAssist             SignAssistConfig
-	BlowFish               BlowFishConfig
-	DebankAPI              DebankAPIConfig
 	ClientCodes            map[string]string
 	WEB_DATADOG_SERVICE    string
 	DATADOG_SERVICE        string
@@ -48,54 +31,15 @@ type Config struct {
 	LOG_ENCODING_FORMAT    string
 }
 
-type BlowFishConfig struct {
-	AccessKey string
-	EndPoint  string
-}
+// type BlowFishConfig struct {
+// 	AccessKey string
+// 	EndPoint  string
+// }
 
 type SignAssistConfig struct {
 	AccessKey string
 	Endpoint  string
 }
-
-type DebankAPIConfig struct {
-	EndPoint  string
-	AccessKey string
-}
-
-type TenderlyConfig struct {
-	AccessKey string
-	Project   string
-	UserName  string
-}
-
-type AlchemyConfig struct {
-	APIKey string `yaml:"APIKey"`
-}
-
-type ProxiesConfig struct {
-	ExchangeTypes []string `yaml:"exchangeTypes"`
-}
-
-type CeloConfig struct {
-	GrpcClientEndPoint   string
-	ServerPort           string
-	ChainTokensUrl       string
-	ZeroXUrl             string
-	CeloCoinGeckoChainId string
-	OpenAPIChainId       string
-	LogFile              string
-}
-
-//type NearConfig struct {
-//	ServerPort             string
-//	SolanaTokenListUrl     string
-//	JupiterApi             string
-//	JupiterApiTokenListUrl string
-//	SolanaLogoUrl          string
-//	LogFile                string
-//	Datadog                Datadog `yaml:"datadog"`
-//}
 
 type NonEVMConfig struct {
 	NonEVMWallet []*NonEVMChainInfo `yaml:"nonEVMWallet"`
@@ -134,66 +78,11 @@ type AptosConfig struct {
 	AptosLogoUrl string `yaml:"aptosLogoUrl"`
 }
 
-type FantomConfig struct {
-	GrpcClientEndPoint      string
-	CovalentEndPoint        string
-	GraphqlClientEndPoint   string
-	ServerPort              string
-	FantomCovalentId        string
-	FantomCoinGeckoChainId  string
-	FantomUnmarshallChainId string
-	ChainTokensUrl          string
-	ZeroXUrl                string
-	OpenAPIChainId          string
-	LogFile                 string
-}
-
-type ArbitrumConfig struct {
-	GrpcClientEndPoint string
-	ServerPort         string
-	LogFile            string
-}
-
 type WebConfig struct {
 	Host    string
 	Port    string
 	LogFile string
 	Datadog Datadog `yaml:"datadog"`
-}
-
-type CoingeckoConfig struct {
-	APIkey             string
-	EndPoint           string
-	TokenDetailLogoUrl string
-}
-type TrustWalletConfig struct {
-	EndPoint string
-}
-
-type UnmarshallConfig struct {
-	APIkey     string
-	EndPoint   string
-	EndPointV2 string
-}
-
-type CovalentConfig struct {
-	EndPoint            string
-	APIKey              string
-	CovalentBalancesAPI string
-}
-
-type OpenAPIConfig struct {
-	EndPoint string
-	APIKey   string
-}
-
-type LIFIConfig struct {
-	EndPoint string
-}
-
-type BlockNativeConfig struct {
-	EndPoint   string
-	AuthHeader string
 }
 
 type Log struct {
@@ -326,19 +215,6 @@ type Datadog struct {
 	Env     string `yaml:"env"`
 	Version string `yaml:"version"`
 }
-
-type SocketConfig struct {
-	EndPoint string `yaml:"endPoint"`
-	APIKey   string `yaml:"APIKey"`
-	LogoUrl  string `yaml:"logoUrl"`
-}
-
-type DebridgeConfig struct {
-	EndPoint            string `yaml:"endPoint"`
-	TransactionEndPoint string `yaml:"transactionEndPoint"`
-	LogoUrl             string `yaml:"logoUrl"`
-}
-
 type ChainInfo struct {
 	ID             string `yaml:"id"`
 	ChainID        int    `yaml:"chainId"`
@@ -348,75 +224,15 @@ type ChainInfo struct {
 	WrappedTokenID string `yaml:"wrappedTokenID"`
 }
 
-type SwapConfig struct {
-	ChainData        []ChainData `yaml:"chainData"`
-	ZeroxLogoUrl     string      `yaml:"zeroxLogoUrl"`
-	DodoLogoUrl      string      `yaml:"dodoLogoUrl"`
-	LIFILogoUrl      string      `yaml:"lifiLogoUrl"`
-	OneInchLogoUrl   string      `yaml:"oneInchLogoUrl"`
-	ZeroSwapLogoUrl  string      `yaml:"zeroSwapLogoUrl"`
-	DodoEndpoint     string      `yaml:"dodoEndpoint"`
-	LIFIEndpoint     string      `yaml:"lIFIEndpoint"`
-	OneInchEndpoint  string      `yaml:"oneInchEndpoint"`
-	ZeroSwapEndpoint string      `yaml:"zeroSwapEndpoint"`
-	ZeroSwapApiKey   string      `yaml:"zeroSwapApiKey"`
-	CowSwapUrl       string      `yaml:"cowSwapUrl"`
-	CowSwapLogoUrl   string      `yaml:"cowSwapLogoUrl"`
-	DZapUrl          string      `yaml:"DZapUrl"`
-	DZapLogoUrl      string      `yaml:"DZapLogoUrl"`
-}
-
 type ChainData struct {
 	ChainName          string             `yaml:"chainName"`
 	ChainId            int                `yaml:"chainId"`
-	ZeroxSwapConfig    ZeroxSwapConfig    `yaml:"zeroxSwapConfig"`
-	OneInchSwapConfig  OneInchSwapConfig  `yaml:"oneInchSwapConfig"`
-	DodoSwapConfig     DodoSwapConfig     `yaml:"dodoSwapConfig"`
-	LiFiSwapConfig     LiFiSwapConfig     `yaml:"liFiSwapConfig"`
-	ZeroswapSwapConfig ZeroswapSwapConfig `yaml:"zeroswapSwapConfig"`
-	CowSwapConfig      CowSwapConfig      `yaml:"cowSwapConfig"`
 	DZapSwapConfig     DZapSwapConfig     `yaml:"DZapSwapConfig"`
 }
 
 type DZapSwapConfig struct {
 	ApproveAddress string `yaml:"approveAddress"`
 	IsSupported    bool   `yaml:"isSupported"`
-}
-
-type ZeroxSwapConfig struct {
-	EndPoint         string `yaml:"endPoint"`
-	ExchangeTokenUrl string `yaml:"exchangeTokenUrl"`
-	TokenSource      string `yaml:"tokenSource"`
-	IsSupported      bool   `yaml:"isSupported"`
-}
-
-type OneInchSwapConfig struct {
-	ExchangeTokenUrl string `yaml:"exchangeTokenUrl"`
-	ApproveAddress   string `yaml:"approveAddress"`
-	IsSupported      bool   `yaml:"isSupported"`
-}
-
-type DodoSwapConfig struct {
-	ExchangeTokenUrl string `yaml:"exchangeTokenUrl"`
-	TokenSource      string `yaml:"tokenSource"`
-	ApproveAddress   string `yaml:"approveAddress"`
-	IsSupported      bool   `yaml:"isSupported"`
-}
-
-type LiFiSwapConfig struct {
-	IsSupported bool `yaml:"isSupported"`
-}
-
-type ZeroswapSwapConfig struct {
-	ApproveAddress        string `yaml:"approveAddress"`
-	GasLessApproveAddress string `yaml:"gasLessApproveAddress"`
-	IsSupported           bool   `yaml:"isSupported"`
-}
-
-type CowSwapConfig struct {
-	WrappedTokenID string `yaml:"wrappedTokenID"`
-	IsSupported    bool   `yaml:"isSupported"`
-	ApproveAddress string `yaml:"approveAddress"`
 }
 
 type CosmosDirectory struct {

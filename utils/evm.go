@@ -230,12 +230,3 @@ func (u *UtilConf) SliceContains(elements []string, value string) bool {
 	return false
 }
 
-func (u *UtilConf) GetSwapDataInfo(chain string) config.ChainData {
-	for _, s := range u.conf.Swap.ChainData {
-		if s.ChainName == chain {
-			return s
-		}
-		u.log.Debug(s.ChainName)
-	}
-	return config.ChainData{}
-}

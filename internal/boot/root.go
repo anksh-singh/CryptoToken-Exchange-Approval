@@ -1,7 +1,7 @@
 package boot
 
 import (
-	"bridge-allowance/internal/adapters/bridge"
+	// "bridge-allowance/internal/adapters/bridge"
 	"bridge-allowance/internal/adapters/cosmos"
 	"bridge-allowance/internal/adapters/evm"
 	"bridge-allowance/internal/adapters/nonevm"
@@ -31,5 +31,4 @@ func initAdapters() {
 	rootCmd.AddCommand(nonevm.SolanaCmd)
 	rootCmd.AddCommand(evm.EvmCmd)
 	rootCmd.AddCommand(cosmos.CosmosCmd)
-	rootCmd.AddCommand(bridge.BridgeCmd)
 }

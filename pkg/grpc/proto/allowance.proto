@@ -1,0 +1,12 @@
+syntax = "proto3";
+package proto;
+
+import "contract.proto";
+// import "swap.proto";
+// import "bridge.proto";
+// import "cosmos.proto";
+option go_package = "./pb";
+
+service Unifront {
+  rpc allowance(AllowanceRequest) returns (AllowanceResponse);
+}

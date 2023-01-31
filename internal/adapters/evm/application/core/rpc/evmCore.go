@@ -111,22 +111,22 @@ func (evm *evmCore) getEthTokenDecimals(contractAddr string, chain string) (int,
 	return int(decimals), err
 }
 
-func (evm *evmCore) createContractABI(request *pb.GasLimitRequest) ([]byte, error) {
-	transferFunction := []string{core.AbiTransferFunction}
-	abiContract, err := abi.NewABIFromList(transferFunction)
-	if err != nil {
-		evm.logger.Error("Method: transfer not found")
-		return nil, status.Errorf(codes.Internal, err.Error(), "Internal Error")
-	}
-	addr := ethgo.HexToAddress(request.To)
-	contractInstance := contract.NewContract(addr, abiContract, contract.WithJsonRPC(evm.ethgoRpc[request.Chain].Eth()))
-	method := contractInstance.GetABI().GetMethod("transfer")
-	if method == nil {
-		evm.logger.Error("Method: transfer not found")
-	}
-	data, err := method.Encode(request.Value)
-	return data, nil
-}
+// func (evm *evmCore) createContractABI(request *pb.GasLimitRequest) ([]byte, error) {
+// 	transferFunction := []string{core.AbiTransferFunction}
+// 	abiContract, err := abi.NewABIFromList(transferFunction)
+// 	if err != nil {
+// 		evm.logger.Error("Method: transfer not found")
+// 		return nil, status.Errorf(codes.Internal, err.Error(), "Internal Error")
+// 	}
+// 	addr := ethgo.HexToAddress(request.To)
+// 	contractInstance := contract.NewContract(addr, abiContract, contract.WithJsonRPC(evm.ethgoRpc[request.Chain].Eth()))
+// 	method := contractInstance.GetABI().GetMethod("transfer")
+// 	if method == nil {
+// 		evm.logger.Error("Method: transfer not found")
+// 	}
+// 	data, err := method.Encode(request.Value)
+// 	return data, nil
+// }
 
 // optContractABI get opL1 fee from contact abi
 func (evm *evmCore) optContractABI(chain string) float64 {

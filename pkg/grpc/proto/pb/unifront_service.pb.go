@@ -237,34 +237,13 @@ var file_unifront_service_proto_goTypes = []interface{}{
 	(*SendTransactionRequest)(nil),          // 4: proto.SendTransactionRequest
 	(*ListTransactionRequest)(nil),          // 5: proto.ListTransactionRequest
 	(*UserDataRequest)(nil),                 // 6: proto.UserDataRequest
-	// (*ExchangeTokenRequest)(nil),            // 7: proto.ExchangeTokenRequest
-	// (*ExchangeQuoteRequest)(nil),            // 8: proto.ExchangeQuoteRequest
-	// (*ExchangeMultiQuoteRequest)(nil),       // 9: proto.ExchangeMultiQuoteRequest
-	// (*ExchangeSwapRequest)(nil),             // 10: proto.ExchangeSwapRequest
-	// (*ExchangeMultiSwapRequest)(nil),        // 11: proto.ExchangeMultiSwapRequest
-	// (*ExchangeSwapExecuteRequest)(nil),      // 12: proto.ExchangeSwapExecuteRequest
-	// (*FreeTradeCountRequest)(nil),           // 13: proto.FreeTradeCountRequest
-	// (*TokenApprovalRequest)(nil),            // 14: proto.TokenApprovalRequest
-	// (*ExchangeSignatureRequest)(nil),        // 15: proto.ExchangeSignatureRequest
 	(*TxStatusRequest)(nil),                 // 16: proto.TxStatusRequest
 	(*GasLimitRequest)(nil),                 // 17: proto.GasLimitRequest
 	(*TokenInfoRequest)(nil),                // 18: proto.TokenInfoRequest
 	(*TokenDetailRequest)(nil),              // 19: proto.TokenDetailRequest
-	(*BridgeChainRequest)(nil),              // 20: proto.BridgeChainRequest
-	(*BridgeChainTokensRequest)(nil),        // 21: proto.BridgeChainTokensRequest
-	(*BridgeQuoteRequest)(nil),              // 22: proto.BridgeQuoteRequest
-	(*BridgeTransactionRequest)(nil),        // 23: proto.BridgeTransactionRequest
-	(*BridgeTransactionStatusRequest)(nil),  // 24: proto.BridgeTransactionStatusRequest
 	(*AllowanceRequest)(nil),                // 25: proto.AllowanceRequest
 	(*ApprovalRequest)(nil),                 // 26: proto.ApprovalRequest
 	(*NftCollectionRequest)(nil),            // 27: proto.NftCollectionRequest
-	(*CosmosValidatorsRequest)(nil),         // 28: proto.CosmosValidatorsRequest
-	(*CosmosAprRatesRequest)(nil),           // 29: proto.CosmosAprRatesRequest
-	(*CosmosDelegationsRequest)(nil),        // 30: proto.CosmosDelegationsRequest
-	(*CosmosCDPParametersRequest)(nil),      // 31: proto.CosmosCDPParametersRequest
-	(*CosmosSendTxRequest)(nil),             // 32: proto.CosmosSendTxRequest
-	(*CosmosSimulateTxRequest)(nil),         // 33: proto.CosmosSimulateTxRequest
-	(*GetCosmosBlockHeightRequest)(nil),     // 34: proto.GetCosmosBlockHeightRequest
 	(*PositionChainData)(nil),               // 35: proto.PositionChainData
 	(*GetOpportunitiesRequest)(nil),         // 36: proto.GetOpportunitiesRequest
 	(*TokenPriceResponse)(nil),              // 37: proto.TokenPriceResponse
@@ -275,34 +254,13 @@ var file_unifront_service_proto_goTypes = []interface{}{
 	(*SendTransactionResponse)(nil),         // 42: proto.SendTransactionResponse
 	(*ListTransactionResponse)(nil),         // 43: proto.ListTransactionResponse
 	(*UserDataResponse)(nil),                // 44: proto.UserDataResponse
-	// (*ExchangeTokenResponse)(nil),           // 45: proto.ExchangeTokenResponse
-	// (*ExchangeQuoteResponse)(nil),           // 46: proto.ExchangeQuoteResponse
-	// (*ExchangeMultiQuoteResponse)(nil),      // 47: proto.ExchangeMultiQuoteResponse
-	// (*ExchangeSwapResponse)(nil),            // 48: proto.ExchangeSwapResponse
-	// (*ExchangeMultipleSwapResponse)(nil),    // 49: proto.ExchangeMultipleSwapResponse
-	// (*ExchangeSwapExecuteResponse)(nil),     // 50: proto.ExchangeSwapExecuteResponse
-	// (*FreeTradeCountResponse)(nil),          // 51: proto.FreeTradeCountResponse
-	// (*TokenApprovalResponse)(nil),           // 52: proto.TokenApprovalResponse
-	// (*ExchangeSignatureResponse)(nil),       // 53: proto.ExchangeSignatureResponse
 	(*TxStatusResponse)(nil),                // 54: proto.TxStatusResponse
 	(*GasLimitResponse)(nil),                // 55: proto.GasLimitResponse
 	(*TokenInfoResponse)(nil),               // 56: proto.TokenInfoResponse
 	(*TokenDetailResponse)(nil),             // 57: proto.TokenDetailResponse
-	(*BridgeChainResponse)(nil),             // 58: proto.BridgeChainResponse
-	(*BridgeChainTokensResponse)(nil),       // 59: proto.BridgeChainTokensResponse
-	(*BridgeQuoteResponse)(nil),             // 60: proto.BridgeQuoteResponse
-	(*BridgeTransactionResponse)(nil),       // 61: proto.BridgeTransactionResponse
-	(*BridgeTransactionStatusResponse)(nil), // 62: proto.BridgeTransactionStatusResponse
 	(*AllowanceResponse)(nil),               // 63: proto.AllowanceResponse
 	(*ApprovalResponse)(nil),                // 64: proto.ApprovalResponse
 	(*ListNftCollectionResponse)(nil),       // 65: proto.ListNftCollectionResponse
-	(*CosmosValidatorsResponse)(nil),        // 66: proto.CosmosValidatorsResponse
-	(*CosmosAprRatesResponse)(nil),          // 67: proto.CosmosAprRatesResponse
-	(*CosmosDelegationsResponse)(nil),       // 68: proto.CosmosDelegationsResponse
-	(*CosmosCDPParametersResponse)(nil),     // 69: proto.CosmosCDPParametersResponse
-	(*CosmosAssetResponse)(nil),             // 70: proto.CosmosAssetResponse
-	(*CosmosSimulateTxResponse)(nil),        // 71: proto.CosmosSimulateTxResponse
-	(*GetCosmosBlockHeightResponse)(nil),    // 72: proto.GetCosmosBlockHeightResponse
 	(*GetPositionsResponse)(nil),            // 73: proto.GetPositionsResponse
 	(*BulkApprovalResponse)(nil),            // 74: proto.BulkApprovalResponse
 	(*BulkAllowanceResponse)(nil),           // 75: proto.BulkAllowanceResponse
@@ -405,8 +363,8 @@ func file_unifront_service_proto_init() {
 	}
 	file_contract_proto_init()
 	// file_swap_proto_init()
-	file_bridge_proto_init()
-	file_cosmos_proto_init()
+	// file_bridge_proto_init()
+	// file_cosmos_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

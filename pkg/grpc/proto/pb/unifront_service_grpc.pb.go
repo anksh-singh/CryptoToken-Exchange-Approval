@@ -22,56 +22,9 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UnifrontClient interface {
-	// TokenPrice(ctx context.Context, in *TokenPriceRequest, opts ...grpc.CallOption) (*TokenPriceResponse, error)
-	// TokenPriceV2(ctx context.Context, in *TokenPriceRequest, opts ...grpc.CallOption) (*TokenPriceResponseV2, error)
-	// Balance(ctx context.Context, in *BalanceRequest, opts ...grpc.CallOption) (*BalanceResponse, error)
-	// ProcessingFee(ctx context.Context, in *ProcessingFeeRequest, opts ...grpc.CallOption) (*ProcessingFeeResponse, error)
-	// Nonce(ctx context.Context, in *NonceRequest, opts ...grpc.CallOption) (*NonceResponse, error)
-	// SendTransaction(ctx context.Context, in *SendTransactionRequest, opts ...grpc.CallOption) (*SendTransactionResponse, error)
-	// ListTransaction(ctx context.Context, in *ListTransactionRequest, opts ...grpc.CallOption) (*ListTransactionResponse, error)
-	// UserData(ctx context.Context, in *UserDataRequest, opts ...grpc.CallOption) (*UserDataResponse, error)
-	// ExchangeTokens(ctx context.Context, in *ExchangeTokenRequest, opts ...grpc.CallOption) (*ExchangeTokenResponse, error)
-	// ExchangeQuote(ctx context.Context, in *ExchangeQuoteRequest, opts ...grpc.CallOption) (*ExchangeQuoteResponse, error)
-	// ExchangeMultiQuote(ctx context.Context, in *ExchangeMultiQuoteRequest, opts ...grpc.CallOption) (*ExchangeMultiQuoteResponse, error)
-	// ExchangeSwap(ctx context.Context, in *ExchangeSwapRequest, opts ...grpc.CallOption) (*ExchangeSwapResponse, error)
-	// ExchangeMultiSwap(ctx context.Context, in *ExchangeMultiSwapRequest, opts ...grpc.CallOption) (*ExchangeMultipleSwapResponse, error)
-	// ExchangeSwapExecute(ctx context.Context, in *ExchangeSwapExecuteRequest, opts ...grpc.CallOption) (*ExchangeSwapExecuteResponse, error)
-	// FreeTradeCount(ctx context.Context, in *FreeTradeCountRequest, opts ...grpc.CallOption) (*FreeTradeCountResponse, error)
-	// ExchangeTokenApprove(ctx context.Context, in *TokenApprovalRequest, opts ...grpc.CallOption) (*TokenApprovalResponse, error)
-	// ExchangeSwapSignature(ctx context.Context, in *ExchangeSignatureRequest, opts ...grpc.CallOption) (*ExchangeSignatureResponse, error)
-	// TxStatus(ctx context.Context, in *TxStatusRequest, opts ...grpc.CallOption) (*TxStatusResponse, error)
-	// GasLimit(ctx context.Context, in *GasLimitRequest, opts ...grpc.CallOption) (*GasLimitResponse, error)
-	// TokenInfo(ctx context.Context, in *TokenInfoRequest, opts ...grpc.CallOption) (*TokenInfoResponse, error)
-	// TokenDetail(ctx context.Context, in *TokenDetailRequest, opts ...grpc.CallOption) (*TokenDetailResponse, error)
-	// BridgeChain(ctx context.Context, in *BridgeChainRequest, opts ...grpc.CallOption) (*BridgeChainResponse, error)
-	// BridgeChainTokens(ctx context.Context, in *BridgeChainTokensRequest, opts ...grpc.CallOption) (*BridgeChainTokensResponse, error)
-	// BridgeQuote(ctx context.Context, in *BridgeQuoteRequest, opts ...grpc.CallOption) (*BridgeQuoteResponse, error)
-	// BridgeTransaction(ctx context.Context, in *BridgeTransactionRequest, opts ...grpc.CallOption) (*BridgeTransactionResponse, error)
-	// BridgeTransactionStatus(ctx context.Context, in *BridgeTransactionStatusRequest, opts ...grpc.CallOption) (*BridgeTransactionStatusResponse, error)
+	
 	Allowance(ctx context.Context, in *AllowanceRequest, opts ...grpc.CallOption) (*AllowanceResponse, error)
-	// Approve(ctx context.Context, in *ApprovalRequest, opts ...grpc.CallOption) (*ApprovalResponse, error)
-	// GetNftCollections(ctx context.Context, in *NftCollectionRequest, opts ...grpc.CallOption) (*ListNftCollectionResponse, error)
-	// GetValidators(ctx context.Context, in *CosmosValidatorsRequest, opts ...grpc.CallOption) (*CosmosValidatorsResponse, error)
-	// GetCosmosAprRates(ctx context.Context, in *CosmosAprRatesRequest, opts ...grpc.CallOption) (*CosmosAprRatesResponse, error)
-	// GetDelegations(ctx context.Context, in *CosmosDelegationsRequest, opts ...grpc.CallOption) (*CosmosDelegationsResponse, error)
-	// GetCosmosCDPParams(ctx context.Context, in *CosmosCDPParametersRequest, opts ...grpc.CallOption) (*CosmosCDPParametersResponse, error)
-	// rpc getAccountInfo(getAccountInfoRequest) returns (getAccountInfoResponse);
-	// rpc getFees(GetFeeRequest) returns (GetFeeResponse);
-	// rpc getTokenAccountBalance(GetTokenAccBalanceRequest) returns (GetTokenAccBalanceResponse);
-	// rpc getTransaction(GetTransactionRequest) returns(GetTransactionResponse);
-	// CosmosAssets(ctx context.Context, in *BalanceRequest, opts ...grpc.CallOption) (*CosmosAssetResponse, error)
-	// CosmosSendTx(ctx context.Context, in *CosmosSendTxRequest, opts ...grpc.CallOption) (*SendTransactionResponse, error)
-	// CosmosSimulateTX(ctx context.Context, in *CosmosSimulateTxRequest, opts ...grpc.CallOption) (*CosmosSimulateTxResponse, error)
-	// CosmosGetBlockHeight(ctx context.Context, in *GetCosmosBlockHeightRequest, opts ...grpc.CallOption) (*GetCosmosBlockHeightResponse, error)
-	// GetPositions(ctx context.Context, in *PositionChainData, opts ...grpc.CallOption) (*GetPositionsResponse, error)
-	// rpc getAccountInfo(getAccountInfoRequest) returns
-	// (getAccountInfoResponse); rpc getFees(GetFeeRequest) returns
-	// (GetFeeResponse); rpc getTokenAccountBalance(GetTokenAccBalanceRequest)
-	// returns (GetTokenAccBalanceResponse); rpc
-	// getTransaction(GetTransactionRequest) returns(GetTransactionResponse);
-	// BulkApproval(ctx context.Context, in *ApprovalRequest, opts ...grpc.CallOption) (*BulkApprovalResponse, error)
-	// BulkAllowance(ctx context.Context, in *AllowanceRequest, opts ...grpc.CallOption) (*BulkAllowanceResponse, error)
-	// GetOpportunites(ctx context.Context, in *GetOpportunitiesRequest, opts ...grpc.CallOption) (*GetOpportunitesResponse, error)
+	
 }
 
 type unifrontClient struct {
@@ -154,86 +107,6 @@ func (c *unifrontClient) UserData(ctx context.Context, in *UserDataRequest, opts
 	return out, nil
 }
 
-// func (c *unifrontClient) ExchangeTokens(ctx context.Context, in *ExchangeTokenRequest, opts ...grpc.CallOption) (*ExchangeTokenResponse, error) {
-// 	out := new(ExchangeTokenResponse)
-// 	err := c.cc.Invoke(ctx, "/proto.Unifront/exchangeTokens", in, out, opts...)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return out, nil
-// }
-
-// func (c *unifrontClient) ExchangeQuote(ctx context.Context, in *ExchangeQuoteRequest, opts ...grpc.CallOption) (*ExchangeQuoteResponse, error) {
-// 	out := new(ExchangeQuoteResponse)
-// 	err := c.cc.Invoke(ctx, "/proto.Unifront/exchangeQuote", in, out, opts...)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return out, nil
-// }
-
-// func (c *unifrontClient) ExchangeMultiQuote(ctx context.Context, in *ExchangeMultiQuoteRequest, opts ...grpc.CallOption) (*ExchangeMultiQuoteResponse, error) {
-// 	out := new(ExchangeMultiQuoteResponse)
-// 	err := c.cc.Invoke(ctx, "/proto.Unifront/exchangeMultiQuote", in, out, opts...)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return out, nil
-// }
-
-// func (c *unifrontClient) ExchangeSwap(ctx context.Context, in *ExchangeSwapRequest, opts ...grpc.CallOption) (*ExchangeSwapResponse, error) {
-// 	out := new(ExchangeSwapResponse)
-// 	err := c.cc.Invoke(ctx, "/proto.Unifront/exchangeSwap", in, out, opts...)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return out, nil
-// }
-
-// func (c *unifrontClient) ExchangeMultiSwap(ctx context.Context, in *ExchangeMultiSwapRequest, opts ...grpc.CallOption) (*ExchangeMultipleSwapResponse, error) {
-// 	out := new(ExchangeMultipleSwapResponse)
-// 	err := c.cc.Invoke(ctx, "/proto.Unifront/exchangeMultiSwap", in, out, opts...)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return out, nil
-// }
-
-// func (c *unifrontClient) ExchangeSwapExecute(ctx context.Context, in *ExchangeSwapExecuteRequest, opts ...grpc.CallOption) (*ExchangeSwapExecuteResponse, error) {
-// 	out := new(ExchangeSwapExecuteResponse)
-// 	err := c.cc.Invoke(ctx, "/proto.Unifront/exchangeSwapExecute", in, out, opts...)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return out, nil
-// }
-
-// func (c *unifrontClient) FreeTradeCount(ctx context.Context, in *FreeTradeCountRequest, opts ...grpc.CallOption) (*FreeTradeCountResponse, error) {
-// 	out := new(FreeTradeCountResponse)
-// 	err := c.cc.Invoke(ctx, "/proto.Unifront/FreeTradeCount", in, out, opts...)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return out, nil
-// }
-
-// func (c *unifrontClient) ExchangeTokenApprove(ctx context.Context, in *TokenApprovalRequest, opts ...grpc.CallOption) (*TokenApprovalResponse, error) {
-// 	out := new(TokenApprovalResponse)
-// 	err := c.cc.Invoke(ctx, "/proto.Unifront/ExchangeTokenApprove", in, out, opts...)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return out, nil
-// }
-
-// func (c *unifrontClient) ExchangeSwapSignature(ctx context.Context, in *ExchangeSignatureRequest, opts ...grpc.CallOption) (*ExchangeSignatureResponse, error) {
-// 	out := new(ExchangeSignatureResponse)
-// 	err := c.cc.Invoke(ctx, "/proto.Unifront/exchangeSwapSignature", in, out, opts...)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return out, nil
-// }
 
 func (c *unifrontClient) TxStatus(ctx context.Context, in *TxStatusRequest, opts ...grpc.CallOption) (*TxStatusResponse, error) {
 	out := new(TxStatusResponse)
@@ -271,51 +144,6 @@ func (c *unifrontClient) TokenDetail(ctx context.Context, in *TokenDetailRequest
 	return out, nil
 }
 
-func (c *unifrontClient) BridgeChain(ctx context.Context, in *BridgeChainRequest, opts ...grpc.CallOption) (*BridgeChainResponse, error) {
-	out := new(BridgeChainResponse)
-	err := c.cc.Invoke(ctx, "/proto.Unifront/bridgeChain", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *unifrontClient) BridgeChainTokens(ctx context.Context, in *BridgeChainTokensRequest, opts ...grpc.CallOption) (*BridgeChainTokensResponse, error) {
-	out := new(BridgeChainTokensResponse)
-	err := c.cc.Invoke(ctx, "/proto.Unifront/bridgeChainTokens", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *unifrontClient) BridgeQuote(ctx context.Context, in *BridgeQuoteRequest, opts ...grpc.CallOption) (*BridgeQuoteResponse, error) {
-	out := new(BridgeQuoteResponse)
-	err := c.cc.Invoke(ctx, "/proto.Unifront/bridgeQuote", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *unifrontClient) BridgeTransaction(ctx context.Context, in *BridgeTransactionRequest, opts ...grpc.CallOption) (*BridgeTransactionResponse, error) {
-	out := new(BridgeTransactionResponse)
-	err := c.cc.Invoke(ctx, "/proto.Unifront/bridgeTransaction", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *unifrontClient) BridgeTransactionStatus(ctx context.Context, in *BridgeTransactionStatusRequest, opts ...grpc.CallOption) (*BridgeTransactionStatusResponse, error) {
-	out := new(BridgeTransactionStatusResponse)
-	err := c.cc.Invoke(ctx, "/proto.Unifront/bridgeTransactionStatus", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *unifrontClient) Allowance(ctx context.Context, in *AllowanceRequest, opts ...grpc.CallOption) (*AllowanceResponse, error) {
 	out := new(AllowanceResponse)
 	err := c.cc.Invoke(ctx, "/proto.Unifront/allowance", in, out, opts...)
@@ -337,78 +165,6 @@ func (c *unifrontClient) Approve(ctx context.Context, in *ApprovalRequest, opts 
 func (c *unifrontClient) GetNftCollections(ctx context.Context, in *NftCollectionRequest, opts ...grpc.CallOption) (*ListNftCollectionResponse, error) {
 	out := new(ListNftCollectionResponse)
 	err := c.cc.Invoke(ctx, "/proto.Unifront/GetNftCollections", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *unifrontClient) GetValidators(ctx context.Context, in *CosmosValidatorsRequest, opts ...grpc.CallOption) (*CosmosValidatorsResponse, error) {
-	out := new(CosmosValidatorsResponse)
-	err := c.cc.Invoke(ctx, "/proto.Unifront/GetValidators", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *unifrontClient) GetCosmosAprRates(ctx context.Context, in *CosmosAprRatesRequest, opts ...grpc.CallOption) (*CosmosAprRatesResponse, error) {
-	out := new(CosmosAprRatesResponse)
-	err := c.cc.Invoke(ctx, "/proto.Unifront/GetCosmosAprRates", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *unifrontClient) GetDelegations(ctx context.Context, in *CosmosDelegationsRequest, opts ...grpc.CallOption) (*CosmosDelegationsResponse, error) {
-	out := new(CosmosDelegationsResponse)
-	err := c.cc.Invoke(ctx, "/proto.Unifront/GetDelegations", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *unifrontClient) GetCosmosCDPParams(ctx context.Context, in *CosmosCDPParametersRequest, opts ...grpc.CallOption) (*CosmosCDPParametersResponse, error) {
-	out := new(CosmosCDPParametersResponse)
-	err := c.cc.Invoke(ctx, "/proto.Unifront/GetCosmosCDPParams", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *unifrontClient) CosmosAssets(ctx context.Context, in *BalanceRequest, opts ...grpc.CallOption) (*CosmosAssetResponse, error) {
-	out := new(CosmosAssetResponse)
-	err := c.cc.Invoke(ctx, "/proto.Unifront/cosmosAssets", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *unifrontClient) CosmosSendTx(ctx context.Context, in *CosmosSendTxRequest, opts ...grpc.CallOption) (*SendTransactionResponse, error) {
-	out := new(SendTransactionResponse)
-	err := c.cc.Invoke(ctx, "/proto.Unifront/cosmosSendTx", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *unifrontClient) CosmosSimulateTX(ctx context.Context, in *CosmosSimulateTxRequest, opts ...grpc.CallOption) (*CosmosSimulateTxResponse, error) {
-	out := new(CosmosSimulateTxResponse)
-	err := c.cc.Invoke(ctx, "/proto.Unifront/cosmosSimulateTX", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *unifrontClient) CosmosGetBlockHeight(ctx context.Context, in *GetCosmosBlockHeightRequest, opts ...grpc.CallOption) (*GetCosmosBlockHeightResponse, error) {
-	out := new(GetCosmosBlockHeightResponse)
-	err := c.cc.Invoke(ctx, "/proto.Unifront/cosmosGetBlockHeight", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -463,45 +219,14 @@ type UnifrontServer interface {
 	SendTransaction(context.Context, *SendTransactionRequest) (*SendTransactionResponse, error)
 	ListTransaction(context.Context, *ListTransactionRequest) (*ListTransactionResponse, error)
 	UserData(context.Context, *UserDataRequest) (*UserDataResponse, error)
-	// ExchangeTokens(context.Context, *ExchangeTokenRequest) (*ExchangeTokenResponse, error)
-	// ExchangeQuote(context.Context, *ExchangeQuoteRequest) (*ExchangeQuoteResponse, error)
-	// ExchangeMultiQuote(context.Context, *ExchangeMultiQuoteRequest) (*ExchangeMultiQuoteResponse, error)
-	// ExchangeSwap(context.Context, *ExchangeSwapRequest) (*ExchangeSwapResponse, error)
-	// ExchangeMultiSwap(context.Context, *ExchangeMultiSwapRequest) (*ExchangeMultipleSwapResponse, error)
-	// ExchangeSwapExecute(context.Context, *ExchangeSwapExecuteRequest) (*ExchangeSwapExecuteResponse, error)
-	// FreeTradeCount(context.Context, *FreeTradeCountRequest) (*FreeTradeCountResponse, error)
-	// ExchangeTokenApprove(context.Context, *TokenApprovalRequest) (*TokenApprovalResponse, error)
-	// ExchangeSwapSignature(context.Context, *ExchangeSignatureRequest) (*ExchangeSignatureResponse, error)
 	TxStatus(context.Context, *TxStatusRequest) (*TxStatusResponse, error)
 	GasLimit(context.Context, *GasLimitRequest) (*GasLimitResponse, error)
 	TokenInfo(context.Context, *TokenInfoRequest) (*TokenInfoResponse, error)
 	TokenDetail(context.Context, *TokenDetailRequest) (*TokenDetailResponse, error)
-	BridgeChain(context.Context, *BridgeChainRequest) (*BridgeChainResponse, error)
-	BridgeChainTokens(context.Context, *BridgeChainTokensRequest) (*BridgeChainTokensResponse, error)
-	BridgeQuote(context.Context, *BridgeQuoteRequest) (*BridgeQuoteResponse, error)
-	BridgeTransaction(context.Context, *BridgeTransactionRequest) (*BridgeTransactionResponse, error)
-	BridgeTransactionStatus(context.Context, *BridgeTransactionStatusRequest) (*BridgeTransactionStatusResponse, error)
 	Allowance(context.Context, *AllowanceRequest) (*AllowanceResponse, error)
 	Approve(context.Context, *ApprovalRequest) (*ApprovalResponse, error)
 	GetNftCollections(context.Context, *NftCollectionRequest) (*ListNftCollectionResponse, error)
-	GetValidators(context.Context, *CosmosValidatorsRequest) (*CosmosValidatorsResponse, error)
-	GetCosmosAprRates(context.Context, *CosmosAprRatesRequest) (*CosmosAprRatesResponse, error)
-	GetDelegations(context.Context, *CosmosDelegationsRequest) (*CosmosDelegationsResponse, error)
-	GetCosmosCDPParams(context.Context, *CosmosCDPParametersRequest) (*CosmosCDPParametersResponse, error)
-	// rpc getAccountInfo(getAccountInfoRequest) returns (getAccountInfoResponse);
-	// rpc getFees(GetFeeRequest) returns (GetFeeResponse);
-	// rpc getTokenAccountBalance(GetTokenAccBalanceRequest) returns (GetTokenAccBalanceResponse);
-	// rpc getTransaction(GetTransactionRequest) returns(GetTransactionResponse);
-	CosmosAssets(context.Context, *BalanceRequest) (*CosmosAssetResponse, error)
-	CosmosSendTx(context.Context, *CosmosSendTxRequest) (*SendTransactionResponse, error)
-	CosmosSimulateTX(context.Context, *CosmosSimulateTxRequest) (*CosmosSimulateTxResponse, error)
-	CosmosGetBlockHeight(context.Context, *GetCosmosBlockHeightRequest) (*GetCosmosBlockHeightResponse, error)
 	GetPositions(context.Context, *PositionChainData) (*GetPositionsResponse, error)
-	// rpc getAccountInfo(getAccountInfoRequest) returns
-	// (getAccountInfoResponse); rpc getFees(GetFeeRequest) returns
-	// (GetFeeResponse); rpc getTokenAccountBalance(GetTokenAccBalanceRequest)
-	// returns (GetTokenAccBalanceResponse); rpc
-	// getTransaction(GetTransactionRequest) returns(GetTransactionResponse);
 	BulkApproval(context.Context, *ApprovalRequest) (*BulkApprovalResponse, error)
 	BulkAllowance(context.Context, *AllowanceRequest) (*BulkAllowanceResponse, error)
 	GetOpportunites(context.Context, *GetOpportunitiesRequest) (*GetOpportunitesResponse, error)
@@ -536,33 +261,7 @@ func (UnimplementedUnifrontServer) ListTransaction(context.Context, *ListTransac
 func (UnimplementedUnifrontServer) UserData(context.Context, *UserDataRequest) (*UserDataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserData not implemented")
 }
-// func (UnimplementedUnifrontServer) ExchangeTokens(context.Context, *ExchangeTokenRequest) (*ExchangeTokenResponse, error) {
-// 	return nil, status.Errorf(codes.Unimplemented, "method ExchangeTokens not implemented")
-// }
-// func (UnimplementedUnifrontServer) ExchangeQuote(context.Context, *ExchangeQuoteRequest) (*ExchangeQuoteResponse, error) {
-// 	return nil, status.Errorf(codes.Unimplemented, "method ExchangeQuote not implemented")
-// }
-// func (UnimplementedUnifrontServer) ExchangeMultiQuote(context.Context, *ExchangeMultiQuoteRequest) (*ExchangeMultiQuoteResponse, error) {
-// 	return nil, status.Errorf(codes.Unimplemented, "method ExchangeMultiQuote not implemented")
-// }
-// func (UnimplementedUnifrontServer) ExchangeSwap(context.Context, *ExchangeSwapRequest) (*ExchangeSwapResponse, error) {
-// 	return nil, status.Errorf(codes.Unimplemented, "method ExchangeSwap not implemented")
-// }
-// func (UnimplementedUnifrontServer) ExchangeMultiSwap(context.Context, *ExchangeMultiSwapRequest) (*ExchangeMultipleSwapResponse, error) {
-// 	return nil, status.Errorf(codes.Unimplemented, "method ExchangeMultiSwap not implemented")
-// }
-// func (UnimplementedUnifrontServer) ExchangeSwapExecute(context.Context, *ExchangeSwapExecuteRequest) (*ExchangeSwapExecuteResponse, error) {
-// 	return nil, status.Errorf(codes.Unimplemented, "method ExchangeSwapExecute not implemented")
-// }
-// func (UnimplementedUnifrontServer) FreeTradeCount(context.Context, *FreeTradeCountRequest) (*FreeTradeCountResponse, error) {
-// 	return nil, status.Errorf(codes.Unimplemented, "method FreeTradeCount not implemented")
-// }
-// func (UnimplementedUnifrontServer) ExchangeTokenApprove(context.Context, *TokenApprovalRequest) (*TokenApprovalResponse, error) {
-// 	return nil, status.Errorf(codes.Unimplemented, "method ExchangeTokenApprove not implemented")
-// }
-// func (UnimplementedUnifrontServer) ExchangeSwapSignature(context.Context, *ExchangeSignatureRequest) (*ExchangeSignatureResponse, error) {
-// 	return nil, status.Errorf(codes.Unimplemented, "method ExchangeSwapSignature not implemented")
-// }
+
 func (UnimplementedUnifrontServer) TxStatus(context.Context, *TxStatusRequest) (*TxStatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TxStatus not implemented")
 }
@@ -575,21 +274,7 @@ func (UnimplementedUnifrontServer) TokenInfo(context.Context, *TokenInfoRequest)
 func (UnimplementedUnifrontServer) TokenDetail(context.Context, *TokenDetailRequest) (*TokenDetailResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TokenDetail not implemented")
 }
-func (UnimplementedUnifrontServer) BridgeChain(context.Context, *BridgeChainRequest) (*BridgeChainResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BridgeChain not implemented")
-}
-func (UnimplementedUnifrontServer) BridgeChainTokens(context.Context, *BridgeChainTokensRequest) (*BridgeChainTokensResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BridgeChainTokens not implemented")
-}
-func (UnimplementedUnifrontServer) BridgeQuote(context.Context, *BridgeQuoteRequest) (*BridgeQuoteResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BridgeQuote not implemented")
-}
-func (UnimplementedUnifrontServer) BridgeTransaction(context.Context, *BridgeTransactionRequest) (*BridgeTransactionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BridgeTransaction not implemented")
-}
-func (UnimplementedUnifrontServer) BridgeTransactionStatus(context.Context, *BridgeTransactionStatusRequest) (*BridgeTransactionStatusResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BridgeTransactionStatus not implemented")
-}
+
 func (UnimplementedUnifrontServer) Allowance(context.Context, *AllowanceRequest) (*AllowanceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Allowance not implemented")
 }
@@ -598,30 +283,6 @@ func (UnimplementedUnifrontServer) Approve(context.Context, *ApprovalRequest) (*
 }
 func (UnimplementedUnifrontServer) GetNftCollections(context.Context, *NftCollectionRequest) (*ListNftCollectionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetNftCollections not implemented")
-}
-func (UnimplementedUnifrontServer) GetValidators(context.Context, *CosmosValidatorsRequest) (*CosmosValidatorsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetValidators not implemented")
-}
-func (UnimplementedUnifrontServer) GetCosmosAprRates(context.Context, *CosmosAprRatesRequest) (*CosmosAprRatesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetCosmosAprRates not implemented")
-}
-func (UnimplementedUnifrontServer) GetDelegations(context.Context, *CosmosDelegationsRequest) (*CosmosDelegationsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetDelegations not implemented")
-}
-func (UnimplementedUnifrontServer) GetCosmosCDPParams(context.Context, *CosmosCDPParametersRequest) (*CosmosCDPParametersResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetCosmosCDPParams not implemented")
-}
-func (UnimplementedUnifrontServer) CosmosAssets(context.Context, *BalanceRequest) (*CosmosAssetResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CosmosAssets not implemented")
-}
-func (UnimplementedUnifrontServer) CosmosSendTx(context.Context, *CosmosSendTxRequest) (*SendTransactionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CosmosSendTx not implemented")
-}
-func (UnimplementedUnifrontServer) CosmosSimulateTX(context.Context, *CosmosSimulateTxRequest) (*CosmosSimulateTxResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CosmosSimulateTX not implemented")
-}
-func (UnimplementedUnifrontServer) CosmosGetBlockHeight(context.Context, *GetCosmosBlockHeightRequest) (*GetCosmosBlockHeightResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CosmosGetBlockHeight not implemented")
 }
 func (UnimplementedUnifrontServer) GetPositions(context.Context, *PositionChainData) (*GetPositionsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPositions not implemented")
@@ -792,168 +453,6 @@ func _Unifront_UserData_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-// func _Unifront_ExchangeTokens_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-// 	in := new(ExchangeTokenRequest)
-// 	if err := dec(in); err != nil {
-// 		return nil, err
-// 	}
-// 	if interceptor == nil {
-// 		return srv.(UnifrontServer).ExchangeTokens(ctx, in)
-// 	}
-// 	info := &grpc.UnaryServerInfo{
-// 		Server:     srv,
-// 		FullMethod: "/proto.Unifront/exchangeTokens",
-// 	}
-// 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-// 		return srv.(UnifrontServer).ExchangeTokens(ctx, req.(*ExchangeTokenRequest))
-// 	}
-// 	return interceptor(ctx, in, info, handler)
-// }
-
-// func _Unifront_ExchangeQuote_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-// 	in := new(ExchangeQuoteRequest)
-// 	if err := dec(in); err != nil {
-// 		return nil, err
-// 	}
-// 	if interceptor == nil {
-// 		return srv.(UnifrontServer).ExchangeQuote(ctx, in)
-// 	}
-// 	info := &grpc.UnaryServerInfo{
-// 		Server:     srv,
-// 		FullMethod: "/proto.Unifront/exchangeQuote",
-// 	}
-// 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-// 		return srv.(UnifrontServer).ExchangeQuote(ctx, req.(*ExchangeQuoteRequest))
-// 	}
-// 	return interceptor(ctx, in, info, handler)
-// }
-
-// func _Unifront_ExchangeMultiQuote_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-// 	in := new(ExchangeMultiQuoteRequest)
-// 	if err := dec(in); err != nil {
-// 		return nil, err
-// 	}
-// 	if interceptor == nil {
-// 		return srv.(UnifrontServer).ExchangeMultiQuote(ctx, in)
-// 	}
-// 	info := &grpc.UnaryServerInfo{
-// 		Server:     srv,
-// 		FullMethod: "/proto.Unifront/exchangeMultiQuote",
-// 	}
-// 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-// 		return srv.(UnifrontServer).ExchangeMultiQuote(ctx, req.(*ExchangeMultiQuoteRequest))
-// 	}
-// 	return interceptor(ctx, in, info, handler)
-// }
-
-// func _Unifront_ExchangeSwap_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-// 	in := new(ExchangeSwapRequest)
-// 	if err := dec(in); err != nil {
-// 		return nil, err
-// 	}
-// 	if interceptor == nil {
-// 		return srv.(UnifrontServer).ExchangeSwap(ctx, in)
-// 	}
-// 	info := &grpc.UnaryServerInfo{
-// 		Server:     srv,
-// 		FullMethod: "/proto.Unifront/exchangeSwap",
-// 	}
-// 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-// 		return srv.(UnifrontServer).ExchangeSwap(ctx, req.(*ExchangeSwapRequest))
-// 	}
-// 	return interceptor(ctx, in, info, handler)
-// }
-
-// func _Unifront_ExchangeMultiSwap_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-// 	in := new(ExchangeMultiSwapRequest)
-// 	if err := dec(in); err != nil {
-// 		return nil, err
-// 	}
-// 	if interceptor == nil {
-// 		return srv.(UnifrontServer).ExchangeMultiSwap(ctx, in)
-// 	}
-// 	info := &grpc.UnaryServerInfo{
-// 		Server:     srv,
-// 		FullMethod: "/proto.Unifront/exchangeMultiSwap",
-// 	}
-// 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-// 		return srv.(UnifrontServer).ExchangeMultiSwap(ctx, req.(*ExchangeMultiSwapRequest))
-// 	}
-// 	return interceptor(ctx, in, info, handler)
-// }
-
-// func _Unifront_ExchangeSwapExecute_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-// 	in := new(ExchangeSwapExecuteRequest)
-// 	if err := dec(in); err != nil {
-// 		return nil, err
-// 	}
-// 	if interceptor == nil {
-// 		return srv.(UnifrontServer).ExchangeSwapExecute(ctx, in)
-// 	}
-// 	info := &grpc.UnaryServerInfo{
-// 		Server:     srv,
-// 		FullMethod: "/proto.Unifront/exchangeSwapExecute",
-// 	}
-// 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-// 		return srv.(UnifrontServer).ExchangeSwapExecute(ctx, req.(*ExchangeSwapExecuteRequest))
-// 	}
-// 	return interceptor(ctx, in, info, handler)
-// }
-
-// func _Unifront_FreeTradeCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-// 	in := new(FreeTradeCountRequest)
-// 	if err := dec(in); err != nil {
-// 		return nil, err
-// 	}
-// 	if interceptor == nil {
-// 		return srv.(UnifrontServer).FreeTradeCount(ctx, in)
-// 	}
-// 	info := &grpc.UnaryServerInfo{
-// 		Server:     srv,
-// 		FullMethod: "/proto.Unifront/FreeTradeCount",
-// 	}
-// 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-// 		return srv.(UnifrontServer).FreeTradeCount(ctx, req.(*FreeTradeCountRequest))
-// 	}
-// 	return interceptor(ctx, in, info, handler)
-// }
-
-// func _Unifront_ExchangeTokenApprove_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-// 	in := new(TokenApprovalRequest)
-// 	if err := dec(in); err != nil {
-// 		return nil, err
-// 	}
-// 	if interceptor == nil {
-// 		return srv.(UnifrontServer).ExchangeTokenApprove(ctx, in)
-// 	}
-// 	info := &grpc.UnaryServerInfo{
-// 		Server:     srv,
-// 		FullMethod: "/proto.Unifront/ExchangeTokenApprove",
-// 	}
-// 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-// 		return srv.(UnifrontServer).ExchangeTokenApprove(ctx, req.(*TokenApprovalRequest))
-// 	}
-// 	return interceptor(ctx, in, info, handler)
-// }
-
-// func _Unifront_ExchangeSwapSignature_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-// 	in := new(ExchangeSignatureRequest)
-// 	if err := dec(in); err != nil {
-// 		return nil, err
-// 	}
-// 	if interceptor == nil {
-// 		return srv.(UnifrontServer).ExchangeSwapSignature(ctx, in)
-// 	}
-// 	info := &grpc.UnaryServerInfo{
-// 		Server:     srv,
-// 		FullMethod: "/proto.Unifront/exchangeSwapSignature",
-// 	}
-// 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-// 		return srv.(UnifrontServer).ExchangeSwapSignature(ctx, req.(*ExchangeSignatureRequest))
-// 	}
-// 	return interceptor(ctx, in, info, handler)
-// }
-
 func _Unifront_TxStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(TxStatusRequest)
 	if err := dec(in); err != nil {
@@ -1026,95 +525,6 @@ func _Unifront_TokenDetail_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Unifront_BridgeChain_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BridgeChainRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UnifrontServer).BridgeChain(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.Unifront/bridgeChain",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UnifrontServer).BridgeChain(ctx, req.(*BridgeChainRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Unifront_BridgeChainTokens_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BridgeChainTokensRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UnifrontServer).BridgeChainTokens(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.Unifront/bridgeChainTokens",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UnifrontServer).BridgeChainTokens(ctx, req.(*BridgeChainTokensRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Unifront_BridgeQuote_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BridgeQuoteRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UnifrontServer).BridgeQuote(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.Unifront/bridgeQuote",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UnifrontServer).BridgeQuote(ctx, req.(*BridgeQuoteRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Unifront_BridgeTransaction_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BridgeTransactionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UnifrontServer).BridgeTransaction(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.Unifront/bridgeTransaction",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UnifrontServer).BridgeTransaction(ctx, req.(*BridgeTransactionRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Unifront_BridgeTransactionStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BridgeTransactionStatusRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UnifrontServer).BridgeTransactionStatus(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.Unifront/bridgeTransactionStatus",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UnifrontServer).BridgeTransactionStatus(ctx, req.(*BridgeTransactionStatusRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
 
 func _Unifront_Allowance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AllowanceRequest)
@@ -1170,149 +580,6 @@ func _Unifront_GetNftCollections_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Unifront_GetValidators_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CosmosValidatorsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UnifrontServer).GetValidators(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.Unifront/GetValidators",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UnifrontServer).GetValidators(ctx, req.(*CosmosValidatorsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Unifront_GetCosmosAprRates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CosmosAprRatesRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UnifrontServer).GetCosmosAprRates(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.Unifront/GetCosmosAprRates",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UnifrontServer).GetCosmosAprRates(ctx, req.(*CosmosAprRatesRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Unifront_GetDelegations_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CosmosDelegationsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UnifrontServer).GetDelegations(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.Unifront/GetDelegations",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UnifrontServer).GetDelegations(ctx, req.(*CosmosDelegationsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Unifront_GetCosmosCDPParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CosmosCDPParametersRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UnifrontServer).GetCosmosCDPParams(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.Unifront/GetCosmosCDPParams",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UnifrontServer).GetCosmosCDPParams(ctx, req.(*CosmosCDPParametersRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Unifront_CosmosAssets_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BalanceRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UnifrontServer).CosmosAssets(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.Unifront/cosmosAssets",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UnifrontServer).CosmosAssets(ctx, req.(*BalanceRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Unifront_CosmosSendTx_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CosmosSendTxRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UnifrontServer).CosmosSendTx(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.Unifront/cosmosSendTx",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UnifrontServer).CosmosSendTx(ctx, req.(*CosmosSendTxRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Unifront_CosmosSimulateTX_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CosmosSimulateTxRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UnifrontServer).CosmosSimulateTX(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.Unifront/cosmosSimulateTX",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UnifrontServer).CosmosSimulateTX(ctx, req.(*CosmosSimulateTxRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Unifront_CosmosGetBlockHeight_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetCosmosBlockHeightRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UnifrontServer).CosmosGetBlockHeight(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.Unifront/cosmosGetBlockHeight",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UnifrontServer).CosmosGetBlockHeight(ctx, req.(*GetCosmosBlockHeightRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
 
 func _Unifront_GetPositions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PositionChainData)
@@ -1425,42 +692,7 @@ var Unifront_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "userData",
 			Handler:    _Unifront_UserData_Handler,
 		},
-		// {
-		// 	MethodName: "exchangeTokens",
-		// 	Handler:    _Unifront_ExchangeTokens_Handler,
-		// },
-		// {
-		// 	MethodName: "exchangeQuote",
-		// 	Handler:    _Unifront_ExchangeQuote_Handler,
-		// },
-		// {
-		// 	MethodName: "exchangeMultiQuote",
-		// 	Handler:    _Unifront_ExchangeMultiQuote_Handler,
-		// },
-		// {
-		// 	MethodName: "exchangeSwap",
-		// 	Handler:    _Unifront_ExchangeSwap_Handler,
-		// },
-		// {
-		// 	MethodName: "exchangeMultiSwap",
-		// 	Handler:    _Unifront_ExchangeMultiSwap_Handler,
-		// },
-		// {
-		// 	MethodName: "exchangeSwapExecute",
-		// 	Handler:    _Unifront_ExchangeSwapExecute_Handler,
-		// },
-		// {
-		// 	MethodName: "FreeTradeCount",
-		// 	Handler:    _Unifront_FreeTradeCount_Handler,
-		// },
-		// {
-		// 	MethodName: "ExchangeTokenApprove",
-		// 	Handler:    _Unifront_ExchangeTokenApprove_Handler,
-		// },
-		// {
-		// 	MethodName: "exchangeSwapSignature",
-		// 	Handler:    _Unifront_ExchangeSwapSignature_Handler,
-		// },
+		
 		{
 			MethodName: "txStatus",
 			Handler:    _Unifront_TxStatus_Handler,
@@ -1477,26 +709,7 @@ var Unifront_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "tokenDetail",
 			Handler:    _Unifront_TokenDetail_Handler,
 		},
-		{
-			MethodName: "bridgeChain",
-			Handler:    _Unifront_BridgeChain_Handler,
-		},
-		{
-			MethodName: "bridgeChainTokens",
-			Handler:    _Unifront_BridgeChainTokens_Handler,
-		},
-		{
-			MethodName: "bridgeQuote",
-			Handler:    _Unifront_BridgeQuote_Handler,
-		},
-		{
-			MethodName: "bridgeTransaction",
-			Handler:    _Unifront_BridgeTransaction_Handler,
-		},
-		{
-			MethodName: "bridgeTransactionStatus",
-			Handler:    _Unifront_BridgeTransactionStatus_Handler,
-		},
+	
 		{
 			MethodName: "allowance",
 			Handler:    _Unifront_Allowance_Handler,
@@ -1508,38 +721,6 @@ var Unifront_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetNftCollections",
 			Handler:    _Unifront_GetNftCollections_Handler,
-		},
-		{
-			MethodName: "GetValidators",
-			Handler:    _Unifront_GetValidators_Handler,
-		},
-		{
-			MethodName: "GetCosmosAprRates",
-			Handler:    _Unifront_GetCosmosAprRates_Handler,
-		},
-		{
-			MethodName: "GetDelegations",
-			Handler:    _Unifront_GetDelegations_Handler,
-		},
-		{
-			MethodName: "GetCosmosCDPParams",
-			Handler:    _Unifront_GetCosmosCDPParams_Handler,
-		},
-		{
-			MethodName: "cosmosAssets",
-			Handler:    _Unifront_CosmosAssets_Handler,
-		},
-		{
-			MethodName: "cosmosSendTx",
-			Handler:    _Unifront_CosmosSendTx_Handler,
-		},
-		{
-			MethodName: "cosmosSimulateTX",
-			Handler:    _Unifront_CosmosSimulateTX_Handler,
-		},
-		{
-			MethodName: "cosmosGetBlockHeight",
-			Handler:    _Unifront_CosmosGetBlockHeight_Handler,
 		},
 		{
 			MethodName: "getPositions",

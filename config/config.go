@@ -11,7 +11,6 @@ type Config struct {
 	NonEVMConfig           NonEVMConfig `yaml:"nonEVMConfig"`
 	Logger                 Log
 	EVM                    EVM
-	Bridge                 BridgeConfig
 	Cosmos                 CosmosConfig
 	Datadog                Datadog
 	ClientCodes            map[string]string
@@ -56,8 +55,6 @@ type SolanaConfig struct {
 type NearConfig struct {
 	ChainName        string `yaml:"chainName"`
 	NearTokenListUrl string `yaml:"nearTokenListUrl"`
-	//JupiterApi             string
-	//JupiterApiTokenListUrl string
 	Rpc         string `yaml:"rpc"`
 	NearLogoUrl string `yaml:"nearLogoUrl"`
 }
@@ -80,10 +77,6 @@ type Log struct {
 	LogPath  string
 }
 
-type BridgeConfig struct {
-	Datadog   Datadog   `yaml:"datadog"`
-	BridgeCfg BridgeCfg `yaml:"bridgeCfg"`
-}
 
 type EVM struct {
 	Cfg     Cfg     `yaml:"cfg"`

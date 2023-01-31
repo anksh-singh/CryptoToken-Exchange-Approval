@@ -2,8 +2,6 @@ package handler
 
 import (
 	"bridge-allowance/config"
-	// cosmos "bridge-allowance/internal/adapters/cosmos/application"
-	// "bridge-allowance/internal/adapters/nonevm/application"
 	grpcClient "bridge-allowance/pkg/grpc/client"
 	"bridge-allowance/pkg/grpc/proto/pb"
 	"bridge-allowance/utils"
@@ -16,8 +14,7 @@ type handler struct {
 	config        *config.Config
 	logger        *zap.SugaredLogger
 	util          *utils.UtilConf
-	// nonEVMHandler *application.NonEVMServerHandler
-	// cosmosHandler *cosmos.CosmosServerHandler
+	
 }
 
 const (
@@ -36,16 +33,13 @@ const (
 func NewHandler(config *config.Config, logger *zap.SugaredLogger, gc *grpcClient.GrpcClientManager,
 	) *handler {
 	utilConf := utils.NewUtils(logger, config)
-	// nonEVMHandler := application.NewEVMServerServerHandler(config, logger)
-	// cosmosHandler, _ := cosmos.NewCosmosServerHandler(config, logger)
+
 
 	return &handler{
 		grpcClient:    gc.MapGrpcClient(),
 		config:        config,
 		logger:        logger,
 		util:          utilConf,
-		// nonEVMHandler: nonEVMHandler,
-		// cosmosHandler: cosmosHandler,
 	
 	}
 }

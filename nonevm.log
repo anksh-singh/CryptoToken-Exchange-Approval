@@ -1,5 +1,0 @@
-2023-01-29T17:25:11.577+0530	INFO	nonevm/api.go:47	Non EVM gRPC Server Started at 8081
-2023-01-30T15:56:23.458+0530	INFO	nonevm/api.go:47	Non EVM gRPC Server Started at 8081
-2023-01-30T16:09:57.693+0530	INFO	nonevm/api.go:47	Non EVM gRPC Server Started at 8081
-2023-01-30T16:13:23.370+0530	INFO	nonevm/api.go:47	Non EVM gRPC Server Started at 8081
-2023-01-30T18:12:53.049+0530	INFO	nonevm/api.go:48	Non EVM gRPC Server Started at 8081
